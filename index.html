@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NusaQuest — Petualangan Basa Jawa (BAIFEST 2026)</title>
+  <!-- Google Fonts: Retro pixel font + clean readable body font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="gameWrapper">
+    <!-- Header HUD -->
+    <header id="topHud">
+      <div class="brand">
+        <h1 class="game-title">NusaQuest</h1>
+        <span class="badge">BAIFEST 2026</span>
+      </div>
+
+      <!-- Control hints -->
+      <div class="control-hint">
+        <span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku
+      </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <div id="canvasContainer">
+      <canvas id="gameCanvas" width="768" height="480"></canvas>
+
+      <!-- Vocab Notebook Overlay Panel (Top Right HUD) -->
+      <aside id="vocabNotebook" class="rpg-box">
+        <div class="notebook-header">
+          <div class="notebook-title">
+            <span class="icon">📖</span> Buku Tembung
+          </div>
+          <div class="notebook-controls">
+            <span id="vocabCounter" class="counter">0 / 11 kata</span>
+            <button id="toggleNotebookBtn" class="toggle-btn" title="Sembunyikan / Tampilkan Buku (N / Tab)">−</button>
+          </div>
+        </div>
+        <div class="notebook-body">
+          <ul id="vocabList">
+            <li class="empty-msg">Belum ada kata terbukti. Bicara dengan warga desa!</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Floating Dialogue Box UI (Bottom RPG Overlay) -->
+      <div id="dialogueBox" class="rpg-box hidden">
+        <div class="dialogue-content">
+          <div id="npcPortraitFrame" class="portrait-frame">
+            <canvas id="portraitCanvas" width="64" height="64"></canvas>
+          </div>
+          <div class="dialogue-text-area">
+            <div id="npcName" class="npc-name">Warga Desa</div>
+            <div id="javaneseText" class="javanese-line">"Sugeng enjing!"</div>
+            <div id="indonesianText" class="indonesian-line">(Selamat pagi!)</div>
+          </div>
+        </div>
+        <div class="dialogue-footer">
+          <button id="nextBtn" class="rpg-btn">Lanjut <span class="key-badge">E</span> ▶</button>
+        </div>
+      </div>
+
+      <!-- Toast Notification Container -->
+      <div id="toastContainer"></div>
+    </div>
+  </div>
+
+  <!-- Modular Game Engine Scripts -->
+  <script src="js/data/dialogues.js"></script>
+  <script src="js/data/maps.js"></script>
+  <script src="js/assets.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/npcs.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
