@@ -153,7 +153,7 @@ class UIManager {
     this.vocabList.appendChild(li);
     this.vocabList.scrollTop = this.vocabList.scrollHeight;
 
-    this.vocabCounter.innerText = `${this.learnedVocab.size} / ${TOTAL_VOCAB_COUNT} kata`;
+    this.vocabCounter.innerText = `${this.learnedVocab.size} kata`;
   }
 
   showToast(message) {

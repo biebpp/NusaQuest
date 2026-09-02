@@ -22,6 +22,7 @@ const TILE_MAP_FILE = path.join(__dirname, 'data', 'tile_map.json');
 const TILESHEETS_FILE = path.join(__dirname, 'assets', 'tiles', 'tilesheets.json');
 const DIALOGUES_FILE = path.join(__dirname, 'data', 'dialogues.json');
 const NPC_PLACEMENTS_FILE = path.join(__dirname, 'data', 'npc_placements.json');
+const MAPS_FILE = path.join(__dirname, 'data', 'maps.json');
 
 function ensureDirForFile(filePath) {
   const dir = path.dirname(filePath);
@@ -465,6 +466,25 @@ app.post('/api/npc-placements', (req, res) => {
     res.json({ status: 'ok', file: 'data/npc_placements.json' });
   } else {
     res.status(500).json({ error: 'Failed to write data/npc_placements.json' });
+  }
+});
+
+app.get('/api/maps', (req, res) => {
+  const maps = readDb(MAPS_FILE);
+  res.json(maps);
+});
+
+app.post('/api/maps', (req, res) => {
+  const data = req.body;
+  if (!data || typeof data !== 'object') {
+    return res.status(400).json({ error: 'Invalid payload' });
+  }
+  const ok = writeDb(MAPS_FILE, data);
+  if (ok) {
+    console.log('Auto-saved data/maps.json');
+    res.json({ status: 'ok', file: 'data/maps.json' });
+  } else {
+    res.status(500).json({ error: 'Failed to write data/maps.json' });
   }
 });
 

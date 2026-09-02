@@ -1,12 +1,6 @@
 {
   "village": [
     {
-      "id": "mbok_sari",
-      "tileX": 13,
-      "tileY": 2,
-      "dir": 0
-    },
-    {
       "id": "pak_joko",
       "tileX": 4,
       "tileY": 7,
@@ -17,6 +11,12 @@
       "tileX": 9,
       "tileY": 4,
       "dir": 1
+    },
+    {
+      "id": "mbok_sari",
+      "tileX": 3,
+      "tileY": 2,
+      "dir": 0
     }
   ],
   "balai_indoor": [
@@ -26,5 +26,7 @@
       "tileY": 3,
       "dir": 0
     }
-  ]
+  ],
+  "east_village": [],
+  "west_village": []
 }

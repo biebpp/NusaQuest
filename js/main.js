@@ -4,9 +4,14 @@ class GameEngine {
     this.ctx = this.canvas.getContext('2d');
 
     this.currentMapId = 'village';
-    this.currentMap = MAPS[this.currentMapId];
+    this.currentMap = MAPS[this.currentMapId] || {
+      id: 'village', name: 'Desa NusaQuest', width: 16, height: 10, tileSize: 48, spawnX: 7, spawnY: 4,
+      ground: Array.from({ length: 10 }, () => Array(16).fill(0)),
+      objects: Array.from({ length: 10 }, () => Array(16).fill('.')),
+      collision: Array.from({ length: 10 }, () => Array(16).fill(0))
+    };
 
-    this.player = new Player(this.currentMap.spawnX, this.currentMap.spawnY);
+    this.player = new Player(this.currentMap.spawnX || 7, this.currentMap.spawnY || 4);
     this.npcManager = new NpcManager();
     this.uiManager = new UIManager();
 
@@ -17,6 +22,18 @@ class GameEngine {
     this.keysPressed = {};
 
     this.bindInputs();
+  }
+
+  initMap(mapId = 'village') {
+    if (MAPS[mapId]) {
+      this.currentMapId = mapId;
+      this.currentMap = MAPS[mapId];
+      this.player.setPosition(
+        this.currentMap.spawnX !== undefined ? this.currentMap.spawnX : 7,
+        this.currentMap.spawnY !== undefined ? this.currentMap.spawnY : 4,
+        this.currentMap.spawnDir !== undefined ? this.currentMap.spawnDir : 0
+      );
+    }
   }
 
   bindInputs() {
@@ -59,27 +76,14 @@ class GameEngine {
           npcToMove.tileX = tileX;
           npcToMove.tileY = tileY;
 
-          if (typeof localStorage !== 'undefined') {
-            try {
-              let mapPlacements = JSON.parse(localStorage.getItem('NUSAQUEST_NPC_MAPS')) || {};
-              if (!mapPlacements[this.currentMapId]) mapPlacements[this.currentMapId] = [];
-              
-              const existingIdx = mapPlacements[this.currentMapId].findIndex(r => r.id === npcToMove.id);
-              if (existingIdx >= 0) {
-                mapPlacements[this.currentMapId][existingIdx].tileX = tileX;
-                mapPlacements[this.currentMapId][existingIdx].tileY = tileY;
-              } else {
-                mapPlacements[this.currentMapId].push({ id: npcToMove.id, tileX, tileY, dir: npcToMove.dir || 0 });
-              }
-              localStorage.setItem('NUSAQUEST_NPC_MAPS', JSON.stringify(mapPlacements));
+          const currentMapNpcs = npcs.map(n => ({ id: n.id, tileX: n.tileX, tileY: n.tileY, dir: n.dir || 0 }));
+          const mapPlacements = { [this.currentMapId]: currentMapNpcs };
 
-              fetch('/api/npc-placements', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(mapPlacements)
-              }).catch(err => console.warn('Auto-save NPC placement to server JSON failed:', err));
-            } catch (err) {}
-          }
+          fetch('/api/npc-placements', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(mapPlacements)
+          }).catch(err => console.warn('Auto-save NPC placement to server JSON failed:', err));
 
           this.uiManager.showToast(`Placed ${npcToMove.name} at tile (${tileX}, ${tileY})`);
         }
@@ -293,5 +297,9 @@ class GameEngine {
 
 window.addEventListener('load', () => {
   window.game = new GameEngine();
-  window.game.start();
+  const mapsPromise = window.mapsLoadPromise || Promise.resolve();
+  mapsPromise.then(() => {
+    window.game.initMap('village');
+    window.game.start();
+  });
 });

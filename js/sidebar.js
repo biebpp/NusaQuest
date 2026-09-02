@@ -16,15 +16,19 @@
 
       <nav class="nq-nav-menu">
         <a href="index.html" class="nq-nav-item ${currentPath === 'index.html' || currentPath === '' ? 'active' : ''}">
-          <span class="nq-icon"></span>
+          <span class="nq-icon">🎮</span>
           <span class="nq-label">Game Engine</span>
         </a>
+        <a href="map_maker.html" class="nq-nav-item ${currentPath === 'map_maker.html' ? 'active' : ''}">
+          <span class="nq-icon">🗺️</span>
+          <span class="nq-label">Map Maker</span>
+        </a>
         <a href="tile_viewer.html" class="nq-nav-item ${currentPath === 'tile_viewer.html' ? 'active' : ''}">
-          <span class="nq-icon"></span>
+          <span class="nq-icon">🎨</span>
           <span class="nq-label">Tile Viewer & Tagger</span>
         </a>
         <a href="npc_config.html" class="nq-nav-item ${currentPath === 'npc_config.html' ? 'active' : ''}">
-          <span class="nq-icon"></span>
+          <span class="nq-icon">👥</span>
           <span class="nq-label">NPC Configurator</span>
         </a>
       </nav>

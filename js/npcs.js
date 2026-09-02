@@ -1,17 +1,14 @@
 class NpcManager {
   constructor() {
-    this.npcsByMap = {};
     this.initNpcs();
   }
 
   initNpcs() {
-    let customNpcPlacements = null;
-
     if (typeof fetch !== 'undefined') {
       fetch('data/npc_placements.json')
         .then(res => res.json())
         .then(data => {
-          if (data) {
+          if (data && typeof data === 'object') {
             for (const [mapId, list] of Object.entries(data)) {
               if (MAPS[mapId]) MAPS[mapId].npcs = list;
             }
@@ -19,34 +16,28 @@ class NpcManager {
         })
         .catch(() => {});
     }
-
-    if (typeof localStorage !== 'undefined' && localStorage.getItem('NUSAQUEST_NPC_MAPS')) {
-      try { customNpcPlacements = JSON.parse(localStorage.getItem('NUSAQUEST_NPC_MAPS')); } catch (e) {}
-    }
-
-    for (const [mapId, mapDef] of Object.entries(MAPS)) {
-      const npcList = (customNpcPlacements && customNpcPlacements[mapId]) ? customNpcPlacements[mapId] : mapDef.npcs;
-      this.npcsByMap[mapId] = npcList.map(npcRef => {
-        const dialogData = DIALOGUES[npcRef.id] || { name: npcRef.id, role: 'NPC', charIndex: 0, lines: [] };
-        return {
-          id: npcRef.id,
-          name: dialogData.name || npcRef.id,
-          role: dialogData.role || 'Warga Desa',
-          tileX: npcRef.tileX !== undefined ? npcRef.tileX : 0,
-          tileY: npcRef.tileY !== undefined ? npcRef.tileY : 0,
-          dir: npcRef.dir !== undefined ? npcRef.dir : 0,
-          charIndex: dialogData.charIndex !== undefined ? dialogData.charIndex : (npcRef.charIndex !== undefined ? npcRef.charIndex : 0),
-          col: dialogData.col !== undefined ? dialogData.col : npcRef.col,
-          row: dialogData.row !== undefined ? dialogData.row : npcRef.row,
-          animList: dialogData.animList || npcRef.animList || null,
-          dialogue: dialogData.lines || []
-        };
-      });
-    }
   }
 
   getNpcsForMap(mapId) {
-    return this.npcsByMap[mapId] || [];
+    const mapDef = MAPS[mapId];
+    if (!mapDef || !mapDef.npcs) return [];
+
+    return mapDef.npcs.map(npcRef => {
+      const dialogData = DIALOGUES[npcRef.id] || { name: npcRef.id, role: 'NPC', charIndex: 0, lines: [] };
+      return {
+        id: npcRef.id,
+        name: dialogData.name || npcRef.id,
+        role: dialogData.role || 'Warga Desa',
+        tileX: npcRef.tileX !== undefined ? npcRef.tileX : 0,
+        tileY: npcRef.tileY !== undefined ? npcRef.tileY : 0,
+        dir: npcRef.dir !== undefined ? npcRef.dir : 0,
+        charIndex: dialogData.charIndex !== undefined ? dialogData.charIndex : (npcRef.charIndex !== undefined ? npcRef.charIndex : 0),
+        col: dialogData.col !== undefined ? dialogData.col : npcRef.col,
+        row: dialogData.row !== undefined ? dialogData.row : npcRef.row,
+        animList: dialogData.animList || npcRef.animList || null,
+        dialogue: dialogData.lines || []
+      };
+    });
   }
 
   getAdjacentNpc(player, currentMapId) {
