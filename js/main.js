@@ -1,7 +1,3 @@
-/**
- * NusaQuest — Main Game Loop, State Manager, & Input Dispatcher
- */
-
 class GameEngine {
   constructor() {
     this.canvas = document.getElementById('gameCanvas');
@@ -16,6 +12,8 @@ class GameEngine {
 
     this.activeDialogueNpc = null;
     this.activeDialogueStep = 0;
+    this.isGeneratingQuiz = false;
+    this.pendingQuiz = null;
     this.keysPressed = {};
 
     this.bindInputs();
@@ -44,9 +42,54 @@ class GameEngine {
     document.getElementById('nextBtn').addEventListener('click', () => {
       this.advanceDialogue();
     });
+
+    this.canvas.addEventListener('click', (e) => {
+      if (e.shiftKey) {
+        const rect = this.canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        const tileSize = this.currentMap.tileSize || 48;
+
+        const tileX = Math.floor(clickX / tileSize);
+        const tileY = Math.floor(clickY / tileSize);
+
+        const npcs = this.npcManager.getNpcsForMap(this.currentMapId);
+        if (npcs.length > 0) {
+          const npcToMove = npcs[0];
+          npcToMove.tileX = tileX;
+          npcToMove.tileY = tileY;
+
+          if (typeof localStorage !== 'undefined') {
+            try {
+              let mapPlacements = JSON.parse(localStorage.getItem('NUSAQUEST_NPC_MAPS')) || {};
+              if (!mapPlacements[this.currentMapId]) mapPlacements[this.currentMapId] = [];
+              
+              const existingIdx = mapPlacements[this.currentMapId].findIndex(r => r.id === npcToMove.id);
+              if (existingIdx >= 0) {
+                mapPlacements[this.currentMapId][existingIdx].tileX = tileX;
+                mapPlacements[this.currentMapId][existingIdx].tileY = tileY;
+              } else {
+                mapPlacements[this.currentMapId].push({ id: npcToMove.id, tileX, tileY, dir: npcToMove.dir || 0 });
+              }
+              localStorage.setItem('NUSAQUEST_NPC_MAPS', JSON.stringify(mapPlacements));
+
+              fetch('/api/npc-placements', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(mapPlacements)
+              }).catch(err => console.warn('Auto-save NPC placement to server JSON failed:', err));
+            } catch (err) {}
+          }
+
+          this.uiManager.showToast(`Placed ${npcToMove.name} at tile (${tileX}, ${tileY})`);
+        }
+      }
+    });
   }
 
   handleInteractionKey() {
+    if (this.isGeneratingQuiz) return;
+
     if (this.activeDialogueNpc) {
       this.advanceDialogue();
       return;
@@ -58,27 +101,50 @@ class GameEngine {
     }
   }
 
-  startDialogue(npc) {
+  async startDialogue(npc) {
     this.activeDialogueNpc = npc;
     this.activeDialogueStep = 0;
+    this.pendingQuiz = null;
 
-    // Face player & NPC towards each other
+    if (DIALOGUES[npc.id] && DIALOGUES[npc.id].lines) {
+      npc.dialogue = DIALOGUES[npc.id].lines;
+    }
+
     if (this.player.tileX < npc.tileX) { this.player.dir = 2; npc.dir = 1; }
     else if (this.player.tileX > npc.tileX) { this.player.dir = 1; npc.dir = 2; }
     else if (this.player.tileY < npc.tileY) { this.player.dir = 0; npc.dir = 3; }
     else if (this.player.tileY > npc.tileY) { this.player.dir = 3; npc.dir = 0; }
 
-    this.uiManager.showDialogue(npc, this.activeDialogueStep);
+    this.uiManager.showDialogueLoading(npc);
+
+    this.isGeneratingQuiz = true;
+    try {
+      console.log(`Requesting fresh quiz for NPC ${npc.id}...`);
+      const quiz = await fetchNpcQuiz(npc.id);
+      this.pendingQuiz = quiz;
+    } catch (err) {
+      console.error('Error generating quiz:', err);
+    } finally {
+      this.isGeneratingQuiz = false;
+      this.uiManager.showDialogue(npc, this.activeDialogueStep);
+    }
   }
 
   advanceDialogue() {
-    if (!this.activeDialogueNpc) return;
+    if (!this.activeDialogueNpc || this.isGeneratingQuiz) return;
 
     this.activeDialogueStep++;
     if (this.activeDialogueStep >= this.activeDialogueNpc.dialogue.length) {
+      const finishedNpc = this.activeDialogueNpc;
       this.activeDialogueNpc = null;
       this.activeDialogueStep = 0;
       this.uiManager.hideDialogue();
+
+      if (this.pendingQuiz) {
+        this.uiManager.showQuizModal(this.pendingQuiz, (score) => {
+          console.log(`Quiz completed for ${finishedNpc.id} with score ${score}`);
+        });
+      }
     } else {
       this.uiManager.showDialogue(this.activeDialogueNpc, this.activeDialogueStep);
     }
@@ -102,7 +168,6 @@ class GameEngine {
     this.currentMap = MAPS[targetMapId];
     this.player.setPosition(targetX, targetY, targetDir);
 
-    // Toast notification for map change
     this.uiManager.showToast(`Memasuki: ${this.currentMap.name}`);
   }
 
@@ -125,13 +190,8 @@ class GameEngine {
     this.ctx.imageSmoothingEnabled = false;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // 1. Render Ground Layer
     this.renderGround();
-
-    // 2. Render Y-Sorted Entities (Objects, NPCs, Player)
     this.renderEntities(now);
-
-    // 3. Render Interaction Prompts
     this.renderPrompts(now);
   }
 
@@ -149,7 +209,6 @@ class GameEngine {
     const map = this.currentMap;
     const entities = [];
 
-    // Map objects
     for (let r = 0; r < map.height; r++) {
       for (let c = 0; c < map.width; c++) {
         const obj = map.objects[r][c];
@@ -165,7 +224,6 @@ class GameEngine {
       }
     }
 
-    // Active NPCs
     const npcs = this.npcManager.getNpcsForMap(this.currentMapId);
     npcs.forEach(npc => {
       entities.push({
@@ -175,16 +233,13 @@ class GameEngine {
       });
     });
 
-    // Player
     entities.push({
       type: 'player',
       sortY: this.player.pixelY + 32
     });
 
-    // Depth sorting
     entities.sort((a, b) => a.sortY - b.sortY);
 
-    // Render sorted
     entities.forEach(ent => {
       if (ent.type === 'object') AssetManager.drawObjectTile(this.ctx, ent.code, ent.tileX, ent.tileY, 48);
       else if (ent.type === 'npc') this.npcManager.drawNpc(this.ctx, ent.data, 48);
@@ -236,7 +291,6 @@ class GameEngine {
   }
 }
 
-// Global Game Launch
 window.addEventListener('load', () => {
   window.game = new GameEngine();
   window.game.start();

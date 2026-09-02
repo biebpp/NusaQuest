@@ -1,0 +1,316 @@
+{
+  "ground": {
+    "0": {
+      "col": 5,
+      "row": 0,
+      "color": "#8dc435",
+      "desc": "Grass"
+    },
+    "1": {
+      "col": 3,
+      "row": 16,
+      "color": "#d97706",
+      "desc": "Dirt Path"
+    },
+    "2": {
+      "col": 0,
+      "row": 0,
+      "color": "#0284c7",
+      "desc": "Water Pond"
+    },
+    "3": {
+      "col": 8,
+      "row": 10,
+      "color": "#854d0e",
+      "desc": "Sawah Mud"
+    },
+    "4": {
+      "col": 7,
+      "row": 0,
+      "color": "#94a3b8",
+      "desc": "Cobblestone Plaza"
+    },
+    "10": {
+      "col": 9,
+      "row": 0,
+      "color": "#78350f",
+      "desc": "Indoor Teak Wood Floor"
+    },
+    "11": {
+      "col": 10,
+      "row": 16,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "12": {
+      "col": 11,
+      "row": 16,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "13": {
+      "col": 12,
+      "row": 16,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "14": {
+      "col": 10,
+      "row": 17,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "15": {
+      "col": 11,
+      "row": 17,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "16": {
+      "col": 12,
+      "row": 17,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "17": {
+      "col": 10,
+      "row": 18,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "18": {
+      "col": 11,
+      "row": 18,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "19": {
+      "col": 12,
+      "row": 18,
+      "color": "#d97706",
+      "desc": "Mat (Tikar)"
+    },
+    "20": {
+      "col": 38,
+      "row": 22,
+      "color": "#a3641b",
+      "desc": "Cobblestone Plaza"
+    },
+    "21": {
+      "col": 39,
+      "row": 22,
+      "color": "#a3641b",
+      "desc": "Cobblestone Plaza"
+    },
+    "22": {
+      "col": 40,
+      "row": 22,
+      "color": "#a3641b",
+      "desc": "Cobblestone Plaza"
+    },
+    "30": {
+      "col": 19,
+      "row": 9,
+      "color": "#a3641b",
+      "desc": "Cobblestone Plaza"
+    },
+    "FR": {
+      "col": 48,
+      "row": 23,
+      "color": "#a4794f"
+    },
+    "F": {
+      "col": 53,
+      "row": 23,
+      "color": "#a77c51"
+    },
+    "FL": {
+      "col": 49,
+      "row": 23,
+      "color": "#a4794f"
+    }
+  },
+  "objects": {
+    "T": {
+      "col": 19,
+      "row": 9,
+      "yOffset": -12,
+      "hExtra": 12,
+      "color": "#15803d",
+      "desc": "Tree"
+    },
+    "Ta": {
+      "col": 11,
+      "row": 14,
+      "yOffset": -12,
+      "hExtra": 12,
+      "color": "#15803d",
+      "desc": "Tree"
+    },
+    "Ta1": {
+      "col": 30,
+      "row": 12,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "Ta2": {
+      "col": 31,
+      "row": 12,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "Ta3": {
+      "col": 30,
+      "row": 13,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "Ta4": {
+      "col": 31,
+      "row": 13,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "F": {
+      "col": 53,
+      "row": 23,
+      "color": "#a77c51"
+    },
+    "FR": {
+      "col": 49,
+      "row": 23,
+      "color": "#a4794f"
+    },
+    "FL": {
+      "col": 48,
+      "row": 23,
+      "color": "#a4794f"
+    },
+    "ST": {
+      "col": 19,
+      "row": 5,
+      "color": "#78350f",
+      "desc": "Wooden Fence"
+    },
+    "SB": {
+      "col": 20,
+      "row": 5,
+      "color": "#78350f",
+      "desc": "Wooden Fence"
+    },
+    "SR": {
+      "col": 21,
+      "row": 5,
+      "color": "#78350f",
+      "desc": "Wooden Fence"
+    },
+    "SL": {
+      "col": 22,
+      "row": 5,
+      "color": "#78350f",
+      "desc": "Wooden Fence"
+    },
+    "P": {
+      "col": 13,
+      "row": 4,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "WX": {
+      "col": 14,
+      "row": 12,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "WY": {
+      "col": 15,
+      "row": 13,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "WR1": {
+      "col": 16,
+      "row": 12,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "WR2": {
+      "col": 16,
+      "row": 13,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "WL1": {
+      "col": 17,
+      "row": 12,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "WL2": {
+      "col": 17,
+      "row": 13,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "Wd": {
+      "col": 44,
+      "row": 5,
+      "color": "#84cc16",
+      "desc": "Sawah Padi Crop"
+    },
+    "RR1": {
+      "col": 20,
+      "row": 21,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RR2": {
+      "col": 20,
+      "row": 22,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RR3": {
+      "col": 20,
+      "row": 23,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RT1": {
+      "col": 25,
+      "row": 21,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RT2": {
+      "col": 25,
+      "row": 22,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RT3": {
+      "col": 25,
+      "row": 23,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RL1": {
+      "col": 21,
+      "row": 21,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RL2": {
+      "col": 21,
+      "row": 22,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    },
+    "RL3": {
+      "col": 21,
+      "row": 23,
+      "color": "#0284c7",
+      "desc": "Water Reed / Lilypad"
+    }
+  }
+}

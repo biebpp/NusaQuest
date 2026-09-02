@@ -1,7 +1,3 @@
-/**
- * NusaQuest — Multi-Map Definitions, Layer Arrays, & Warp Triggers
- */
-
 const MAPS = {
   village: {
     id: 'village',
@@ -11,40 +7,38 @@ const MAPS = {
     tileSize: 48,
     spawnX: 7,
     spawnY: 4,
-    spawnDir: 0, // DIR_DOWN
+    spawnDir: 0, 
 
-    // 0: Grass, 1: Dirt Path, 2: Water Pond, 3: Sawah Mud, 4: Cobblestone Plaza
+    
     ground: [
       [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 1, 0, 1, 1, 1, 0],
       [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-      [0, 0, 1, 0, 0, 1, 4, 4, 4, 4, 4, 1, 0, 0, 0, 0],
-      [0, 4, 1, 4, 0, 1, 4, 4, 4, 4, 4, 1, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 4, 1, 0, 0, 0, 0],
-      [0, 20, 21, 22, 0, 1, 3, 3, 3, 3, 3, 1, 0, 0, 0, 0],
-      [0, 20, 21, 22, 0, 1, 3, 3, 3, 3, 3, 1, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]
+      [0, 0, 1, 0, 0, 1, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0],
+      [0, 4, 1, 4, 0, 1, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0],
+      [0, 20, 21, 22, 0, 1, 3, 3, 3, 3, 1, 0, 0, 0, 0, 0],
+      [0, 20, 21, 22, 0, 1, 3, 3, 3, 3, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
     ],
-
-    // F: Fence, T: Tree, H: House Roof/Wall, M: Market Stall, P: Padi Crop, W: Reed, D: House Door
     objects: [
-      ['T','T','T','T','F','H','H','H','H','H','H','T','T','T','T','T'],
+      ['T','T','T','T','F','H','H','H','H','H','H','F','T','T','T','T'],
       ['T','.','.','.','.','H','H','D','D','H','H','.','M','M','M','T'],
       ['T','.','.','.','.','.','.','.','.','.','.','.','M','M','M','T'],
       ['T','.','.','.','.','.','.','.','.','.','.','.','.','.','.','T'],
       ['T','.','.','.','.','.','.','.','.','.','.','.','.','.','.','T'],
       ['T','RR1','RT1','RL1','.','.','.','.','.','.','.','.','.','.','.','T'],
       ['T','RR2','RT2','RL2','.','.','.','.','.','.','.','.','.','.','.','T'],
-      ['T','RR3','.','RL3','.','.','P','P','P','P','P','.','.','.','.','T'],
-      ['T','.','Wd','.','.','.','P','P','P','P','P','.','.','.','.','T'],
-      ['T','T','T','T','T','.','.','.','.','.','.',',','T','T','T','T']
+      ['T','RR3','.','RL3','.','.','P','P','P','P','.','.','.','.','.','T'],
+      ['T','.','Wd','.','.','.','P','P','P','P','.','.','.','.','.','T'],
+      ['F','F','F','F','FR','.','.','.','.','.','.','FL','F','F','F','F']
     ],
 
-    // 1 = Solid / Blocked, 0 = Walkable
+    
     collision: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1], // (7,1) door is walkable
+      [1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1], 
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -55,17 +49,12 @@ const MAPS = {
       [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1]
     ],
 
-    // Warp Triggers: Stepping onto (x, y) warps to target map
     warps: [
-      { x: 7, y: 1, targetMap: 'balai_indoor', targetX: 7, targetY: 8, targetDir: 3 }, // Entering Joglo door
-      { x: 8, y: 1, targetMap: 'balai_indoor', targetX: 7, targetY: 8, targetDir: 3 }, // Entering Joglo door
+      { x: 7, y: 1, targetMap: 'balai_indoor', targetX: 7, targetY: 8, targetDir: 3 },
+      { x: 8, y: 1, targetMap: 'balai_indoor', targetX: 7, targetY: 8, targetDir: 3 }, 
     ],
 
-    npcs: [
-      { id: 'mbok_sari', tileX: 13, tileY: 2, dir: 0 },
-      { id: 'pak_joko', tileX: 4, tileY: 7, dir: 2 },
-      { id: 'dimas', tileX: 9, tileY: 4, dir: 1 }
-    ]
+    npcs: []
   },
 
   balai_indoor: {
@@ -76,9 +65,8 @@ const MAPS = {
     tileSize: 48,
     spawnX: 7,
     spawnY: 8,
-    spawnDir: 3, // DIR_UP
+    spawnDir: 3, 
 
-    // 10: Wood Floorboard, 11: Bamboo Mat (Tikar/Klasa), 12: Door Mat Exit
     ground: [
       [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
       [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],
@@ -92,7 +80,7 @@ const MAPS = {
       [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
     ],
 
-    // W: Indoor Wall, C: Teak Cabinet, T: Teak Table, S: Chair, Y: Wayang Shield Tapestry, E: Exit Door
+
     objects: [
       ['WR1','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WL1'],
       ['WY','C','.','.','.','.','.','.','.','.','.','.','.','C','.','WY'],
@@ -116,16 +104,16 @@ const MAPS = {
       [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1] // Exit door (7, 9) is walkable
+      [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1] 
     ],
 
     warps: [
-      { x: 7, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 }, // Exit back to village plaza
-      { x: 8, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 }, // Exit back to village plaza
+      { x: 7, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 }, 
+      { x: 8, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 },
     ],
 
-    npcs: [
-      { id: 'mbah_kakung', tileX: 7, tileY: 3, dir: 0 }
-    ]
+    npcs: []
   }
+
+  
 };

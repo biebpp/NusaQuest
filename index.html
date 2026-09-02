@@ -18,6 +18,7 @@
       <div class="brand">
         <h1 class="game-title">NusaQuest</h1>
         <span class="badge">BAIFEST 2026</span>
+        <a href="tile_viewer.html" target="_blank" style="color: #f59e0b; text-decoration: none; font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px; border: 1px solid #f59e0b;">Tile Viewer</a>
       </div>
 
       <!-- Control hints -->
@@ -34,7 +35,7 @@
       <aside id="vocabNotebook" class="rpg-box">
         <div class="notebook-header">
           <div class="notebook-title">
-            <span class="icon">📖</span> Buku Tembung
+            <span class="icon"></span> Buku Tembung
           </div>
           <div class="notebook-controls">
             <span id="vocabCounter" class="counter">0 / 11 kata</span>
@@ -50,6 +51,9 @@
 
       <!-- Floating Dialogue Box UI (Bottom RPG Overlay) -->
       <div id="dialogueBox" class="rpg-box hidden">
+        <div id="aiLoadingIndicator" class="ai-loading hidden">
+          <span class="spinner"></span> Sedang merangkai kuis baru kanggo panjenengan...
+        </div>
         <div class="dialogue-content">
           <div id="npcPortraitFrame" class="portrait-frame">
             <canvas id="portraitCanvas" width="64" height="64"></canvas>
@@ -65,12 +69,39 @@
         </div>
       </div>
 
+      <!-- Interactive Quiz Modal UI Overlay -->
+      <div id="quizModal" class="quiz-modal hidden">
+        <div class="quiz-box rpg-box">
+          <div class="quiz-header">
+            <div class="quiz-npc-badge">
+              <span id="quizNpcIcon"></span>
+              <span id="quizTitle">Kuis Tembung NPC</span>
+            </div>
+            <button id="closeQuizBtn" class="quiz-close-btn">&times;</button>
+          </div>
+
+          <div class="quiz-body">
+            <div id="quizProgress" class="quiz-progress">Pertanyaan 1 dari 3</div>
+            <div id="quizQuestion" class="quiz-question-text">Apa tegese tembung "sedasa"?</div>
+            <div id="quizOptions" class="quiz-options-grid">
+             
+            </div>
+            <div id="quizFeedback" class="quiz-feedback hidden"></div>
+          </div>
+
+          <div class="quiz-footer">
+            <button id="nextQuizBtn" class="rpg-btn quiz-btn hidden">Lanjut ▶</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Toast Notification Container -->
       <div id="toastContainer"></div>
     </div>
   </div>
 
   <!-- Modular Game Engine Scripts -->
+  <script src="js/sidebar.js"></script>
   <script src="js/data/dialogues.js"></script>
   <script src="js/data/maps.js"></script>
   <script src="js/assets.js"></script>

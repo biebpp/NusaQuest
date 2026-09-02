@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NusaQuest — NPC Configurator & Animation Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-panel: #1e293b;
+      --bg-card: #334155;
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+      --gold: #f59e0b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #475569;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background-color: #0b1324;
+      border-bottom: 2px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      color: var(--gold);
+    }
+
+    .badge {
+      background: #8b5cf6;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .sync-status {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid #22c55e;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sync-status .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 6px #22c55e;
+    }
+
+    .content-area {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* Left Panel: Character Grid Tile Viewer */
+    .left-panel {
+      flex: 1;
+      background: #090d16;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .section-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Character Tile Grid Canvas Box */
+    .sprite-grid-box {
+      position: relative;
+      overflow: auto;
+      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    #charCanvas {
+      display: block;
+      cursor: crosshair;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    /* Tile Hover Inspector */
+    .hover-inspector {
+      position: fixed;
+      bottom: 20px;
+      left: 240px;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      z-index: 5;
+      pointer-events: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    /* Right Panel: Form & Animation Config */
+    .right-panel {
+      width: 480px;
+      background: var(--bg-panel);
+      border-left: 2px solid var(--border);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+    }
+
+    select, input[type="text"], input[type="number"], input[type="range"] {
+      background: var(--bg-dark);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    select:focus, input:focus {
+      outline: 2px solid var(--accent);
+      border-color: transparent;
+    }
+
+    input[type="range"] {
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    .zoom-preset-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .zoom-preset-btn:hover {
+      background: var(--border);
+    }
+
+    .npc-selector-bar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: var(--bg-card);
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .form-field label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    /* Animation Sequence Box */
+    .anim-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .anim-preview-canvas {
+      width: 52px;
+      height: 72px;
+      background: #000;
+      border: 2px solid var(--gold);
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+
+    .anim-frames-list {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .anim-chip {
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .anim-chip-del {
+      color: #ef4444;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Dialogue Line Cards */
+    .lines-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .line-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .line-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .code-preview {
+      background: #090d16;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #a7f3d0;
+      max-height: 160px;
+      overflow: auto;
+      white-space: pre;
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- Unified Navigation Sidebar loaded automatically by js/sidebar.js -->
+  <script src="js/sidebar.js"></script>
+
+  <div class="main-wrapper">
+    <header>
+      <div class="brand">
+        <h1>NusaQuest NPC Configurator</h1>
+        <span class="badge">Animation & Dialogue Editor</span>
+      </div>
+      <div class="sync-status">
+        <span class="dot"></span>
+        <span id="syncText">Auto-Synced to Game</span>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <!-- Left Panel: Character Spritesheet Grid Tile Inspector -->
+      <div class="left-panel">
+        <div class="section-card" style="flex: 1;">
+          <div class="section-title">
+            <span>Character Spritesheet Tile Grid (26x36px Tiles — Click tile to select)</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <label style="font-size: 11px;">Zoom Slider:</label>
+              <input type="range" id="charZoomSlider" min="1" max="6" step="0.5" value="2.5" style="width: 100px;">
+              <span id="charZoomText" style="font-family: monospace; font-size: 11px; color: var(--gold); min-width: 32px;">2.5x</span>
+              <div style="display: flex; gap: 2px;">
+                <button class="zoom-preset-btn" data-zoom="1">1x</button>
+                <button class="zoom-preset-btn" data-zoom="2">2x</button>
+                <button class="zoom-preset-btn" data-zoom="3">3x</button>
+                <button class="zoom-preset-btn" data-zoom="4">4x</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="sprite-grid-box">
+            <canvas id="charCanvas"></canvas>
+            
+            <div class="hover-inspector" id="charHoverInspector" style="display: none;">
+              <span>Col: <strong id="hoverCol" style="color: var(--gold);">0</strong>, Row: <strong id="hoverRow" style="color: var(--gold);">0</strong></span>
+              <span>Pos: <span id="hoverPixel">0, 0</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: NPC Form, Manual Tile Placement & Dialogue Form -->
+      <div class="right-panel">
+        <div class="section-title">
+          <span>Select & Configure NPC</span>
+          <button id="newNpcBtn" class="btn-primary" style="padding: 4px 10px; font-size: 12px;">Add New NPC</button>
+        </div>
+
+        <div class="npc-selector-bar">
+          <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Select NPC:</label>
+          <select id="npcSelect" style="flex: 1; font-weight: 700;"></select>
+          <button id="deleteNpcBtn" class="btn-danger">Delete</button>
+        </div>
+
+        <form id="npcForm" class="form-grid">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="npcId">NPC ID (Unique Code):</label>
+              <input type="text" id="npcId" required placeholder="e.g. mbok_sari">
+            </div>
+            <div class="form-field">
+              <label for="npcName">Display Name:</label>
+              <input type="text" id="npcName" required placeholder="e.g. Mbok Sari">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="npcRole">Role / Title:</label>
+              <input type="text" id="npcRole" placeholder="e.g. Market Seller">
+            </div>
+            <div class="form-field" style="max-width: 100px;">
+              <label for="npcCharIndex">Char Index:</label>
+              <input type="number" id="npcCharIndex" value="1" min="0" max="10">
+            </div>
+          </div>
+
+          <!-- Manual NPC Map Placement Controls -->
+          <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+            <div class="section-title" style="margin-bottom: 8px;">
+              <span>Manual Map Coordinates Placement</span>
+            </div>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="npcMapId">Assigned Map:</label>
+                <select id="npcMapId">
+                  <option value="village">village (Outdoor)</option>
+                  <option value="balai_indoor">balai_indoor (Indoor)</option>
+                </select>
+              </div>
+              <div class="form-field" style="max-width: 70px;">
+                <label for="npcTileX">Tile X:</label>
+                <input type="number" id="npcTileX" value="4" min="0" max="50">
+              </div>
+              <div class="form-field" style="max-width: 70px;">
+                <label for="npcTileY">Tile Y:</label>
+                <input type="number" id="npcTileY" value="7" min="0" max="50">
+              </div>
+              <div class="form-field" style="max-width: 90px;">
+                <label for="npcDir">Facing Dir:</label>
+                <select id="npcDir">
+                  <option value="0">Down (0)</option>
+                  <option value="1">Left (1)</option>
+                  <option value="2">Right (2)</option>
+                  <option value="3">Up (3)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- NPC Tile & Animation Selection Section -->
+          <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+            <div class="section-title">
+              <span>Tile & Animation Sequence</span>
+              <button type="button" id="addAnimFrameBtn" class="btn-secondary" style="font-size: 11px;">Add Tile to Anim</button>
+            </div>
+
+            <div class="anim-box">
+              <canvas id="animPreviewCanvas" width="52" height="72" class="anim-preview-canvas" title="Live Animation Preview"></canvas>
+              <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                <div style="font-size: 11px; color: var(--text-muted);">
+                  Selected Tile: Col <strong id="selTileCol" style="color: var(--gold);">0</strong>, Row <strong id="selTileRow" style="color: var(--gold);">0</strong>
+                  <button type="button" id="setSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px; margin-left: 6px;">Set as Idle Tile</button>
+                </div>
+                <div class="anim-frames-list" id="animFramesList">
+                  <span style="font-size: 11px; color: var(--text-muted);">Default charIndex animation</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--dialogue Lines Section -->
+          <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+            <div class="section-title">
+              <span>Dialogue Lines Script</span>
+              <button type="button" id="addLineBtn" class="btn-primary" style="padding: 3px 6px; font-size: 11px;">Add Line</button>
+            </div>
+            
+            <div class="lines-container" id="linesContainer">
+              <!-- dialogue line cards injected here -->
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top: 6px;">
+            <button type="submit" class="btn-primary" style="flex: 1; padding: 10px; font-size: 14px;">Save NPC Configuration</button>
+          </div>
+        </form>
+
+        <!-- Code Exporter -->
+        <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+          <div class="section-title">Export DIALOGUES JavaScript</div>
+          <pre class="code-preview" id="codeOutput">// Code export preview</pre>
+          <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <button id="copyJsBtn" class="btn-primary" style="flex: 1;">Copy JS</button>
+            <button id="downloadJsonBtn" class="btn-secondary">Export JSON</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data/dialogues.js"></script>
+  <script src="js/data/maps.js"></script>
+  <script>
+    let dialogues = loadDialogues();
+    let npcPlacements = loadNpcPlacements();
+    let currentNpcId = 'mbok_sari';
+    let editingOriginalId = 'mbok_sari';
+    let charImg = new Image();
+
+    let charZoom = 2.5;
+    let selectedCol = 0;
+    let selectedRow = 0;
+    let hoverTile = null;
+
+    let customCol = null;
+    let customRow = null;
+    let animSequence = [];
+    let animTimer = null;
+    let animStep = 0;
+
+    function loadDialogues() {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('NUSAQUEST_DIALOGUES')) {
+        try {
+          const parsed = JSON.parse(localStorage.getItem('NUSAQUEST_DIALOGUES'));
+          if (parsed && Object.keys(parsed).length > 0) return parsed;
+        } catch(e){}
+      }
+      return JSON.parse(JSON.stringify(DIALOGUES));
+    }
+
+    function loadNpcPlacements() {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('NUSAQUEST_NPC_MAPS')) {
+        try {
+          const parsed = JSON.parse(localStorage.getItem('NUSAQUEST_NPC_MAPS'));
+          if (parsed && Object.keys(parsed).length > 0) return parsed;
+        } catch(e){}
+      }
+      const placements = {};
+      for (const [mapId, mapDef] of Object.entries(MAPS)) {
+        placements[mapId] = JSON.parse(JSON.stringify(mapDef.npcs));
+      }
+      return placements;
+    }
+
+    function saveToGameSession() {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('NUSAQUEST_DIALOGUES', JSON.stringify(dialogues));
+        localStorage.setItem('NUSAQUEST_NPC_MAPS', JSON.stringify(npcPlacements));
+      }
+
+      fetch('/api/npc-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dialogues, npcPlacements })
+      }).then(() => {
+        const syncText = document.getElementById('syncText');
+        if (syncText) {
+          syncText.textContent = `Auto-Saved to JSON (${new Date().toLocaleTimeString()})`;
+          setTimeout(() => { syncText.textContent = 'Auto-Synced to Game'; }, 3000);
+        }
+      }).catch(err => {
+        console.warn('Auto-save to server JSON failed:', err);
+        const syncText = document.getElementById('syncText');
+        if (syncText) syncText.textContent = `Synced Local (${new Date().toLocaleTimeString()})`;
+      });
+    }
+
+    const charCanvas = document.getElementById('charCanvas');
+    const charCtx = charCanvas.getContext('2d');
+    const charZoomSlider = document.getElementById('charZoomSlider');
+    const charZoomText = document.getElementById('charZoomText');
+    const charHoverInspector = document.getElementById('charHoverInspector');
+
+    const animPreviewCanvas = document.getElementById('animPreviewCanvas');
+    const animPreviewCtx = animPreviewCanvas.getContext('2d');
+    const animFramesList = document.getElementById('animFramesList');
+
+    const npcSelect = document.getElementById('npcSelect');
+    const npcId = document.getElementById('npcId');
+    const npcName = document.getElementById('npcName');
+    const npcRole = document.getElementById('npcRole');
+    const npcCharIndex = document.getElementById('npcCharIndex');
+    const npcMapId = document.getElementById('npcMapId');
+    const npcTileX = document.getElementById('npcTileX');
+    const npcTileY = document.getElementById('npcTileY');
+    const npcDir = document.getElementById('npcDir');
+    const linesContainer = document.getElementById('linesContainer');
+    const codeOutput = document.getElementById('codeOutput');
+
+    charImg.onload = () => { renderCharGrid(); };
+    charImg.src = 'assets/characters/characters.png';
+
+    function getCharMetrics() {
+      const tileW = 26;
+      const tileH = 36;
+      const numCols = Math.floor(charImg.naturalWidth / tileW);
+      const numRows = Math.floor(charImg.naturalHeight / tileH);
+      return { tileW, tileH, numCols, numRows };
+    }
+
+    function renderCharGrid() {
+      if (!charImg.complete || charImg.naturalWidth === 0) return;
+
+      const { tileW, tileH, numCols, numRows } = getCharMetrics();
+      const marginOffset = 20;
+
+      charCanvas.width = (charImg.naturalWidth + marginOffset) * charZoom;
+      charCanvas.height = (charImg.naturalHeight + marginOffset) * charZoom;
+
+      charCtx.imageSmoothingEnabled = false;
+      charCtx.clearRect(0, 0, charCanvas.width, charCanvas.height);
+      charCtx.save();
+      charCtx.scale(charZoom, charZoom);
+
+      charCtx.fillStyle = '#1e293b';
+      charCtx.fillRect(0, 0, charCanvas.width / charZoom, marginOffset);
+      charCtx.fillRect(0, 0, marginOffset, charCanvas.height / charZoom);
+
+      charCtx.fillStyle = '#94a3b8';
+      charCtx.font = '8px "JetBrains Mono", monospace';
+      charCtx.textAlign = 'center';
+      charCtx.textBaseline = 'middle';
+
+      for (let c = 0; c < numCols; c++) {
+        charCtx.fillText(c, marginOffset + c * tileW + tileW / 2, marginOffset / 2);
+      }
+      for (let r = 0; r < numRows; r++) {
+        charCtx.fillText(r, marginOffset / 2, marginOffset + r * tileH + tileH / 2);
+      }
+
+      charCtx.drawImage(charImg, marginOffset, marginOffset);
+
+      charCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      charCtx.lineWidth = 1;
+
+      for (let c = 0; c <= numCols; c++) {
+        const x = marginOffset + c * tileW;
+        charCtx.beginPath();
+        charCtx.moveTo(x, marginOffset);
+        charCtx.lineTo(x, marginOffset + charImg.naturalHeight);
+        charCtx.stroke();
+      }
+      for (let r = 0; r <= numRows; r++) {
+        const y = marginOffset + r * tileH;
+        charCtx.beginPath();
+        charCtx.moveTo(marginOffset, y);
+        charCtx.lineTo(marginOffset + charImg.naturalWidth, y);
+        charCtx.stroke();
+      }
+
+      const sx = marginOffset + selectedCol * tileW;
+      const sy = marginOffset + selectedRow * tileH;
+
+      charCtx.strokeStyle = '#f59e0b';
+      charCtx.lineWidth = 2;
+      charCtx.strokeRect(sx, sy, tileW, tileH);
+      charCtx.fillStyle = 'rgba(245, 158, 11, 0.25)';
+      charCtx.fillRect(sx, sy, tileW, tileH);
+
+      if (hoverTile) {
+        const hx = marginOffset + hoverTile.col * tileW;
+        const hy = marginOffset + hoverTile.row * tileH;
+        charCtx.strokeStyle = '#22c55e';
+        charCtx.lineWidth = 2;
+        charCtx.strokeRect(hx, hy, tileW, tileH);
+      }
+
+      charCtx.restore();
+    }
+
+    function getCharTileFromEvent(e) {
+      const rect = charCanvas.getBoundingClientRect();
+      const clickX = (e.clientX - rect.left) / charZoom;
+      const clickY = (e.clientY - rect.top) / charZoom;
+
+      const { tileW, tileH, numCols, numRows } = getCharMetrics();
+      const marginOffset = 20;
+
+      const relX = clickX - marginOffset;
+      const relY = clickY - marginOffset;
+
+      if (relX < 0 || relY < 0 || relX >= charImg.naturalWidth || relY >= charImg.naturalHeight) {
+        return null;
+      }
+
+      const col = Math.floor(relX / tileW);
+      const row = Math.floor(relY / tileH);
+
+      if (col >= 0 && col < numCols && row >= 0 && row < numRows) {
+        return { col, row };
+      }
+      return null;
+    }
+
+    charCanvas.addEventListener('mousemove', (e) => {
+      const tile = getCharTileFromEvent(e);
+      hoverTile = tile;
+
+      if (tile) {
+        document.getElementById('hoverCol').textContent = tile.col;
+        document.getElementById('hoverRow').textContent = tile.row;
+        document.getElementById('hoverPixel').textContent = `${tile.col * 26}, ${tile.row * 36}`;
+        charHoverInspector.style.display = 'flex';
+      } else {
+        charHoverInspector.style.display = 'none';
+      }
+      renderCharGrid();
+    });
+
+    charCanvas.addEventListener('mouseleave', () => {
+      hoverTile = null;
+      charHoverInspector.style.display = 'none';
+      renderCharGrid();
+    });
+
+    charCanvas.addEventListener('click', (e) => {
+      const tile = getCharTileFromEvent(e);
+      if (tile) {
+        selectedCol = tile.col;
+        selectedRow = tile.row;
+
+        document.getElementById('selTileCol').textContent = tile.col;
+        document.getElementById('selTileRow').textContent = tile.row;
+        renderCharGrid();
+        updateAnimPreview();
+      }
+    });
+
+    charZoomSlider.addEventListener('input', () => {
+      charZoom = parseFloat(charZoomSlider.value);
+      charZoomText.textContent = `${charZoom.toFixed(1)}x`;
+      renderCharGrid();
+    });
+
+    document.querySelectorAll('.zoom-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        charZoom = parseFloat(btn.dataset.zoom);
+        charZoomSlider.value = charZoom;
+        charZoomText.textContent = `${charZoom.toFixed(1)}x`;
+        renderCharGrid();
+      });
+    });
+
+    document.getElementById('setSpecificTileBtn').addEventListener('click', () => {
+      customCol = selectedCol;
+      customRow = selectedRow;
+      updateAnimPreview();
+    });
+
+    document.getElementById('addAnimFrameBtn').addEventListener('click', () => {
+      animSequence.push({ col: selectedCol, row: selectedRow });
+      renderAnimChips();
+      updateAnimPreview();
+    });
+
+    function renderAnimChips() {
+      animFramesList.innerHTML = '';
+      if (animSequence.length === 0) {
+        animFramesList.innerHTML = `<span style="font-size: 11px; color: var(--text-muted);">Default charIndex animation</span>`;
+        return;
+      }
+
+      animSequence.forEach((frame, idx) => {
+        const chip = document.createElement('span');
+        chip.className = 'anim-chip';
+        chip.innerHTML = `[${frame.col},${frame.row}] <span class="anim-chip-del">✖</span>`;
+        chip.querySelector('.anim-chip-del').addEventListener('click', () => {
+          animSequence.splice(idx, 1);
+          renderAnimChips();
+          updateAnimPreview();
+        });
+        animFramesList.appendChild(chip);
+      });
+    }
+
+    function updateAnimPreview() {
+      if (animTimer) clearInterval(animTimer);
+
+      animStep = 0;
+      const drawFrame = () => {
+        if (!charImg.complete || charImg.naturalWidth === 0) return;
+        animPreviewCtx.imageSmoothingEnabled = false;
+        animPreviewCtx.clearRect(0, 0, 52, 72);
+
+        let c = selectedCol;
+        let r = selectedRow;
+
+        if (animSequence.length > 0) {
+          const current = animSequence[animStep % animSequence.length];
+          c = current.col;
+          r = current.row;
+          animStep++;
+        } else if (customCol !== null && customRow !== null) {
+          c = customCol;
+          r = customRow;
+        } else {
+          const cIdx = parseInt(npcCharIndex.value, 10) || 0;
+          const dir = parseInt(npcDir.value, 10) || 0;
+          c = cIdx * 3 + 1;
+          r = dir;
+        }
+
+        animPreviewCtx.drawImage(
+          charImg,
+          c * 26, r * 36, 26, 36,
+          0, 0, 52, 72
+        );
+      };
+
+      drawFrame();
+      if (animSequence.length > 1) {
+        animTimer = setInterval(drawFrame, 250);
+      }
+    }
+
+    function populateNpcSelect() {
+      npcSelect.innerHTML = '';
+      const keys = Object.keys(dialogues);
+
+      if (keys.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = '-- No NPCs Defined --';
+        npcSelect.appendChild(opt);
+        return;
+      }
+
+      keys.forEach(id => {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = `${dialogues[id].name || id} (${id})`;
+        if (id === currentNpcId) opt.selected = true;
+        npcSelect.appendChild(opt);
+      });
+    }
+
+    function loadNpcIntoForm(id) {
+      if (!id || !dialogues[id]) return;
+
+      currentNpcId = id;
+      editingOriginalId = id;
+      const npc = dialogues[id];
+
+      npcId.value = npc.id || id;
+      npcName.value = npc.name || id;
+      npcRole.value = npc.role || '';
+      npcCharIndex.value = npc.charIndex !== undefined ? npc.charIndex : 1;
+
+      customCol = npc.col !== undefined ? npc.col : null;
+      customRow = npc.row !== undefined ? npc.row : null;
+      animSequence = npc.animList ? JSON.parse(JSON.stringify(npc.animList)) : [];
+
+      if (customCol !== null && customRow !== null) {
+        selectedCol = customCol;
+        selectedRow = customRow;
+      } else {
+        selectedCol = parseInt(npcCharIndex.value, 10) * 3 + 1;
+        selectedRow = 0;
+      }
+
+      document.getElementById('selTileCol').textContent = selectedCol;
+      document.getElementById('selTileRow').textContent = selectedRow;
+
+      let foundMap = 'village';
+      let foundX = 4, foundY = 7, foundDir = 0;
+
+      for (const [mId, list] of Object.entries(npcPlacements)) {
+        const ref = list.find(r => r.id === id);
+        if (ref) {
+          foundMap = mId;
+          foundX = ref.tileX;
+          foundY = ref.tileY;
+          foundDir = ref.dir !== undefined ? ref.dir : 0;
+          break;
+        }
+      }
+
+      npcMapId.value = foundMap;
+      npcTileX.value = foundX;
+      npcTileY.value = foundY;
+      npcDir.value = foundDir;
+
+      renderCharGrid();
+      renderAnimChips();
+      updateAnimPreview();
+      renderDialogueLines(npc.lines || []);
+      updateJsExporter();
+    }
+
+    npcSelect.addEventListener('change', () => {
+      loadNpcIntoForm(npcSelect.value);
+    });
+
+    function renderDialogueLines(lines) {
+      linesContainer.innerHTML = '';
+
+      lines.forEach((line, idx) => {
+        const card = document.createElement('div');
+        card.className = 'line-card';
+        card.innerHTML = `
+          <div class="line-card-header">
+            <span>Line #${idx + 1}</span>
+            <div class="line-actions">
+              <button type="button" class="btn-secondary line-up-btn" title="Move Up">▲</button>
+              <button type="button" class="btn-secondary line-down-btn" title="Move Down">▼</button>
+              <button type="button" class="btn-danger line-del-btn" title="Delete">✖</button>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Javanese Text:</label>
+            <input type="text" class="line-javanese" value="${line.javanese || ''}" required placeholder="e.g. Sugeng enjing, Nak!">
+          </div>
+          <div class="form-field">
+            <label>Indonesian Translation:</label>
+            <input type="text" class="line-indonesian" value="${line.indonesian || ''}" required placeholder="e.g. Selamat pagi, Nak!">
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Teaches Vocab Word (Optional):</label>
+              <input type="text" class="line-word" value="${line.teaches ? line.teaches.word : ''}" placeholder="e.g. sedasa">
+            </div>
+            <div class="form-field">
+              <label>Meaning:</label>
+              <input type="text" class="line-meaning" value="${line.teaches ? line.teaches.meaning : ''}" placeholder="e.g. sepuluh (10)">
+            </div>
+          </div>
+        `;
+
+        card.querySelector('.line-up-btn').addEventListener('click', () => {
+          if (idx > 0) {
+            const currentLines = extractLinesFromForm();
+            const temp = currentLines[idx];
+            currentLines[idx] = currentLines[idx - 1];
+            currentLines[idx - 1] = temp;
+            renderDialogueLines(currentLines);
+          }
+        });
+
+        card.querySelector('.line-down-btn').addEventListener('click', () => {
+          const currentLines = extractLinesFromForm();
+          if (idx < currentLines.length - 1) {
+            const temp = currentLines[idx];
+            currentLines[idx] = currentLines[idx + 1];
+            currentLines[idx + 1] = temp;
+            renderDialogueLines(currentLines);
+          }
+        });
+
+        card.querySelector('.line-del-btn').addEventListener('click', () => {
+          const currentLines = extractLinesFromForm();
+          currentLines.splice(idx, 1);
+          renderDialogueLines(currentLines);
+        });
+
+        linesContainer.appendChild(card);
+      });
+    }
+
+    function extractLinesFromForm() {
+      const lineCards = linesContainer.querySelectorAll('.line-card');
+      const lines = [];
+
+      lineCards.forEach(card => {
+        const jav = card.querySelector('.line-javanese').value.trim();
+        const indo = card.querySelector('.line-indonesian').value.trim();
+        const word = card.querySelector('.line-word').value.trim();
+        const meaning = card.querySelector('.line-meaning').value.trim();
+
+        const item = { javanese: jav, indonesian: indo };
+        if (word && meaning) {
+          item.teaches = { word, meaning };
+        }
+        lines.push(item);
+      });
+
+      return lines;
+    }
+
+    document.getElementById('addLineBtn').addEventListener('click', () => {
+      const lines = extractLinesFromForm();
+      lines.push({ javanese: '', indonesian: '' });
+      renderDialogueLines(lines);
+    });
+
+    document.getElementById('npcForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newId = npcId.value.trim();
+      if (!newId) return;
+
+      const lines = extractLinesFromForm();
+
+      if (editingOriginalId && editingOriginalId !== newId) {
+        delete dialogues[editingOriginalId];
+        for (const mId of Object.keys(npcPlacements)) {
+          npcPlacements[mId] = npcPlacements[mId].filter(r => r.id !== editingOriginalId);
+        }
+      }
+
+      const npcDef = {
+        id: newId,
+        name: npcName.value.trim(),
+        role: npcRole.value.trim(),
+        charIndex: parseInt(npcCharIndex.value, 10) || 0,
+        lines
+      };
+
+      if (customCol !== null && customRow !== null) {
+        npcDef.col = customCol;
+        npcDef.row = customRow;
+      }
+      if (animSequence.length > 0) {
+        npcDef.animList = animSequence;
+      }
+
+      dialogues[newId] = npcDef;
+
+      const targetMap = npcMapId.value;
+      for (const mId of Object.keys(npcPlacements)) {
+        npcPlacements[mId] = npcPlacements[mId].filter(r => r.id !== newId);
+      }
+
+      if (!npcPlacements[targetMap]) npcPlacements[targetMap] = [];
+      const placementDef = {
+        id: newId,
+        tileX: parseInt(npcTileX.value, 10) || 0,
+        tileY: parseInt(npcTileY.value, 10) || 0,
+        dir: parseInt(npcDir.value, 10) || 0
+      };
+      if (customCol !== null && customRow !== null) {
+        placementDef.col = customCol;
+        placementDef.row = customRow;
+      }
+
+      npcPlacements[targetMap].push(placementDef);
+
+      currentNpcId = newId;
+      editingOriginalId = newId;
+
+      saveToGameSession();
+      populateNpcSelect();
+      loadNpcIntoForm(newId);
+    });
+
+    document.getElementById('newNpcBtn').addEventListener('click', () => {
+      const count = Object.keys(dialogues).length + 1;
+      const newId = `warga_baru_${count}`;
+      
+      dialogues[newId] = {
+        id: newId,
+        name: `Warga Baru ${count}`,
+        role: 'Warga Desa',
+        charIndex: 2,
+        lines: [
+          { javanese: "Sugeng enjing!", indonesian: "Selamat pagi!" }
+        ]
+      };
+
+      if (!npcPlacements.village) npcPlacements.village = [];
+      npcPlacements.village.push({ id: newId, tileX: 5, tileY: 5, dir: 0 });
+
+      currentNpcId = newId;
+      editingOriginalId = newId;
+
+      saveToGameSession();
+      populateNpcSelect();
+      loadNpcIntoForm(newId);
+    });
+
+    document.getElementById('deleteNpcBtn').addEventListener('click', () => {
+      if (confirm(`Delete NPC '${currentNpcId}'?`)) {
+        delete dialogues[currentNpcId];
+        for (const mId of Object.keys(npcPlacements)) {
+          npcPlacements[mId] = npcPlacements[mId].filter(r => r.id !== currentNpcId);
+        }
+        saveToGameSession();
+        const keys = Object.keys(dialogues);
+        currentNpcId = keys.length > 0 ? keys[0] : '';
+        populateNpcSelect();
+        if (currentNpcId) loadNpcIntoForm(currentNpcId);
+      }
+    });
+
+    function updateJsExporter() {
+      let code = 'const DIALOGUES = {\n';
+      const keys = Object.keys(dialogues);
+
+      keys.forEach((id, idx) => {
+        const d = dialogues[id];
+        code += `  ${id}: {\n`;
+        code += `    id: '${d.id}',\n`;
+        code += `    name: ${JSON.stringify(d.name)},\n`;
+        code += `    role: ${JSON.stringify(d.role)},\n`;
+        code += `    charIndex: ${d.charIndex},\n`;
+        if (d.col !== undefined && d.row !== undefined) {
+          code += `    col: ${d.col}, row: ${d.row},\n`;
+        }
+        if (d.animList) {
+          code += `    animList: ${JSON.stringify(d.animList)},\n`;
+        }
+        code += `    lines: [\n`;
+
+        d.lines.forEach((l, lIdx) => {
+          let lineStr = `      { javanese: ${JSON.stringify(l.javanese)}, indonesian: ${JSON.stringify(l.indonesian)}`;
+          if (l.teaches) {
+            lineStr += `, teaches: { word: ${JSON.stringify(l.teaches.word)}, meaning: ${JSON.stringify(l.teaches.meaning)} }`;
+          }
+          lineStr += ` }${lIdx === d.lines.length - 1 ? '' : ','}\n`;
+          code += lineStr;
+        });
+
+        code += `    ]\n`;
+        code += `  }${idx === keys.length - 1 ? '' : ','}\n`;
+      });
+
+      code += '};\n';
+      codeOutput.textContent = code;
+    }
+
+    document.getElementById('copyJsBtn').addEventListener('click', () => {
+      navigator.clipboard.writeText(codeOutput.textContent).then(() => {
+        const btn = document.getElementById('copyJsBtn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy JS', 2000);
+      });
+    });
+
+    document.getElementById('downloadJsonBtn').addEventListener('click', () => {
+      const dataStr = JSON.stringify({ dialogues, npcPlacements }, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nusaquest_npcs_${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    function loadServerJsonData() {
+      fetch('/api/npc-config')
+        .then(res => res.json())
+        .then(data => {
+          if (data && (data.dialogues || data.npcPlacements)) {
+            if (data.dialogues && Object.keys(data.dialogues).length > 0) {
+              dialogues = data.dialogues;
+              if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('NUSAQUEST_DIALOGUES', JSON.stringify(dialogues));
+              }
+            }
+            if (data.npcPlacements && Object.keys(data.npcPlacements).length > 0) {
+              npcPlacements = data.npcPlacements;
+              if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('NUSAQUEST_NPC_MAPS', JSON.stringify(npcPlacements));
+              }
+            }
+            populateNpcSelect();
+            if (dialogues[currentNpcId]) {
+              loadNpcIntoForm(currentNpcId);
+            } else {
+              const keys = Object.keys(dialogues);
+              if (keys.length > 0) loadNpcIntoForm(keys[0]);
+            }
+          }
+        }).catch(() => {});
+    }
+
+    populateNpcSelect();
+    loadNpcIntoForm(currentNpcId);
+    loadServerJsonData();
+  </script>
+</body>
+</html>

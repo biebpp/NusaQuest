@@ -1,7 +1,3 @@
-/**
- * NusaQuest — NPC Entity Manager & Proximity Detector
- */
-
 class NpcManager {
   constructor() {
     this.npcsByMap = {};
@@ -9,18 +5,41 @@ class NpcManager {
   }
 
   initNpcs() {
+    let customNpcPlacements = null;
+
+    if (typeof fetch !== 'undefined') {
+      fetch('data/npc_placements.json')
+        .then(res => res.json())
+        .then(data => {
+          if (data) {
+            for (const [mapId, list] of Object.entries(data)) {
+              if (MAPS[mapId]) MAPS[mapId].npcs = list;
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('NUSAQUEST_NPC_MAPS')) {
+      try { customNpcPlacements = JSON.parse(localStorage.getItem('NUSAQUEST_NPC_MAPS')); } catch (e) {}
+    }
+
     for (const [mapId, mapDef] of Object.entries(MAPS)) {
-      this.npcsByMap[mapId] = mapDef.npcs.map(npcRef => {
-        const dialogData = DIALOGUES[npcRef.id];
+      const npcList = (customNpcPlacements && customNpcPlacements[mapId]) ? customNpcPlacements[mapId] : mapDef.npcs;
+      this.npcsByMap[mapId] = npcList.map(npcRef => {
+        const dialogData = DIALOGUES[npcRef.id] || { name: npcRef.id, role: 'NPC', charIndex: 0, lines: [] };
         return {
           id: npcRef.id,
-          name: dialogData.name,
-          role: dialogData.role,
-          tileX: npcRef.tileX,
-          tileY: npcRef.tileY,
-          dir: npcRef.dir,
-          charIndex: dialogData.charIndex,
-          dialogue: dialogData.lines
+          name: dialogData.name || npcRef.id,
+          role: dialogData.role || 'Warga Desa',
+          tileX: npcRef.tileX !== undefined ? npcRef.tileX : 0,
+          tileY: npcRef.tileY !== undefined ? npcRef.tileY : 0,
+          dir: npcRef.dir !== undefined ? npcRef.dir : 0,
+          charIndex: dialogData.charIndex !== undefined ? dialogData.charIndex : (npcRef.charIndex !== undefined ? npcRef.charIndex : 0),
+          col: dialogData.col !== undefined ? dialogData.col : npcRef.col,
+          row: dialogData.row !== undefined ? dialogData.row : npcRef.row,
+          animList: dialogData.animList || npcRef.animList || null,
+          dialogue: dialogData.lines || []
         };
       });
     }
@@ -48,8 +67,16 @@ class NpcManager {
     const py = npc.tileY * tileSize;
 
     if (img && img.complete && img.naturalWidth !== 0) {
-      const srcX = npc.charIndex * 3 * 26 + 26; // Idle center frame
-      const srcY = npc.dir * 36;
+      let srcX, srcY;
+      if (npc.col !== undefined && npc.row !== undefined) {
+        srcX = npc.col * 26;
+        srcY = npc.row * 36;
+      } else {
+        const cIdx = npc.charIndex !== undefined ? npc.charIndex : 0;
+        const dir = npc.dir !== undefined ? npc.dir : 0;
+        srcX = cIdx * 3 * 26 + 26;
+        srcY = dir * 36;
+      }
       ctx.drawImage(img, srcX, srcY, 26, 36, px + 6, py - 8, 36, 52);
     } else {
       ctx.fillStyle = '#dc2626';

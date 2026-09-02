@@ -1,0 +1,227 @@
+(function() {
+  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+
+  const sidebarHtml = `
+    <aside id="nqDevSidebar" class="nq-sidebar">
+      <div class="nq-sidebar-header">
+        <div class="nq-brand">
+          <span class="nq-logo">NQ</span>
+          <div class="nq-title-box">
+            <span class="nq-title">NusaQuest</span>
+            <span class="nq-subtitle">Dev Suite</span>
+          </div>
+        </div>
+        <button id="nqToggleSidebarBtn" class="nq-toggle-btn" title="Toggle Sidebar">◀</button>
+      </div>
+
+      <nav class="nq-nav-menu">
+        <a href="index.html" class="nq-nav-item ${currentPath === 'index.html' || currentPath === '' ? 'active' : ''}">
+          <span class="nq-icon"></span>
+          <span class="nq-label">Game Engine</span>
+        </a>
+        <a href="tile_viewer.html" class="nq-nav-item ${currentPath === 'tile_viewer.html' ? 'active' : ''}">
+          <span class="nq-icon"></span>
+          <span class="nq-label">Tile Viewer & Tagger</span>
+        </a>
+        <a href="npc_config.html" class="nq-nav-item ${currentPath === 'npc_config.html' ? 'active' : ''}">
+          <span class="nq-icon"></span>
+          <span class="nq-label">NPC Configurator</span>
+        </a>
+      </nav>
+
+      <div class="nq-sidebar-footer">
+        <div class="nq-sync-badge">
+          <span class="nq-dot"></span>
+          <span>Auto-Sync Active</span>
+        </div>
+      </div>
+    </aside>
+  `;
+
+  const style = document.createElement('style');
+  style.textContent = `
+    body {
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow-x: hidden !important;
+      transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    body.nq-sidebar-expanded {
+      padding-left: 220px !important;
+    }
+    body.nq-sidebar-collapsed {
+      padding-left: 60px !important;
+    }
+
+    .nq-sidebar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: 220px;
+      background: #0b1324;
+      border-right: 2px solid #334155;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      z-index: 9999;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      box-shadow: 4px 0 15px rgba(0,0,0,0.5);
+    }
+    .nq-sidebar.collapsed {
+      width: 60px;
+    }
+    .nq-sidebar-header {
+      padding: 14px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+    }
+    .nq-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .nq-logo {
+      font-size: 20px;
+    }
+    .nq-title-box {
+      display: flex;
+      flex-direction: column;
+      white-space: nowrap;
+    }
+    .nq-title {
+      font-family: 'Press Start 2P', monospace, sans-serif;
+      font-size: 11px;
+      color: #f59e0b;
+    }
+    .nq-subtitle {
+      font-size: 10px;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .nq-sidebar.collapsed .nq-title-box,
+    .nq-sidebar.collapsed .nq-label,
+    .nq-sidebar.collapsed .nq-sidebar-footer span {
+      display: none;
+    }
+    .nq-toggle-btn {
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .nq-toggle-btn:hover {
+      background: #334155;
+      color: #fff;
+    }
+    .nq-nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 8px;
+      flex: 1;
+    }
+    .nq-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .nq-nav-item:hover {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+    .nq-nav-item.active {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .nq-icon {
+      font-size: 16px;
+    }
+    .nq-sidebar-footer {
+      padding: 12px;
+      border-top: 1px solid #1e293b;
+    }
+    .nq-sync-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #4ade80;
+      font-weight: 600;
+      background: rgba(34, 197, 94, 0.1);
+      padding: 6px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+    .nq-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 6px #22c55e;
+    }
+  `;
+  document.head.appendChild(style);
+
+  function applyLayoutClass(isCollapsed) {
+    if (isCollapsed) {
+      document.body.classList.add('nq-sidebar-collapsed');
+      document.body.classList.remove('nq-sidebar-expanded');
+    } else {
+      document.body.classList.add('nq-sidebar-expanded');
+      document.body.classList.remove('nq-sidebar-collapsed');
+    }
+  }
+
+  function initSidebar() {
+    if (document.getElementById('nqDevSidebar')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = sidebarHtml;
+    const sidebarEl = wrapper.firstElementChild;
+    document.body.insertBefore(sidebarEl, document.body.firstChild);
+
+    const isCollapsed = localStorage.getItem('NQ_SIDEBAR_COLLAPSED') === 'true';
+    if (isCollapsed) {
+      sidebarEl.classList.add('collapsed');
+      const toggleBtn = sidebarEl.querySelector('#nqToggleSidebarBtn');
+      if (toggleBtn) toggleBtn.textContent = '▶';
+    }
+    applyLayoutClass(isCollapsed);
+
+    sidebarEl.querySelector('#nqToggleSidebarBtn').addEventListener('click', () => {
+      sidebarEl.classList.toggle('collapsed');
+      const collapsedNow = sidebarEl.classList.contains('collapsed');
+      sidebarEl.querySelector('#nqToggleSidebarBtn').textContent = collapsedNow ? '▶' : '◀';
+      localStorage.setItem('NQ_SIDEBAR_COLLAPSED', collapsedNow);
+      applyLayoutClass(collapsedNow);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSidebar);
+  } else {
+    initSidebar();
+  }
+})();

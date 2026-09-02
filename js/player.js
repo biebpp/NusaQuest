@@ -1,7 +1,3 @@
-/**
- * NusaQuest — Player Entity Controller & Movement Engine
- */
-
 class Player {
   constructor(tileX = 7, tileY = 4) {
     this.tileX = tileX;
@@ -10,12 +6,12 @@ class Player {
     this.pixelY = tileY * 48;
     this.targetTileX = tileX;
     this.targetTileY = tileY;
-    this.dir = 0; // 0: Down, 1: Left, 2: Right, 3: Up
+    this.dir = 0;
     this.isMoving = false;
     this.moveStartTime = 0;
-    this.moveDuration = 180; // ms per tile step
+    this.moveDuration = 180;
     this.animFrame = 0;
-    this.charIndex = 0; // Spritesheet column 0
+    this.charIndex = 0;
   }
 
   setPosition(tx, ty, dir = 0) {
@@ -31,7 +27,7 @@ class Player {
   }
 
   update(now, currentMap, activeNpcDialogue, keysPressed, checkWarpCallback) {
-    if (activeNpcDialogue) return; // Frozen during dialogue
+    if (activeNpcDialogue) return;
 
     if (this.isMoving) {
       const elapsed = now - this.moveStartTime;
@@ -45,7 +41,6 @@ class Player {
       this.pixelX = startX + (targetX - startX) * progress;
       this.pixelY = startY + (targetY - startY) * progress;
 
-      // Walk cycle animation
       if (progress < 0.25) this.animFrame = 1;
       else if (progress < 0.5) this.animFrame = 0;
       else if (progress < 0.75) this.animFrame = 2;
@@ -59,7 +54,6 @@ class Player {
         this.pixelY = this.tileY * 48;
         this.animFrame = 0;
 
-        // Check if current tile triggers map warp/teleport
         if (checkWarpCallback) {
           checkWarpCallback(this.tileX, this.tileY);
         }
@@ -67,7 +61,6 @@ class Player {
       return;
     }
 
-    // Process movement inputs
     let nextX = this.tileX;
     let nextY = this.tileY;
     let newDir = this.dir;
@@ -107,7 +100,6 @@ class Player {
     if (tx < 0 || tx >= currentMap.width || ty < 0 || ty >= currentMap.height) return false;
     if (currentMap.collision[ty][tx] === 1) return false;
 
-    // Check NPC tile collision
     if (currentMap.activeNpcs) {
       for (const npc of currentMap.activeNpcs) {
         if (npc.tileX === tx && npc.tileY === ty) return false;

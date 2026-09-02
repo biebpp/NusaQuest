@@ -1,0 +1,30 @@
+{
+  "village": [
+    {
+      "id": "mbok_sari",
+      "tileX": 13,
+      "tileY": 2,
+      "dir": 0
+    },
+    {
+      "id": "pak_joko",
+      "tileX": 4,
+      "tileY": 7,
+      "dir": 2
+    },
+    {
+      "id": "dimas",
+      "tileX": 9,
+      "tileY": 4,
+      "dir": 1
+    }
+  ],
+  "balai_indoor": [
+    {
+      "id": "mbah_kakung",
+      "tileX": 7,
+      "tileY": 3,
+      "dir": 0
+    }
+  ]
+}

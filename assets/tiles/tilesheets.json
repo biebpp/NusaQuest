@@ -1,0 +1,30 @@
+{
+  "assets/tiles/kenney_roguelike.png": {
+    "name": "Kenney Roguelike",
+    "tileSize": 16,
+    "gap": 1,
+    "margin": 0,
+    "description": "16x16 roguelike tilesheet with 1px gap"
+  },
+  "assets/tiles/kenney_ui_adventure.png": {
+    "name": "Kenney UI Adventure",
+    "tileSize": 32,
+    "gap": 1,
+    "margin": 0,
+    "description": "32x32 UI & adventure icons with 1px gap"
+  },
+  "assets/tiles/kenney_rpg.png": {
+    "name": "Kenney RPG",
+    "tileSize": 16,
+    "gap": 1,
+    "margin": 0,
+    "description": "16x16 RPG tilesheet with 1px gap"
+  },
+  "assets/tiles/kenney_urban.png": {
+    "name": "Kenney Urban",
+    "tileSize": 16,
+    "gap": 1,
+    "margin": 0,
+    "description": "16x16 Urban tilesheet with 1px gap"
+  }
+}

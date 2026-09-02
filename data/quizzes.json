@@ -1,0 +1,741 @@
+{
+  "dimas": [
+    {
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #1)",
+      "generatedAt": "2026-09-02T06:15:07.549Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Unen-unen \"pripun kabare\" tegese apa?",
+          "options": [
+            "Selamat tinggal",
+            "Apa kabar",
+            "Siapa namamu",
+            "Mau ke mana"
+          ],
+          "answer": 1,
+          "explanation": "\"Pripun kabare\" artinya apa kabar."
+        },
+        {
+          "id": 2,
+          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+          "options": [
+            "Sae-sae mawon",
+            "Mboten ngertos",
+            "Sampun dhahar",
+            "Matur nuwun"
+          ],
+          "answer": 0,
+          "explanation": "\"Sae-sae mawon\" artine baik-baik saja."
+        },
+        {
+          "id": 3,
+          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+          "options": [
+            "Bulu tangkis",
+            "Sepak bola",
+            "Bola voli",
+            "Renang"
+          ],
+          "answer": 1,
+          "explanation": "\"Bal-balan\" artinya bermain sepak bola."
+        }
+      ]
+    },
+    {
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #2)",
+      "generatedAt": "2026-09-02T06:15:37.365Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+          "options": [
+            "Sae-sae mawon",
+            "Mboten ngertos",
+            "Sampun dhahar",
+            "Matur nuwun"
+          ],
+          "answer": 0,
+          "explanation": "\"Sae-sae mawon\" artine baik-baik saja."
+        },
+        {
+          "id": 2,
+          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+          "options": [
+            "Bulu tangkis",
+            "Sepak bola",
+            "Bola voli",
+            "Renang"
+          ],
+          "answer": 1,
+          "explanation": "\"Bal-balan\" artinya bermain sepak bola."
+        },
+        {
+          "id": 3,
+          "question": "Apa tegese tembung \"kanca\"?",
+          "options": [
+            "Musuh",
+            "Teman / Sahabat",
+            "Guru",
+            "Adik"
+          ],
+          "answer": 1,
+          "explanation": "\"Kanca\" tegese teman."
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788330599517",
+      "npcId": "dimas",
+      "title": "Kuis Tembung Dimas",
+      "generatedAt": "2026-09-02T06:29:59.517Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen Dimas ngomong 'Aku remen bal-balan', tegese apa?",
+          "options": [
+            "Aku sedih main bola",
+            "Aku suka main bola",
+            "Aku takut main bola",
+            "Aku malas main bola"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'remen' tegese suka, dadi 'Aku remen bal-balan' tegese 'Aku suka main bola'.",
+          "teaches": {
+            "word": "remen",
+            "meaning": "suka"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Tembung Javanese apa sing tegese 'teman' utawa 'kawan'?",
+          "options": [
+            "Bal-balan",
+            "Sae",
+            "Kanca",
+            "Pripun"
+          ],
+          "answer": 2,
+          "explanation": "Tembung 'kanca' ing basa Javanese tegese teman utawa kawan.",
+          "teaches": {
+            "word": "kanca",
+            "meaning": "teman"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Pilihan jawaban manawa ditakoni 'Pripun kabare?' lan kabare apik?",
+          "options": [
+            "Pripun",
+            "Bal-balan",
+            "Sae",
+            "Remen"
+          ],
+          "answer": 2,
+          "explanation": "Yen ditakoni kabar lan kadhaharane apik, biasane dijawab 'Sae' (baik/sehat).",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788330640946",
+      "npcId": "dimas",
+      "title": "Kuis Tembung Dimas",
+      "generatedAt": "2026-09-02T06:30:40.946Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Tembung Javanese apa sing tegese 'suka' utawa 'senang'?",
+          "options": [
+            "remen",
+            "kanca",
+            "sae",
+            "pripun"
+          ],
+          "answer": 0,
+          "explanation": "Tembung 'remen' ing basa Javanese tegese suka utawa senang.",
+          "teaches": {
+            "word": "remen",
+            "meaning": "suka / senang"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Kanggo ngucapake 'apa kabar' ing basa Javanese krama alus, tembung pundi sing didedonga?",
+          "options": [
+            "Pripun kabare",
+            "Bagaimana kabarmu",
+            "Apa kabar",
+            "Kanca kabare"
+          ],
+          "answer": 0,
+          "explanation": "'Pripun kabare' iku tembung krama alus kanggo nuduhake kepoan babagan kabar utawa kondisi.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "apa kabar"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Uga 'bal-balan' iku aktivitas olahraga apa ing tembung Indonésia?",
+          "options": [
+            "Main sepak bola",
+            "Main basket",
+            "Main badminton",
+            "Main tenis meja"
+          ],
+          "answer": 0,
+          "explanation": "'Bal-balan' yaiku tembung umum ing Javanese kanggo main sepak bola (soccer).",
+          "teaches": {
+            "word": "bal-balan",
+            "meaning": "main sepak bola"
+          }
+        }
+      ]
+    },
+    {
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #5)",
+      "generatedAt": "2026-09-02T06:48:41.323Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+          "options": [
+            "Sae-sae mawon",
+            "Mboten ngertos",
+            "Sampun dhahar",
+            "Matur nuwun"
+          ],
+          "answer": 0,
+          "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+          "options": [
+            "Bulu tangkis",
+            "Sepak bola",
+            "Bola voli",
+            "Renang"
+          ],
+          "answer": 1,
+          "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+          "teaches": {
+            "word": "bal-balan",
+            "meaning": "main bola"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Unen-unen \"pripun kabare\" tegese apa?",
+          "options": [
+            "Selamat tinggal",
+            "Apa kabar",
+            "Siapa namamu",
+            "Mau ke mana"
+          ],
+          "answer": 1,
+          "explanation": "\"Pripun kabare\" artinya apa kabar.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "apa kabar"
+          }
+        }
+      ]
+    }
+  ],
+  "mbok_sari": [
+    {
+      "npcId": "mbok_sari",
+      "title": "Kuis Tembung — Mbok Sari (Kuis #1)",
+      "generatedAt": "2026-09-02T06:17:01.423Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+          "options": [
+            "Sepuluh (10)",
+            "Lima (5)",
+            "Satu (1)",
+            "Dua puluh (20)"
+          ],
+          "answer": 0,
+          "explanation": "\"Sedasa\" tegese sepuluh (10)."
+        },
+        {
+          "id": 2,
+          "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+          "options": [
+            "Waktu (Kapan)",
+            "Jumlah / Harga (Berapa)",
+            "Tempat (Di mana)",
+            "Nama orang (Siapa)"
+          ],
+          "answer": 1,
+          "explanation": "\"Pinten\" artine berapa (nuntun rega utawa cacah)."
+        },
+        {
+          "id": 3,
+          "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+          "options": [
+            "Sugeng enjing",
+            "Matur nuwun",
+            "Pripun kabare",
+            "Sae-sae mawon"
+          ],
+          "answer": 1,
+          "explanation": "\"Matur nuwun\" tegese terima kasih."
+        }
+      ]
+    },
+    {
+      "npcId": "mbok_sari",
+      "title": "Kuis Tembung — Mbok Sari (Kuis #2)",
+      "generatedAt": "2026-09-02T06:17:35.150Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+          "options": [
+            "Waktu (Kapan)",
+            "Jumlah / Harga (Berapa)",
+            "Tempat (Di mana)",
+            "Nama orang (Siapa)"
+          ],
+          "answer": 1,
+          "explanation": "\"Pinten\" artine berapa (nuntun rega utawa cacah)."
+        },
+        {
+          "id": 2,
+          "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+          "options": [
+            "Sugeng enjing",
+            "Matur nuwun",
+            "Pripun kabare",
+            "Sae-sae mawon"
+          ],
+          "answer": 1,
+          "explanation": "\"Matur nuwun\" tegese terima kasih."
+        },
+        {
+          "id": 3,
+          "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+          "options": [
+            "Membeli / Beli",
+            "Menjual",
+            "Melihat",
+            "Membuang"
+          ],
+          "answer": 0,
+          "explanation": "\"Mundhut\" tegese tuku utawa membeli."
+        }
+      ]
+    },
+    {
+      "npcId": "mbok_sari",
+      "title": "Kuis Tembung — Mbok Sari (Kuis #3)",
+      "generatedAt": "2026-09-02T06:18:13.330Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+          "options": [
+            "Sugeng enjing",
+            "Matur nuwun",
+            "Pripun kabare",
+            "Sae-sae mawon"
+          ],
+          "answer": 1,
+          "explanation": "\"Matur nuwun\" tegese terima kasih."
+        },
+        {
+          "id": 2,
+          "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+          "options": [
+            "Membeli / Beli",
+            "Menjual",
+            "Melihat",
+            "Membuang"
+          ],
+          "answer": 0,
+          "explanation": "\"Mundhut\" tegese tuku utawa membeli."
+        },
+        {
+          "id": 3,
+          "question": "Yen sampeyan takon \"Regine pinten?\", apa tegese ukara iku?",
+          "options": [
+            "Harganya berapa?",
+            "Siapa namamu?",
+            "Di mana pasarnya?",
+            "Kapan bukanya?"
+          ],
+          "answer": 0,
+          "explanation": "\"Regine pinten\" tegese harganya berapa."
+        }
+      ]
+    },
+    {
+      "npcId": "mbok_sari",
+      "title": "Kuis Tembung — Mbok Sari (Kuis #4)",
+      "generatedAt": "2026-09-02T06:21:05.119Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+          "options": [
+            "Membeli / Beli",
+            "Menjual",
+            "Melihat",
+            "Membuang"
+          ],
+          "answer": 0,
+          "explanation": "\"Mundhut\" tegese tuku utawa membeli."
+        },
+        {
+          "id": 2,
+          "question": "Yen sampeyan takon \"Regine pinten?\", apa tegese ukara iku?",
+          "options": [
+            "Harganya berapa?",
+            "Siapa namamu?",
+            "Di mana pasarnya?",
+            "Kapan bukanya?"
+          ],
+          "answer": 0,
+          "explanation": "\"Regine pinten\" tegese harganya berapa."
+        },
+        {
+          "id": 3,
+          "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+          "options": [
+            "Sepuluh (10)",
+            "Lima (5)",
+            "Satu (1)",
+            "Dua puluh (20)"
+          ],
+          "answer": 0,
+          "explanation": "\"Sedasa\" tegese sepuluh (10)."
+        }
+      ]
+    },
+    {
+      "npcId": "mbok_sari",
+      "title": "Kuis Tembung — Mbok Sari (Kuis #5)",
+      "generatedAt": "2026-09-02T06:22:56.847Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen sampeyan takon \"Regine pinten?\", apa tegese ukara iku?",
+          "options": [
+            "Harganya berapa?",
+            "Siapa namamu?",
+            "Di mana pasarnya?",
+            "Kapan bukanya?"
+          ],
+          "answer": 0,
+          "explanation": "\"Regine pinten\" tegese harganya berapa."
+        },
+        {
+          "id": 2,
+          "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+          "options": [
+            "Sepuluh (10)",
+            "Lima (5)",
+            "Satu (1)",
+            "Dua puluh (20)"
+          ],
+          "answer": 0,
+          "explanation": "\"Sedasa\" tegese sepuluh (10)."
+        },
+        {
+          "id": 3,
+          "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+          "options": [
+            "Waktu (Kapan)",
+            "Jumlah / Harga (Berapa)",
+            "Tempat (Di mana)",
+            "Nama orang (Siapa)"
+          ],
+          "answer": 1,
+          "explanation": "\"Pinten\" artine berapa (nuntun rega utawa cacah)."
+        }
+      ]
+    }
+  ],
+  "mbah_kakung": [
+    {
+      "npcId": "mbah_kakung",
+      "title": "Kuis Tembung — Mbah Kakung (Kuis #1)",
+      "generatedAt": "2026-09-02T06:48:25.259Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese tembung \"kulawarga\"?",
+          "options": [
+            "Tetangga",
+            "Keluarga",
+            "Masyarakat",
+            "Teman"
+          ],
+          "answer": 1,
+          "explanation": "\"Kulawarga\" tegese keluarga.",
+          "teaches": {
+            "word": "kulawarga",
+            "meaning": "keluarga"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Tembung \"tentrem\" tegese apa?",
+          "options": [
+            "Ramai",
+            "Tenteram / Damai",
+            "Sedih",
+            "Marah"
+          ],
+          "answer": 1,
+          "explanation": "\"Tentrem\" tegese tenteram dan damai.",
+          "teaches": {
+            "word": "tentrem",
+            "meaning": "tenteram"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788335796129",
+      "npcId": "mbah_kakung",
+      "title": "Kuis Tembung Mbah Kakung",
+      "generatedAt": "2026-09-02T07:56:36.129Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Tembung 'mugi-mugi' ing basa Jawa tegese apa?",
+          "options": [
+            "Sudah",
+            "Semoga",
+            "Tentu",
+            "Mungkin"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'mugi-mugi' iku tembung krama alus kanggo ngucapake harapan utawa doa, tegese 'semoga' ing basa Indonesia.",
+          "teaches": {
+            "word": "mugi-mugi",
+            "meaning": "semoga"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Kanggo ngomong 'balai desa' ing basa Jawa krama, tembung iki bisa diucapake apa?",
+          "options": [
+            "Balai désa",
+            "Gedhong désa",
+            "Omah désa",
+            "Luar désa"
+          ],
+          "answer": 1,
+          "explanation": "Ing budaya Jawa, balai desa sering disebat 'gedhong désa' utawa 'gedhong balai' amarga wujud fisik gedhongé kanggo papan kumpul warga.",
+          "teaches": {
+            "word": "balai desa",
+            "meaning": "balai desa (gedhong désa)"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Nalika Mbah Kakung ngucapke 'Semoga kulawarga dadi tentrem', cethakake tegese tembung 'tentrem' ing ukara kasebut!",
+          "options": [
+            "Ramai",
+            "Tenteram / Damai",
+            "Berisik",
+            "Sejuk"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'tentrem' tegese tenteram, damai, utawa tenang. Ukara kasebut minangka doa supasané kulawarga urip kanthi tentrem lan ora ana masalah.",
+          "teaches": {
+            "word": "tentrem",
+            "meaning": "tenteram / damai"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788335799179",
+      "npcId": "mbah_kakung",
+      "title": "Kuis Tembung Mbah Kakung",
+      "generatedAt": "2026-09-02T07:56:39.179Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Menapa tegese tembung 'mugi-mugi' ing basa Indonesia?",
+          "options": [
+            "Sebab",
+            "Semoga",
+            "Sudah",
+            "Besok"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'mugi-mugi' tegese 'semoga', biasane digunakake kanggo ngucapake urip utawa harapan.",
+          "teaches": {
+            "word": "mugi-mugi",
+            "meaning": "semoga"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Yen ana wong ngucapake 'Gumanteng pisan kulawarga', tegese apa ukara kasebut?",
+          "options": [
+            "Keluarga sedang pergi",
+            "Keluarga sangat ramai",
+            "Keluarga hidup tenteram/damai",
+            "Keluarga baru menikah"
+          ],
+          "answer": 2,
+          "explanation": "Tembung 'kulawarga' tegese keluarga, lan 'gumanteng' (padanane tentrem) tegese tenteram/damai. Dadi ukara kasebut tegese keluarga hidup tenteram.",
+          "teaches": {
+            "word": "kulawarga",
+            "meaning": "keluarga"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Ing mana biasane warga desa ngumpulake rapat resmi kanggo nyedhiyakake informasi desa?",
+          "options": [
+            "Ing omah desa",
+            "Ing balai desa",
+            "Ing pasar desa",
+            "Ing kuil desa"
+          ],
+          "answer": 1,
+          "explanation": "Balai desa yaiku papan kanggo ngumpul lan rapat warga desa. Tembung 'balai desa' asring digunakake ing basa Jawa krama utawa ngoko alus.",
+          "teaches": {
+            "word": "balai desa",
+            "meaning": "balai desa"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788335802611",
+      "npcId": "mbah_kakung",
+      "title": "Kuis Tembung Mbah Kakung",
+      "generatedAt": "2026-09-02T07:56:42.611Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Ing ukara 'Mugi-mugi awake dhewe tansah lestari', tembung 'mugi-mugi' nduweni fungsi apa ing basa Indonesia?",
+          "options": [
+            "Kewajiban (Wajib)",
+            "Harapan (Semoga)",
+            "Pertanyaan (Apakah)",
+            "Perintah (Harap)"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'mugi-mugi' ing basa Jawa krama lemes utawa halus tegese 'semoga' ing basa Indonesia, digunakake kanggo ngucapake harapan.",
+          "teaches": {
+            "word": "mugi-mugi",
+            "meaning": "semoga"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Yen Mbah Kakung ngandika 'Balai desa kasebut ana punggawahe', tembung 'balai desa' ing ukara kasebut nuduhake papan apa?",
+          "options": [
+            "Sekolah Dasar",
+            "Pusat Kegiatan Warga Desa",
+            "Masjid Desa",
+            "Pasar Desa"
+          ],
+          "answer": 1,
+          "explanation": "Balai desa yaiku papan utawa gedung kanggo kagiyatan resmi warga desa, kayata rapat, administrasi, utawa acara kewanitaan/kepriyayan.",
+          "teaches": {
+            "word": "balai desa",
+            "meaning": "balai desa"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Tembung 'tentrem' ing ukara 'Kulawarga kasebut urip tentrem' tegese paling pas kuwi apa?",
+          "options": [
+            "Makmur lan kayangan",
+            "Damai lan tenteram",
+            "Bersih lan rapi",
+            "Ramai lan riang gembira"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'tentrem' tegese tenteram, damai, utawa tenang tanpa ana gentayangan utawa masalah.",
+          "teaches": {
+            "word": "tentrem",
+            "meaning": "tenteram / damai"
+          }
+        }
+      ]
+    }
+  ],
+  "warga_baru_5": [
+    {
+      "id": "quiz_1788335409534",
+      "npcId": "warga_baru_5",
+      "title": "Kuis Tembung Mbok Sari",
+      "generatedAt": "2026-09-02T07:50:09.534Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Wong iki arek mundhut tempe saka pasar. Apa tegese tembung 'mundhut' in basa Indonesia?",
+          "options": [
+            "Membeli",
+            "Menjual",
+            "Memasak",
+            "Meminjam"
+          ],
+          "answer": 0,
+          "explanation": "Tembung 'mundhut' tegese membeli. Ing pasar, kita mundhut barang kaya tempe utawa sayur.",
+          "teaches": {
+            "word": "mundhut",
+            "meaning": "membeli"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Nalika wong tuku, dheweke nanya: 'Pinten regine?' Apa tegese tembung 'pinten' in basa Indonesia?",
+          "options": [
+            "Kapan",
+            "Dimana",
+            "Berapa",
+            "Siapa"
+          ],
+          "answer": 2,
+          "explanation": "Tembung 'pinten' tegese berapa. Digunakake kanggo nanya cacahan utawa harga.",
+          "teaches": {
+            "word": "pinten",
+            "meaning": "berapa"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Saben wong kudu ngucapake tembung iki yen wis rampung tuku lan arek padomane. Apa tegese tembung 'matur nuwun' in basa Indonesia?",
+          "options": [
+            "Maaf",
+            "Terima kasih",
+            "Selamat pagi",
+            "Sampai jumpa"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'matur nuwun' tegese terima kasih. Iku tembung sopan sing kudu diucapake yen wis nampa pitulungan utawa barang.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        }
+      ]
+    }
+  ]
+}
