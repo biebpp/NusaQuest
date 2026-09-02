@@ -46,8 +46,7 @@ const DIALOGUES = {
     role: 'Sesepuh Joglo (Village Elder)',
     charIndex: 2, // Spritesheet column 2
     lines: [
-      { javanese: "Sugeng rawuh ing gubug kula, Nak.", indonesian: "Selamat datang di rumah saya, Nak." },
-      { javanese: '"Dalem" utawa "omah" niku papan kanggo manggon.', indonesian: '"Dalem" atau "omah" itu tempat untuk tinggal.', teaches: { word: "dalem / omah", meaning: "rumah / tempat tinggal" } },
+      { javanese: "Sugeng rawuh ing balai desa, Nak.", indonesian: "Selamat datang di balai desa, Nak." },
       { javanese: "Kula mriki urip tentrem kaliyan kulawarga.", indonesian: "Saya di sini hidup tenteram bersama keluarga.", teaches: { word: "kulawarga", meaning: "keluarga" } },
       { javanese: "Mugi-mugi betah ing desa NusaQuest!", indonesian: "Semoga betah di desa NusaQuest!" }
     ]

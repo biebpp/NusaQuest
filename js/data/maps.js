@@ -15,9 +15,9 @@ const MAPS = {
 
     // 0: Grass, 1: Dirt Path, 2: Water Pond, 3: Sawah Mud, 4: Cobblestone Plaza
     ground: [
-      [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 1, 4, 4, 4, 1, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 1, 4, 4, 4, 1, 0, 0, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 1, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 1, 4, 4, 4, 4, 1, 0, 1, 1, 1, 0],
       [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
       [0, 0, 1, 0, 0, 1, 4, 4, 4, 4, 4, 1, 0, 0, 0, 0],
       [0, 4, 1, 4, 0, 1, 4, 4, 4, 4, 4, 1, 0, 0, 0, 0],
@@ -29,8 +29,8 @@ const MAPS = {
 
     // F: Fence, T: Tree, H: House Roof/Wall, M: Market Stall, P: Padi Crop, W: Reed, D: House Door
     objects: [
-      ['T','T','T','T','FL','H','H','H','H','H','FR','T','F','F','F','T'],
-      ['T','.','.','.','.','H','H','D','H','H','.','.','M','M','M','T'],
+      ['T','T','T','T','F','H','H','H','H','H','H','T','T','T','T','T'],
+      ['T','.','.','.','.','H','H','D','D','H','H','.','M','M','M','T'],
       ['T','.','.','.','.','.','.','.','.','.','.','.','M','M','M','T'],
       ['T','.','.','.','.','.','.','.','.','.','.','.','.','.','.','T'],
       ['T','.','.','.','.','.','.','.','.','.','.','.','.','.','.','T'],
@@ -44,7 +44,7 @@ const MAPS = {
     // 1 = Solid / Blocked, 0 = Walkable
     collision: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-      [1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1], // (7,1) door is walkable
+      [1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1], // (7,1) door is walkable
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -57,7 +57,8 @@ const MAPS = {
 
     // Warp Triggers: Stepping onto (x, y) warps to target map
     warps: [
-      { x: 7, y: 1, targetMap: 'joglo_indoor', targetX: 7, targetY: 8, targetDir: 3 } // Entering Joglo door
+      { x: 7, y: 1, targetMap: 'balai_indoor', targetX: 7, targetY: 8, targetDir: 3 }, // Entering Joglo door
+      { x: 8, y: 1, targetMap: 'balai_indoor', targetX: 7, targetY: 8, targetDir: 3 }, // Entering Joglo door
     ],
 
     npcs: [
@@ -67,9 +68,9 @@ const MAPS = {
     ]
   },
 
-  joglo_indoor: {
-    id: 'joglo_indoor',
-    name: 'Omah Joglo (Dalam Rumah)',
+  balai_indoor: {
+    id: 'balai_indoor',
+    name: 'Balai Desa (Indoor)',
     width: 16,
     height: 10,
     tileSize: 48,
@@ -93,7 +94,7 @@ const MAPS = {
 
     // W: Indoor Wall, C: Teak Cabinet, T: Teak Table, S: Chair, Y: Wayang Shield Tapestry, E: Exit Door
     objects: [
-      ['WR1','WX','WX','WX','.','WX','WX','WX','WX','.','WX','WX','WX','WX','WX','WL1'],
+      ['WR1','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WX','WL1'],
       ['WY','C','.','.','.','.','.','.','.','.','.','.','.','C','.','WY'],
       ['WY','.','.','.','.','.','.','.','.','.','.','.','.','.','.','WY'],
       ['WY','.','.','.','.','.','.','ST','ST','.','.','.','.','.','.','WY'],
@@ -102,7 +103,7 @@ const MAPS = {
       ['WY','.','.','.','.','.','.','SB','SB','.','.','.','.','.','.','WY'],
       ['WY','.','.','.','.','.','.','.','.','.','.','.','.','.','.','WY'],
       ['WY','.','.','.','.','.','.','.','.','.','.','.','.','.','.','WY'],
-      ['WR2','WX','WX','WX','WX','WX','WX','.','WX','WX','WX','WX','WX','WX','WX','WL2']
+      ['WR2','WX','WX','WX','WX','WX','WX','.','.','WX','WX','WX','WX','WX','WX','WL2']
     ],
 
     collision: [
@@ -115,11 +116,12 @@ const MAPS = {
       [1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-      [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1] // Exit door (7, 9) is walkable
+      [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1] // Exit door (7, 9) is walkable
     ],
 
     warps: [
-      { x: 7, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 } // Exit back to village plaza
+      { x: 7, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 }, // Exit back to village plaza
+      { x: 8, y: 9, targetMap: 'village', targetX: 7, targetY: 2, targetDir: 0 }, // Exit back to village plaza
     ],
 
     npcs: [
