@@ -128,6 +128,12 @@
       "col": 49,
       "row": 23,
       "color": "#a4794f"
+    },
+    "CB": {
+      "col": 14,
+      "row": 20,
+      "color": "#d9caa9",
+      "desc": "COLUMN BAWAH"
     }
   },
   "objects": {
@@ -311,6 +317,64 @@
       "row": 23,
       "color": "#0284c7",
       "desc": "Water Reed / Lilypad"
+    },
+    "LP": {
+      "col": 25,
+      "row": 11,
+      "color": "#e1dba7",
+      "desc": "LILY PAD"
+    },
+    "BR": {
+      "col": 24,
+      "row": 9,
+      "color": "#7bad2c",
+      "desc": "BUSH RED"
+    },
+    "CB": {
+      "col": 14,
+      "row": 20,
+      "color": "#d9caa9",
+      "desc": "COLUMN BAWAH"
+    },
+    "CT": {
+      "col": 14,
+      "row": 19,
+      "color": "#d9caa9",
+      "desc": "COLUMN TENGAH"
+    },
+    "WTR": {
+      "col": 24,
+      "row": 21,
+      "color": "#c58f5c",
+      "desc": "WALL TOp RIGHT"
+    },
+    "WTL": {
+      "col": 26,
+      "row": 21,
+      "color": "#c58f5c",
+      "desc": "WALL TOP RIGHT"
+    },
+    "WML": {
+      "col": 26,
+      "row": 22,
+      "color": "#c58f5c",
+      "desc": "WALL MIDDLE LEFT"
+    },
+    "WBL": {
+      "col": 26,
+      "row": 23,
+      "color": "#c58f5c",
+      "desc": "WALL BOTOM L"
+    },
+    "WMR": {
+      "col": 24,
+      "row": 22,
+      "color": "#c58f5c"
+    },
+    "WBR": {
+      "col": 24,
+      "row": 23,
+      "color": "#c58f5c"
     }
   }
 }

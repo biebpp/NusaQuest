@@ -1,5 +1,9 @@
 (function() {
-  const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+  const pathname = window.location.pathname;
+  const isMapMaker = pathname.includes('/dev/map_maker');
+  const isTileViewer = pathname.includes('/dev/tile_viewer');
+  const isNpcConfig = pathname.includes('/dev/npc_config');
+  const isDevHub = pathname === '/dev' || pathname === '/dev/' || pathname.endsWith('/dev/index.html');
 
   const sidebarHtml = `
     <aside id="nqDevSidebar" class="nq-sidebar">
@@ -15,21 +19,25 @@
       </div>
 
       <nav class="nq-nav-menu">
-        <a href="index.html" class="nq-nav-item ${currentPath === 'index.html' || currentPath === '' ? 'active' : ''}">
+        <a href="/dev/" class="nq-nav-item ${isDevHub ? 'active' : ''}">
           <span class="nq-icon">🎮</span>
-          <span class="nq-label">Game Engine</span>
+          <span class="nq-label">Game Preview</span>
         </a>
-        <a href="map_maker.html" class="nq-nav-item ${currentPath === 'map_maker.html' ? 'active' : ''}">
+        <a href="/dev/map_maker.html" class="nq-nav-item ${isMapMaker ? 'active' : ''}">
           <span class="nq-icon">🗺️</span>
           <span class="nq-label">Map Maker</span>
         </a>
-        <a href="tile_viewer.html" class="nq-nav-item ${currentPath === 'tile_viewer.html' ? 'active' : ''}">
+        <a href="/dev/tile_viewer.html" class="nq-nav-item ${isTileViewer ? 'active' : ''}">
           <span class="nq-icon">🎨</span>
           <span class="nq-label">Tile Viewer & Tagger</span>
         </a>
-        <a href="npc_config.html" class="nq-nav-item ${currentPath === 'npc_config.html' ? 'active' : ''}">
+        <a href="/dev/npc_config.html" class="nq-nav-item ${isNpcConfig ? 'active' : ''}">
           <span class="nq-icon">👥</span>
           <span class="nq-label">NPC Configurator</span>
+        </a>
+        <a href="/" class="nq-nav-item" style="margin-top: 8px; border-top: 1px solid #1e293b; padding-top: 10px;">
+          <span class="nq-icon">🚀</span>
+          <span class="nq-label">Exit Dev Suite</span>
         </a>
       </nav>
 

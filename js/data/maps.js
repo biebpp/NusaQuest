@@ -2,7 +2,7 @@ const MAPS = {};
 
 window.mapsLoadPromise = (function() {
   if (typeof fetch !== 'undefined') {
-    return fetch('data/maps.json')
+    return fetch('/data/maps.json')
       .then(res => res.json())
       .then(data => {
         if (data && typeof data === 'object') {

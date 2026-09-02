@@ -650,7 +650,7 @@
 <body>
 
   <!-- Unified Navigation Sidebar loaded automatically by js/sidebar.js -->
-  <script src="js/sidebar.js"></script>
+  <script src="/js/sidebar.js"></script>
 
   <div class="main-wrapper">
     <!-- Top Header -->
@@ -1030,7 +1030,7 @@
       img.onload = () => {
         renderCanvas();
       };
-      img.src = src;
+      img.src = src.startsWith("/") ? src : "/" + src;
     }
 
     function renderCanvas() {

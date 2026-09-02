@@ -216,13 +216,24 @@ class GameEngine {
     for (let r = 0; r < map.height; r++) {
       for (let c = 0; c < map.width; c++) {
         const obj = map.objects[r][c];
+        const isOverhead = map.collision && map.collision[r] && map.collision[r][c] === 2;
+
         if (obj !== '.') {
           entities.push({
             type: 'object',
             code: obj,
             tileX: c,
             tileY: r,
-            sortY: r * 48 + (obj === 'H' || obj === 'M' || obj === 'W' ? 12 : 24)
+            sortY: isOverhead ? (r * 48 + 47) : (r * 48 + (obj === 'H' || obj === 'M' || obj === 'W' ? 12 : 24))
+          });
+        } else if (isOverhead) {
+          // If collision is 2 but object layer is empty, draw ground tile on overhead Z-index pass
+          entities.push({
+            type: 'ground_overhead',
+            groundType: map.ground[r][c],
+            tileX: c,
+            tileY: r,
+            sortY: r * 48 + 47
           });
         }
       }
@@ -246,6 +257,7 @@ class GameEngine {
 
     entities.forEach(ent => {
       if (ent.type === 'object') AssetManager.drawObjectTile(this.ctx, ent.code, ent.tileX, ent.tileY, 48);
+      else if (ent.type === 'ground_overhead') AssetManager.drawGroundTile(this.ctx, ent.groundType, ent.tileX * 48, ent.tileY * 48, 48);
       else if (ent.type === 'npc') this.npcManager.drawNpc(this.ctx, ent.data, 48);
       else if (ent.type === 'player') this.player.draw(this.ctx, 48);
     });

@@ -21,10 +21,8 @@
     "description": "16x16 RPG tilesheet with 1px gap"
   },
   "assets/tiles/kenney_urban.png": {
-    "name": "Kenney Urban",
     "tileSize": 16,
-    "gap": 1,
-    "margin": 0,
-    "description": "16x16 Urban tilesheet with 1px gap"
+    "gap": 0,
+    "margin": 0
   }
 }

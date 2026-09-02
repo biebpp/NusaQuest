@@ -577,14 +577,17 @@
         <div id="tab-collision" class="tab-content">
           <div class="panel-section-title">Collision Mode</div>
           <div class="form-group">
-            <label>Mode Tabrakan (Solid vs Walkable)</label>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-              <button id="colSolidBtn" class="btn btn-primary" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5;">🧱 Blocked (1)</button>
-              <button id="colWalkBtn" class="btn" style="flex: 1; justify-content: center; background: rgba(34, 197, 94, 0.2); border-color: var(--accent); color: #4ade80;">🚶 Walkable (0)</button>
+            <label>Mode Tabrakan (Solid / Walkable / Overhead)</label>
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+              <div style="display: flex; gap: 8px;">
+                <button id="colSolidBtn" class="btn btn-primary" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5;">🧱 Blocked (1)</button>
+                <button id="colWalkBtn" class="btn" style="flex: 1; justify-content: center; background: rgba(34, 197, 94, 0.2); border-color: var(--accent); color: #4ade80;">🚶 Walkable (0)</button>
+              </div>
+              <button id="colCoverBtn" class="btn" style="justify-content: center; background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #c084fc;">🧥 Overhead / Covering (2)</button>
             </div>
           </div>
           <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-top: 10px;">
-            Klik atau drag pada grid map untuk menandai area yang dapat/tidak dapat dilewati pemain.
+            Klik atau drag pada grid map untuk menandai area yang solid, dapat dilewati, atau menutupi pemain.
           </p>
         </div>
 
@@ -785,11 +788,11 @@
   <div id="toastContainer"></div>
 
   <!-- Scripts -->
-  <script src="js/sidebar.js"></script>
-  <script src="js/data/dialogues.js"></script>
-  <script src="js/data/maps.js"></script>
-  <script src="js/assets.js"></script>
-  <script src="js/npcs.js"></script>
+  <script src="/js/sidebar.js"></script>
+  <script src="/js/data/dialogues.js"></script>
+  <script src="/js/data/maps.js"></script>
+  <script src="/js/assets.js"></script>
+  <script src="/js/npcs.js"></script>
 
   <script>
     // NusaQuest Map Maker Core Logic
@@ -1095,13 +1098,13 @@
 
         // 3. Collision Overlay
         if (document.getElementById('chkCollision').checked) {
-          ctx.fillStyle = 'rgba(239, 68, 68, 0.4)';
-          ctx.strokeStyle = 'rgba(239, 68, 68, 0.8)';
-          ctx.lineWidth = 1;
-
           for (let r = 0; r < currentMap.height; r++) {
             for (let c = 0; c < currentMap.width; c++) {
-              if (currentMap.collision[r][c] === 1) {
+              const colVal = currentMap.collision[r][c];
+              if (colVal === 1) {
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.4)';
+                ctx.strokeStyle = 'rgba(239, 68, 68, 0.8)';
+                ctx.lineWidth = 1;
                 ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
                 ctx.strokeRect(c * tileSize + 2, r * tileSize + 2, tileSize - 4, tileSize - 4);
                 
@@ -1112,6 +1115,18 @@
                 ctx.moveTo(c * tileSize + tileSize - 8, r * tileSize + 8);
                 ctx.lineTo(c * tileSize + 8, r * tileSize + tileSize - 8);
                 ctx.stroke();
+              } else if (colVal === 2) {
+                ctx.fillStyle = 'rgba(168, 85, 247, 0.35)';
+                ctx.strokeStyle = 'rgba(168, 85, 247, 0.9)';
+                ctx.lineWidth = 1.5;
+                ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+                ctx.strokeRect(c * tileSize + 2, r * tileSize + 2, tileSize - 4, tileSize - 4);
+
+                // Draw Overhead icon
+                ctx.fillStyle = '#f3e8ff';
+                ctx.font = '14px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('☂️', c * tileSize + tileSize / 2, r * tileSize + tileSize / 2 + 5);
               }
             }
           }
@@ -1199,7 +1214,8 @@
         document.getElementById('inspectPos').textContent = `(${tx}, ${ty})`;
         document.getElementById('inspectGround').textContent = currentMap.ground[ty][tx];
         document.getElementById('inspectObject').textContent = currentMap.objects[ty][tx];
-        document.getElementById('inspectCollision').textContent = currentMap.collision[ty][tx] === 1 ? 'Blocked (1)' : 'Walkable (0)';
+        const colVal = currentMap.collision[ty][tx];
+        document.getElementById('inspectCollision').textContent = colVal === 1 ? 'Blocked (1)' : (colVal === 2 ? 'Overhead (2)' : 'Walkable (0)');
 
         const npcAtTile = (currentMap.npcs || []).find(n => n.tileX === tx && n.tileY === ty);
         document.getElementById('inspectNpc').textContent = npcAtTile ? `${npcAtTile.id} (dir:${npcAtTile.dir || 0})` : '-';
@@ -1391,6 +1407,11 @@
           collisionMode = 0;
           activeTool = 'collision';
           showToast('Collision Tool: Walkable (0)');
+        });
+        document.getElementById('colCoverBtn').addEventListener('click', () => {
+          collisionMode = 2;
+          activeTool = 'collision';
+          showToast('Collision Tool: Overhead / Covering (2)');
         });
 
         // Canvas Mouse Events

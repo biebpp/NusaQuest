@@ -400,7 +400,7 @@
 <body>
 
   <!-- Unified Navigation Sidebar loaded automatically by js/sidebar.js -->
-  <script src="js/sidebar.js"></script>
+  <script src="/js/sidebar.js"></script>
 
   <div class="main-wrapper">
     <header>
@@ -565,8 +565,8 @@
     </div>
   </div>
 
-  <script src="js/data/dialogues.js"></script>
-  <script src="js/data/maps.js"></script>
+  <script src="/js/data/dialogues.js"></script>
+  <script src="/js/data/maps.js"></script>
   <script>
     let dialogues = loadDialogues();
     let npcPlacements = loadNpcPlacements();
@@ -655,7 +655,7 @@
     const codeOutput = document.getElementById('codeOutput');
 
     charImg.onload = () => { renderCharGrid(); };
-    charImg.src = 'assets/characters/characters.png';
+    charImg.src = '/assets/characters/characters.png';
 
     function getCharMetrics() {
       const tileW = 26;

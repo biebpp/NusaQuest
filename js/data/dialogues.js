@@ -1,7 +1,7 @@
 const DIALOGUES = {};
 
 if (typeof fetch !== 'undefined') {
-  fetch('data/dialogues.json')
+  fetch('/data/dialogues.json')
     .then(res => res.json())
     .then(data => {
       if (data && Object.keys(data).length > 0) {

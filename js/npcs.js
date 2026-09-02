@@ -5,7 +5,7 @@ class NpcManager {
 
   initNpcs() {
     if (typeof fetch !== 'undefined') {
-      fetch('data/npc_placements.json')
+      fetch('/data/npc_placements.json')
         .then(res => res.json())
         .then(data => {
           if (data && typeof data === 'object') {

@@ -98,6 +98,7 @@ class Player {
 
   isWalkable(tx, ty, currentMap) {
     if (tx < 0 || tx >= currentMap.width || ty < 0 || ty >= currentMap.height) return false;
+    // Collision values: 0 = Walkable, 1 = Solid/Blocked, 2 = Overhead/Covering (Walkable)
     if (currentMap.collision[ty][tx] === 1) return false;
 
     if (currentMap.activeNpcs) {

@@ -15,6 +15,25 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Redirect legacy root dev page URLs to exclusive /dev/{pages}
+app.get(['/map_maker', '/map_maker.html'], (req, res) => res.redirect(301, '/dev/map_maker.html'));
+app.get(['/tile_viewer', '/tile_viewer.html'], (req, res) => res.redirect(301, '/dev/tile_viewer.html'));
+app.get(['/npc_config', '/npc_config.html'], (req, res) => res.redirect(301, '/dev/npc_config.html'));
+
+// Dev Suite exclusive static route & extension handling
+app.use('/dev', express.static(path.join(__dirname, 'dev')));
+app.get('/dev/:page', (req, res, next) => {
+  let page = req.params.page;
+  if (!page.endsWith('.html')) page += '.html';
+  const targetPath = path.join(__dirname, 'dev', page);
+  if (fs.existsSync(targetPath)) {
+    return res.sendFile(targetPath);
+  }
+  next();
+});
+
+// Serve main game and static files
 app.use(express.static(__dirname));
 
 const QUIZZES_FILE = path.join(__dirname, 'data', 'quizzes.json');

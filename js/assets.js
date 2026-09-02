@@ -4,7 +4,7 @@ const TILE_MAP = {
 };
 
 if (typeof fetch !== 'undefined') {
-  fetch('data/tile_map.json')
+  fetch('/data/tile_map.json')
     .then(res => res.json())
     .then(data => {
       if (data && data.ground && data.objects) {
@@ -33,10 +33,10 @@ const AssetManager = {
 
   load(callback) {
     const sources = {
-      roguelike: 'assets/tiles/kenney_roguelike.png',
-      rpg: 'assets/tiles/kenney_rpg.png',
-      urban: 'assets/tiles/kenney_urban.png',
-      characters: 'assets/characters/characters.png'
+      roguelike: '/assets/tiles/kenney_roguelike.png',
+      rpg: '/assets/tiles/kenney_rpg.png',
+      urban: '/assets/tiles/kenney_urban.png',
+      characters: '/assets/characters/characters.png'
     };
 
     let loadedCount = 0;
