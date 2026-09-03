@@ -129,7 +129,8 @@
                 </div>
                 <div class="form-field">
                   <label for="tagKey">Key / ID:</label>
-                  <input type="text" id="tagKey" placeholder="e.g. 0 or T" required>
+                  <input type="text" id="tagKey" placeholder="e.g. 0 or 1" required>
+                  <span id="tagKeyError" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;">⚠️ Ground ID must be a numeric integer!</span>
                 </div>
               </div>
 
@@ -664,11 +665,31 @@
       return null;
     }
 
+    const tagKeyError = document.getElementById('tagKeyError');
+
+    function validateTagKeyInput() {
+      const cat = tagCategory.value;
+      const val = tagKey.value.trim();
+      if (cat === 'ground' && val.length > 0 && !/^\d+$/.test(val)) {
+        tagKeyError.style.display = 'block';
+        tagKey.style.borderColor = '#ef4444';
+        return false;
+      } else {
+        tagKeyError.style.display = 'none';
+        tagKey.style.borderColor = '';
+        return true;
+      }
+    }
+
     function toggleObjectFields() {
-      objectFields.style.display = tagCategory.value === 'objects' ? 'flex' : 'none';
+      const isObjects = tagCategory.value === 'objects';
+      objectFields.style.display = isObjects ? 'flex' : 'none';
+      tagKey.placeholder = isObjects ? "e.g. T or Ta1" : "e.g. 0 or 1";
+      validateTagKeyInput();
     }
 
     tagCategory.addEventListener('change', toggleObjectFields);
+    tagKey.addEventListener('input', validateTagKeyInput);
 
     document.getElementById('tagForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -681,7 +702,13 @@
       let key = tagKey.value.trim();
       if (!key) return;
 
-      if (cat === 'ground' && !isNaN(key)) {
+      if (cat === 'ground') {
+        if (!/^\d+$/.test(key)) {
+          validateTagKeyInput();
+          alert(`⚠️ Invalid Ground Tile Key/ID: "${key}"\n\nGround tile Key/ID must be a numeric integer (e.g. 0, 1, 2).\n\nIf you want to use string codes (e.g. 'T', 'Ta1'), please select Category: "Objects".`);
+          tagKey.focus();
+          return;
+        }
         key = parseInt(key, 10);
       }
 
@@ -983,6 +1010,11 @@
         try {
           const parsed = JSON.parse(evt.target.result);
           if (parsed.ground && parsed.objects) {
+            const invalidGroundKeys = Object.keys(parsed.ground).filter(k => !/^\d+$/.test(k));
+            if (invalidGroundKeys.length > 0) {
+              alert(`⚠️ Cannot import JSON: "ground" category contains non-numeric string keys (${invalidGroundKeys.slice(0, 3).map(k => '"' + k + '"').join(', ')}).\n\nGround tiles must have numeric integer IDs (e.g. 0, 1, 2).`);
+              return;
+            }
             const hasExistingData = Object.keys(currentMap.ground || {}).length > 0 || Object.keys(currentMap.objects || {}).length > 0;
             if (hasExistingData) {
               const confirmImport = confirm(`⚠️ Importing '${file.name}' will overwrite your current tile tag configuration. Do you want to proceed?`);

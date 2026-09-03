@@ -23,8 +23,8 @@
     {
       "id": "mbah_kakung",
       "tileX": 7,
-      "tileY": 3,
-      "dir": 0
+      "tileY": 7,
+      "dir": 3
     }
   ],
   "east_village": [],
