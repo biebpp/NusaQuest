@@ -109,31 +109,87 @@
       "desc": "Cobblestone Plaza"
     },
     "30": {
-      "col": 19,
-      "row": 9,
-      "color": "#a3641b",
-      "desc": "Cobblestone Plaza"
+      "sheet": "urban",
+      "col": 8,
+      "row": 3,
+      "color": "#aaaeba"
     },
-    "FR": {
-      "col": 48,
+    "31": {
+      "sheet": "urban",
+      "col": 9,
+      "row": 3,
+      "color": "#aaaeba"
+    },
+    "32": {
+      "sheet": "urban",
+      "col": 10,
+      "row": 3,
+      "color": "#aaaeba"
+    },
+    "33": {
+      "sheet": "urban",
+      "col": 8,
+      "row": 4,
+      "color": "#aaaeba"
+    },
+    "34": {
+      "sheet": "urban",
+      "col": 9,
+      "row": 4,
+      "color": "#aaaeba"
+    },
+    "35": {
+      "sheet": "urban",
+      "col": 10,
+      "row": 4,
+      "color": "#aaaeba"
+    },
+    "36": {
+      "sheet": "urban",
+      "col": 8,
+      "row": 5,
+      "color": "#aaaeba"
+    },
+    "37": {
+      "sheet": "urban",
+      "col": 9,
+      "row": 5,
+      "color": "#aaaeba"
+    },
+    "38": {
+      "sheet": "urban",
+      "col": 10,
+      "row": 5,
+      "color": "#aaaeba"
+    },
+    "99": {
+      "col": 18,
+      "row": 22,
+      "color": "#e6dabf"
+    },
+    "WRMM": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 24,
+      "color": "#b98b5e"
+    },
+    "WRM": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 24,
+      "color": "#b98b5e"
+    },
+    "WRST": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 22,
+      "color": "#b98b5e"
+    },
+    "WES": {
+      "sheet": "roguelike",
+      "col": 22,
       "row": 23,
-      "color": "#a4794f"
-    },
-    "F": {
-      "col": 53,
-      "row": 23,
-      "color": "#a77c51"
-    },
-    "FL": {
-      "col": 49,
-      "row": 23,
-      "color": "#a4794f"
-    },
-    "CB": {
-      "col": 14,
-      "row": 20,
-      "color": "#d9caa9",
-      "desc": "COLUMN BAWAH"
+      "color": "#c18d5b"
     }
   },
   "objects": {
@@ -276,24 +332,6 @@
       "color": "#0284c7",
       "desc": "Water Reed / Lilypad"
     },
-    "RR3": {
-      "col": 20,
-      "row": 23,
-      "color": "#0284c7",
-      "desc": "Water Reed / Lilypad"
-    },
-    "RT1": {
-      "col": 25,
-      "row": 21,
-      "color": "#0284c7",
-      "desc": "Water Reed / Lilypad"
-    },
-    "RT2": {
-      "col": 25,
-      "row": 22,
-      "color": "#0284c7",
-      "desc": "Water Reed / Lilypad"
-    },
     "RT3": {
       "col": 25,
       "row": 23,
@@ -375,6 +413,131 @@
       "col": 24,
       "row": 23,
       "color": "#c58f5c"
+    },
+    "EMS": {
+      "col": 43,
+      "row": 10,
+      "color": "#face33"
+    },
+    "WDDR": {
+      "col": 29,
+      "row": 5,
+      "color": "#ab7f54"
+    },
+    "WDDL": {
+      "col": 28,
+      "row": 5,
+      "color": "#b98b5e"
+    },
+    "RT2": {
+      "col": 20,
+      "row": 24,
+      "color": "#c58f5c"
+    },
+    "WM": {
+      "col": 25,
+      "row": 22,
+      "color": "#c58f5c"
+    },
+    "WMT": {
+      "col": 25,
+      "row": 21,
+      "color": "#c58f5c"
+    },
+    "RR3": {
+      "col": 20,
+      "row": 23,
+      "color": "#d29d6c"
+    },
+    "H": {
+      "col": 25,
+      "row": 21,
+      "color": "#78350f",
+      "desc": "Atap Joglo (Roof)"
+    },
+    "M": {
+      "col": 43,
+      "row": 10,
+      "color": "#f59e0b",
+      "desc": "Pasar Stall (Market)"
+    },
+    "D": {
+      "col": 28,
+      "row": 5,
+      "color": "#d97706",
+      "desc": "Pintu Joglo (Door)"
+    },
+    "C": {
+      "col": 28,
+      "row": 23,
+      "color": "#fbbf24",
+      "desc": "Peti Harta (Chest)"
+    },
+    "RT1": {
+      "col": 20,
+      "row": 21,
+      "color": "#0284c7",
+      "desc": "Roof Top 1"
+    },
+    "IndoorWall": {
+      "col": 25,
+      "row": 22,
+      "color": "#3a1e08",
+      "desc": "Indoor Wall"
+    },
+    "W_Wall": {
+      "col": 25,
+      "row": 22,
+      "color": "#3a1e08",
+      "desc": "Wood Wall"
+    },
+    "WRER": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 23,
+      "color": "#c9a582"
+    },
+    "WREL": {
+      "sheet": "roguelike",
+      "col": 36,
+      "row": 23,
+      "color": "#bf9369"
+    },
+    "WRMM": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 24,
+      "color": "#b98b5e"
+    },
+    "WRT": {
+      "sheet": "roguelike",
+      "col": 39,
+      "row": 21,
+      "color": "#c8a480"
+    },
+    "WRST": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 22,
+      "color": "#b98b5e"
+    },
+    "WRSTD": {
+      "sheet": "roguelike",
+      "col": 23,
+      "row": 22,
+      "color": "#d29d6c"
+    },
+    "WES": {
+      "sheet": "roguelike",
+      "col": 22,
+      "row": 23,
+      "color": "#c18d5b"
+    },
+    "WESR": {
+      "sheet": "roguelike",
+      "col": 23,
+      "row": 23,
+      "color": "#c8925f"
     }
   }
 }

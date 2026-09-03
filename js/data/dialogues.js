@@ -21,8 +21,6 @@ if (typeof localStorage !== 'undefined' && localStorage.getItem('NUSAQUEST_DIALO
   } catch (e) {}
 }
 
-const TOTAL_VOCAB_COUNT = 11;
-
 async function fetchNpcQuiz(npcId) {
   try {
     const res = await fetch('/api/npc/quiz', {

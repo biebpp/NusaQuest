@@ -1,9 +1,9 @@
 class Player {
-  constructor(tileX = 7, tileY = 4) {
+  constructor(tileX = 7, tileY = 4, tileSize = 48) {
     this.tileX = tileX;
     this.tileY = tileY;
-    this.pixelX = tileX * 48;
-    this.pixelY = tileY * 48;
+    this.pixelX = tileX * tileSize;
+    this.pixelY = tileY * tileSize;
     this.targetTileX = tileX;
     this.targetTileY = tileY;
     this.dir = 0;
@@ -14,29 +14,34 @@ class Player {
     this.charIndex = 0;
   }
 
-  setPosition(tx, ty, dir = 0) {
+  setPosition(tx, ty, dir = 0, tileSize = 48) {
     this.tileX = tx;
     this.tileY = ty;
     this.targetTileX = tx;
     this.targetTileY = ty;
-    this.pixelX = tx * 48;
-    this.pixelY = ty * 48;
+    this.pixelX = tx * tileSize;
+    this.pixelY = ty * tileSize;
     this.dir = dir;
     this.isMoving = false;
     this.animFrame = 0;
   }
 
-  update(now, currentMap, activeNpcDialogue, keysPressed, checkWarpCallback) {
+  updatePixelPosition(tileSize = 48) {
+    this.pixelX = this.tileX * tileSize;
+    this.pixelY = this.tileY * tileSize;
+  }
+
+  update(now, currentMap, activeNpcDialogue, keysPressed, checkWarpCallback, tileSize = 48) {
     if (activeNpcDialogue) return;
 
     if (this.isMoving) {
       const elapsed = now - this.moveStartTime;
       const progress = Math.min(elapsed / this.moveDuration, 1);
 
-      const startX = this.tileX * 48;
-      const startY = this.tileY * 48;
-      const targetX = this.targetTileX * 48;
-      const targetY = this.targetTileY * 48;
+      const startX = this.tileX * tileSize;
+      const startY = this.tileY * tileSize;
+      const targetX = this.targetTileX * tileSize;
+      const targetY = this.targetTileY * tileSize;
 
       this.pixelX = startX + (targetX - startX) * progress;
       this.pixelY = startY + (targetY - startY) * progress;
@@ -50,8 +55,8 @@ class Player {
         this.isMoving = false;
         this.tileX = this.targetTileX;
         this.tileY = this.targetTileY;
-        this.pixelX = this.tileX * 48;
-        this.pixelY = this.tileY * 48;
+        this.pixelX = this.tileX * tileSize;
+        this.pixelY = this.tileY * tileSize;
         this.animFrame = 0;
 
         if (checkWarpCallback) {
@@ -98,7 +103,6 @@ class Player {
 
   isWalkable(tx, ty, currentMap) {
     if (tx < 0 || tx >= currentMap.width || ty < 0 || ty >= currentMap.height) return false;
-    // Collision values: 0 = Walkable, 1 = Solid/Blocked, 2 = Overhead/Covering (Walkable)
     if (currentMap.collision[ty][tx] === 1) return false;
 
     if (currentMap.activeNpcs) {
@@ -117,10 +121,14 @@ class Player {
     if (img && img.complete && img.naturalWidth !== 0) {
       const srcX = this.charIndex * 3 * 26 + this.animFrame * 26;
       const srcY = this.dir * 36;
-      ctx.drawImage(img, srcX, srcY, 26, 36, px + 6, py - 8, 36, 52);
+      const spriteW = Math.round(tileSize * 0.75);
+      const spriteH = Math.round(tileSize * 1.0833);
+      const offsetX = Math.round((tileSize - spriteW) / 2);
+      const offsetY = Math.round(tileSize - spriteH - (tileSize * 0.08));
+      ctx.drawImage(img, srcX, srcY, 26, 36, px + offsetX, py + offsetY, spriteW, spriteH);
     } else {
       ctx.fillStyle = '#2563eb';
-      ctx.fillRect(px + 10, py + 10, 28, 34);
+      ctx.fillRect(px + Math.round(tileSize * 0.2), py + Math.round(tileSize * 0.2), Math.round(tileSize * 0.6), Math.round(tileSize * 0.7));
     }
   }
 }

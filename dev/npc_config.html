@@ -7,399 +7,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --bg-panel: #1e293b;
-      --bg-card: #334155;
-      --accent: #22c55e;
-      --accent-hover: #16a34a;
-      --gold: #f59e0b;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #475569;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Quicksand', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text);
-      height: 100vh;
-      display: flex;
-      flex-direction: row;
-      overflow: hidden;
-    }
-
-    .main-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    header {
-      background-color: #0b1324;
-      border-bottom: 2px solid var(--border);
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      z-index: 10;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand h1 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 14px;
-      color: var(--gold);
-    }
-
-    .badge {
-      background: #8b5cf6;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-
-    .sync-status {
-      background: rgba(34, 197, 94, 0.15);
-      color: #4ade80;
-      border: 1px solid #22c55e;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sync-status .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 6px #22c55e;
-    }
-
-    .content-area {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    /* Left Panel: Character Grid Tile Viewer */
-    .left-panel {
-      flex: 1;
-      background: #090d16;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      overflow-y: auto;
-    }
-
-    .section-card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    /* Character Tile Grid Canvas Box */
-    .sprite-grid-box {
-      position: relative;
-      overflow: auto;
-      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px;
-      display: flex;
-      justify-content: center;
-      min-height: 400px;
-    }
-
-    #charCanvas {
-      display: block;
-      cursor: crosshair;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-    }
-
-    /* Tile Hover Inspector */
-    .hover-inspector {
-      position: fixed;
-      bottom: 20px;
-      left: 240px;
-      background: rgba(15, 23, 42, 0.9);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      z-index: 5;
-      pointer-events: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    /* Right Panel: Form & Animation Config */
-    .right-panel {
-      width: 480px;
-      background: var(--bg-panel);
-      border-left: 2px solid var(--border);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      overflow-y: auto;
-    }
-
-    select, input[type="text"], input[type="number"], input[type="range"] {
-      background: var(--bg-dark);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 13px;
-    }
-
-    select:focus, input:focus {
-      outline: 2px solid var(--accent);
-      border-color: transparent;
-    }
-
-    input[type="range"] {
-      accent-color: var(--gold);
-      cursor: pointer;
-    }
-
-    .zoom-preset-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 2px 6px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .zoom-preset-btn:hover {
-      background: var(--border);
-    }
-
-    .npc-selector-bar {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      background: var(--bg-card);
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text);
-      border: 1px solid var(--border);
-      font-weight: 600;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .btn-secondary:hover {
-      background: var(--border);
-    }
-
-    .btn-danger {
-      background: #ef4444;
-      color: #fff;
-      font-weight: 700;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .form-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
-
-    .form-field label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-    }
-
-    /* Animation Sequence Box */
-    .anim-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-
-    .anim-preview-canvas {
-      width: 52px;
-      height: 72px;
-      background: #000;
-      border: 2px solid var(--gold);
-      border-radius: 4px;
-      image-rendering: pixelated;
-    }
-
-    .anim-frames-list {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      flex: 1;
-    }
-
-    .anim-chip {
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--gold);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .anim-chip-del {
-      color: #ef4444;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    /* Dialogue Line Cards */
-    .lines-container {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 220px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .line-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .line-card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--gold);
-    }
-
-    .code-preview {
-      background: #090d16;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: #a7f3d0;
-      max-height: 160px;
-      overflow: auto;
-      white-space: pre;
-    }
-
-    /* Scrollbars */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-dark); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  </style>
+  <link rel="stylesheet" href="/dev/dev.css">
 </head>
 <body>
 
-  <!-- Unified Navigation Sidebar loaded automatically by js/sidebar.js -->
   <script src="/js/sidebar.js"></script>
 
   <div class="main-wrapper">
@@ -415,7 +26,6 @@
     </header>
 
     <div class="content-area">
-      <!-- Left Panel: Character Spritesheet Grid Tile Inspector -->
       <div class="left-panel">
         <div class="section-card" style="flex: 1;">
           <div class="section-title">
@@ -444,7 +54,6 @@
         </div>
       </div>
 
-      <!-- Right Panel: NPC Form, Manual Tile Placement & Dialogue Form -->
       <div class="right-panel">
         <div class="section-title">
           <span>Select & Configure NPC</span>
@@ -480,7 +89,6 @@
             </div>
           </div>
 
-          <!-- Manual NPC Map Placement Controls -->
           <div style="border-top: 1px solid var(--border); padding-top: 10px;">
             <div class="section-title" style="margin-bottom: 8px;">
               <span>Manual Map Coordinates Placement</span>
@@ -513,7 +121,6 @@
             </div>
           </div>
 
-          <!-- NPC Tile & Animation Selection Section -->
           <div style="border-top: 1px solid var(--border); padding-top: 10px;">
             <div class="section-title">
               <span>Tile & Animation Sequence</span>
@@ -534,16 +141,13 @@
             </div>
           </div>
 
-          <!--dialogue Lines Section -->
           <div style="border-top: 1px solid var(--border); padding-top: 10px;">
             <div class="section-title">
               <span>Dialogue Lines Script</span>
               <button type="button" id="addLineBtn" class="btn-primary" style="padding: 3px 6px; font-size: 11px;">Add Line</button>
             </div>
             
-            <div class="lines-container" id="linesContainer">
-              <!-- dialogue line cards injected here -->
-            </div>
+            <div class="lines-container" id="linesContainer"></div>
           </div>
 
           <div class="form-row" style="margin-top: 6px;">
@@ -551,10 +155,9 @@
           </div>
         </form>
 
-        <!-- Code Exporter -->
         <div style="border-top: 1px solid var(--border); padding-top: 10px;">
           <div class="section-title">Export DIALOGUES JavaScript</div>
-          <pre class="code-preview" id="codeOutput">// Code export preview</pre>
+          <pre class="code-preview" id="codeOutput"></pre>
           <div style="display: flex; gap: 8px; margin-top: 8px;">
             <button id="copyJsBtn" class="btn-primary" style="flex: 1;">Copy JS</button>
             <button id="downloadJsonBtn" class="btn-secondary">Export JSON</button>
@@ -1054,6 +657,11 @@
       const newId = npcId.value.trim();
       if (!newId) return;
 
+      if (editingOriginalId !== newId && dialogues[newId]) {
+        const confirmOverride = confirm(`⚠️ NPC with ID '${newId}' already exists!\nOverwriting will replace the existing NPC '${dialogues[newId].name || newId}'. Are you sure you want to proceed?`);
+        if (!confirmOverride) return;
+      }
+
       const lines = extractLinesFromForm();
 
       if (editingOriginalId && editingOriginalId !== newId) {
@@ -1109,8 +717,12 @@
     });
 
     document.getElementById('newNpcBtn').addEventListener('click', () => {
-      const count = Object.keys(dialogues).length + 1;
-      const newId = `warga_baru_${count}`;
+      let count = Object.keys(dialogues).length + 1;
+      let newId = `warga_baru_${count}`;
+      while (dialogues[newId]) {
+        count++;
+        newId = `warga_baru_${count}`;
+      }
       
       dialogues[newId] = {
         id: newId,

@@ -7,653 +7,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-dark: #0f172a;
-      --bg-panel: #1e293b;
-      --bg-card: #334155;
-      --accent: #22c55e;
-      --accent-hover: #16a34a;
-      --gold: #f59e0b;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #475569;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Quicksand', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text);
-      height: 100vh;
-      display: flex;
-      flex-direction: row;
-      overflow: hidden;
-    }
-
-    .main-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* Top Navigation Header */
-    header {
-      background-color: #0b1324;
-      border-bottom: 2px solid var(--border);
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-      flex-wrap: wrap;
-      z-index: 10;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand h1 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 14px;
-      color: var(--gold);
-      letter-spacing: 1px;
-    }
-
-    .badge {
-      background: #3b82f6;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-
-    .nav-btn {
-      background: var(--bg-card);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 6px 12px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .nav-btn:hover {
-      background: var(--border);
-      color: #fff;
-    }
-
-    .sync-status {
-      background: rgba(34, 197, 94, 0.2);
-      color: #4ade80;
-      border: 1px solid #22c55e;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .sync-status .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
-    }
-
-    /* Toolbar Settings Controls */
-    .toolbar {
-      background-color: var(--bg-panel);
-      padding: 10px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      font-size: 13px;
-    }
-
-    .control-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .control-group label {
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    select, input[type="number"], input[type="text"], input[type="color"] {
-      background: var(--bg-dark);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-family: inherit;
-      font-size: 13px;
-    }
-
-    select:focus, input:focus {
-      outline: 2px solid var(--accent);
-      border-color: transparent;
-    }
-
-    input[type="number"] {
-      width: 60px;
-    }
-
-    /* Zoom Slider */
-    input[type="range"] {
-      accent-color: var(--gold);
-      cursor: pointer;
-      width: 110px;
-    }
-
-    .zoom-preset-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 3px 6px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .zoom-preset-btn:hover {
-      background: var(--border);
-    }
-
-    /* Main Workspace Layout */
-    .workspace {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
-
-    /* Left Panel: Canvas Viewer */
-    .viewer-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #090d16;
-      position: relative;
-      overflow: auto;
-    }
-
-    .canvas-container {
-      position: relative;
-      margin: auto;
-      padding: 30px;
-      min-width: min-content;
-      min-height: min-content;
-      user-select: none;
-    }
-
-    #sheetCanvas {
-      display: block;
-      background: repeating-conic-gradient(#1e293b 0% 25%, #0f172a 0% 50%) 50% / 16px 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border-radius: 4px;
-      cursor: crosshair;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-    }
-
-    /* Floating Tile Hover Inspector */
-    .hover-inspector {
-      position: fixed;
-      bottom: 20px;
-      left: 240px;
-      background: rgba(15, 23, 42, 0.9);
-      backdrop-filter: blur(8px);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    .hover-preview {
-      width: 48px;
-      height: 48px;
-      background: #000;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      image-rendering: pixelated;
-    }
-
-    .hover-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-    }
-
-    .hover-info strong {
-      color: var(--gold);
-    }
-
-    /* Right Panel: Tagger & Exporter & Audit Log */
-    .tagger-panel {
-      width: 450px;
-      background: var(--bg-panel);
-      border-left: 2px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-
-    /* Panel Tabs Navigation */
-    .panel-tabs {
-      display: flex;
-      background: #0b1324;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 10px 14px;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-
-    .tab-btn.active {
-      color: var(--gold);
-      border-bottom-color: var(--gold);
-      background: var(--bg-panel);
-    }
-
-    .tab-content {
-      display: none;
-      flex-direction: column;
-    }
-
-    .tab-content.active {
-      display: flex;
-    }
-
-    .panel-section {
-      padding: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .panel-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Selection Card */
-    .selection-card {
-      background: var(--bg-card);
-      border-radius: 8px;
-      padding: 12px;
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-
-    .selected-preview-box {
-      width: 64px;
-      height: 64px;
-      background: #000;
-      border: 2px solid var(--gold);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .selected-preview-box canvas {
-      width: 64px;
-      height: 64px;
-      image-rendering: pixelated;
-    }
-
-    .selected-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 13px;
-    }
-
-    .selected-meta .coords {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--accent);
-    }
-
-    .color-swatch-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      cursor: pointer;
-      color: var(--text);
-    }
-
-    .color-swatch {
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
-      border: 1px solid #fff;
-    }
-
-    /* Form Styles */
-    .form-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
-
-    .form-field label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      font-weight: 700;
-      border: none;
-      padding: 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background 0.2s;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-hover);
-    }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text);
-      border: 1px solid var(--border);
-      font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .btn-secondary:hover {
-      background: var(--border);
-    }
-
-    .btn-danger {
-      background: #ef4444;
-      color: #fff;
-      font-weight: 700;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
-    }
-
-    /* Tagged List Section */
-    .tag-list-controls {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .tag-list-container {
-      max-height: 200px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding-right: 4px;
-    }
-
-    .tag-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-
-    .tag-item:hover, .tag-item.active {
-      border-color: var(--accent);
-      background: #3b4c66;
-    }
-
-    .tag-item-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .tag-badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 700;
-      font-size: 12px;
-      background: var(--bg-dark);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: var(--gold);
-      min-width: 32px;
-      text-align: center;
-    }
-
-    .tag-desc {
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .tag-desc .name {
-      font-weight: 600;
-    }
-
-    .tag-desc .meta {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .tag-delete-btn {
-      background: transparent;
-      border: none;
-      color: #ef4444;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 4px;
-      border-radius: 4px;
-    }
-
-    .tag-delete-btn:hover {
-      background: rgba(239, 68, 68, 0.2);
-    }
-
-    /* JS Code Exporter */
-    .code-preview {
-      background: #090d16;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: #a7f3d0;
-      max-height: 180px;
-      overflow: auto;
-      white-space: pre;
-    }
-
-    .exporter-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    /* Audit Log UI Styles */
-    .audit-controls {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .audit-list-container {
-      max-height: 480px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-right: 4px;
-    }
-
-    .audit-card {
-      background: var(--bg-card);
-      border-left: 4px solid var(--border);
-      border-radius: 4px;
-      padding: 10px 12px;
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .audit-card.action-add { border-left-color: #22c55e; }
-    .audit-card.action-update { border-left-color: #3b82f6; }
-    .audit-card.action-delete { border-left-color: #ef4444; }
-    .audit-card.action-import { border-left-color: #f59e0b; }
-    .audit-card.action-reset { border-left-color: #a855f7; }
-
-    .audit-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .audit-badge {
-      font-weight: 700;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      text-transform: uppercase;
-    }
-
-    .action-add .audit-badge { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-    .action-update .audit-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-    .action-delete .audit-badge { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-    .action-import .audit-badge { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
-    .action-reset .audit-badge { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
-
-    .audit-time {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-muted);
-    }
-
-    .audit-summary {
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .audit-detail {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--text-muted);
-      background: var(--bg-dark);
-      padding: 6px;
-      border-radius: 4px;
-      word-break: break-word;
-    }
-
-    /* Scrollbars */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-dark); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  </style>
+  <link rel="stylesheet" href="/dev/dev.css">
 </head>
 <body>
 
-  <!-- Unified Navigation Sidebar loaded automatically by js/sidebar.js -->
   <script src="/js/sidebar.js"></script>
 
   <div class="main-wrapper">
-    <!-- Top Header -->
     <header>
       <div class="brand">
         <h1>NusaQuest Tile Viewer & Tagger</h1>
@@ -671,7 +31,6 @@
       </div>
     </header>
 
-    <!-- Toolbar Controls -->
     <div class="toolbar">
       <div class="control-group">
         <label for="sheetSelect">Tilesheet Image:</label>
@@ -698,7 +57,6 @@
         <input type="number" id="tileMarginInput" value="0" min="0" max="16">
       </div>
 
-      <!-- Zoom Range Slider -->
       <div class="control-group">
         <label for="zoomSlider">Zoom:</label>
         <input type="range" id="zoomSlider" min="1" max="8" step="0.5" value="2">
@@ -718,15 +76,12 @@
       </div>
     </div>
 
-    <!-- Main Workspace -->
     <div class="workspace">
-      <!-- Left Sheet Viewer -->
       <div class="viewer-panel" id="viewerPanel">
         <div class="canvas-container">
           <canvas id="sheetCanvas"></canvas>
         </div>
 
-        <!-- Floating Tile Hover Inspector -->
         <div class="hover-inspector" id="hoverInspector" style="display: none;">
           <canvas id="hoverPreviewCanvas" width="48" height="48" class="hover-preview"></canvas>
           <div class="hover-info">
@@ -737,18 +92,13 @@
         </div>
       </div>
 
-      <!-- Right Tagger & Sidebar -->
       <div class="tagger-panel">
-        
-        <!-- Panel Navigation Tabs -->
         <div class="panel-tabs">
           <button class="tab-btn active" data-tab="tabTagger">Tile Tagger & Export</button>
           <button class="tab-btn" data-tab="tabAudit">Edit Audit Log (<span id="auditBadgeCount">0</span>)</button>
         </div>
 
-        <!-- TAB 1: TAGGER & EXPORT -->
         <div class="tab-content active" id="tabTagger">
-          <!-- Selection & Tag Form Section -->
           <div class="panel-section">
             <div class="panel-title">Tag Selected Tile</div>
 
@@ -812,7 +162,6 @@
             </form>
           </div>
 
-          <!-- Tagged Tiles List Section -->
           <div class="panel-section">
             <div class="panel-title">
               <span>Mapped Tiles List</span>
@@ -828,16 +177,13 @@
               </select>
             </div>
 
-            <div class="tag-list-container" id="tagListContainer">
-              <!-- Tag items dynamically injected here -->
-            </div>
+            <div class="tag-list-container" id="tagListContainer"></div>
           </div>
 
-          <!-- JS Exporter & Game Integration Section -->
           <div class="panel-section" style="border-bottom: none;">
             <div class="panel-title">Auto-Integration & JS Export</div>
             <div class="exporter-box">
-              <pre class="code-preview" id="codeOutput">// Tagged TILE_MAP export code will appear here...</pre>
+              <pre class="code-preview" id="codeOutput"></pre>
               <div class="exporter-actions">
                 <button id="copyJsBtn" class="btn-primary" style="flex: 1;">Copy JS Code</button>
                 <button id="downloadJsBtn" class="btn-secondary">Save JS File</button>
@@ -847,7 +193,6 @@
           </div>
         </div>
 
-        <!-- TAB 2: EDIT AUDIT LOG -->
         <div class="tab-content" id="tabAudit">
           <div class="panel-section" style="border-bottom: none; flex: 1; display: flex; flex-direction: column;">
             <div class="panel-title">
@@ -868,9 +213,7 @@
               <button id="exportAuditBtn" class="btn-secondary" title="Export audit log report text file">Download Log</button>
             </div>
 
-            <div class="audit-list-container" id="auditListContainer">
-              <!-- Audit log entries injected here -->
-            </div>
+            <div class="audit-list-container" id="auditListContainer"></div>
           </div>
         </div>
 
@@ -1122,10 +465,21 @@
       ctx.restore();
     }
 
+    function getSheetKey(path) {
+      if (!path) return 'roguelike';
+      if (path.includes('kenney_ui_adventure')) return 'ui_adventure';
+      if (path.includes('kenney_rpg')) return 'rpg';
+      if (path.includes('kenney_urban')) return 'urban';
+      if (path.includes('kenney_roguelike')) return 'roguelike';
+      return 'roguelike';
+    }
+
     function drawTagBadges(marginOffset, tileSize, stride, margin) {
+      const currentSheetKey = getSheetKey(sheetSelect.value);
       for (const [cat, tags] of Object.entries(currentMap)) {
         for (const [key, def] of Object.entries(tags)) {
-          if (def.col !== undefined && def.row !== undefined) {
+          const defSheet = def.sheet || 'roguelike';
+          if (defSheet === currentSheetKey && def.col !== undefined && def.row !== undefined) {
             const bx = marginOffset + margin + def.col * stride;
             const by = marginOffset + margin + def.row * stride;
 
@@ -1331,7 +685,9 @@
         key = parseInt(key, 10);
       }
 
+      const currentSheetKey = getSheetKey(sheetSelect.value);
       const newDef = {
+        sheet: currentSheetKey,
         col: selectedTile.col,
         row: selectedTile.row,
         color: tagColor.value
@@ -1349,13 +705,19 @@
 
       const prevDef = currentMap[cat][key];
       const isUpdate = Boolean(prevDef);
+
+      if (isUpdate && (prevDef.col !== selectedTile.col || prevDef.row !== selectedTile.row || (prevDef.sheet || 'roguelike') !== currentSheetKey)) {
+        const confirmOverride = confirm(`⚠️ Key/ID Tag '${key}' in [${cat}] is already assigned to tile (${prevDef.sheet || 'roguelike'}, col: ${prevDef.col}, row: ${prevDef.row}).\nAre you sure you want to overwrite it with tile (${currentSheetKey}, col: ${selectedTile.col}, row: ${selectedTile.row})?`);
+        if (!confirmOverride) return;
+      }
+
       const actionType = isUpdate ? 'UPDATE' : 'ADD';
 
       currentMap[cat][key] = newDef;
 
       const summaryText = isUpdate
-        ? `Updated [${cat}] tag '${key}': col ${prevDef.col}→${newDef.col}, row ${prevDef.row}→${newDef.row}`
-        : `Added [${cat}] tag '${key}' at col: ${newDef.col}, row: ${newDef.row}`;
+        ? `Updated [${cat}] tag '${key}': (${newDef.sheet}) col ${prevDef.col}→${newDef.col}, row ${prevDef.row}→${newDef.row}`
+        : `Added [${cat}] tag '${key}' at (${newDef.sheet}) col: ${newDef.col}, row: ${newDef.row}`;
 
       logAudit(actionType, cat, key, summaryText, prevDef, newDef);
 
@@ -1387,7 +749,8 @@
 
         for (const [key, def] of Object.entries(currentMap[cat])) {
           const desc = def.desc || '';
-          const searchString = `${cat} ${key} ${desc} ${def.col} ${def.row}`.toLowerCase();
+          const sheetKey = def.sheet || 'roguelike';
+          const searchString = `${cat} ${key} ${desc} ${sheetKey} ${def.col} ${def.row}`.toLowerCase();
 
           if (search && !searchString.includes(search)) continue;
 
@@ -1395,7 +758,8 @@
 
           const item = document.createElement('div');
           item.className = 'tag-item';
-          if (selectedTile && selectedTile.col === def.col && selectedTile.row === def.row) {
+          const currentSheetKey = getSheetKey(sheetSelect.value);
+          if (selectedTile && selectedTile.col === def.col && selectedTile.row === def.row && sheetKey === currentSheetKey) {
             item.classList.add('active');
           }
 
@@ -1405,7 +769,7 @@
               <span class="tag-badge">${key}</span>
               <div class="tag-desc">
                 <span class="name">${desc || (cat === 'ground' ? 'Ground Tile' : 'Object Tile')}</span>
-                <span class="meta">[${cat}] col: ${def.col}, row: ${def.row}</span>
+                <span class="meta">[${cat}] (${sheetKey}) col: ${def.col}, row: ${def.row}</span>
               </div>
             </div>
             <button class="tag-delete-btn" title="Delete tag">✖</button>
@@ -1413,6 +777,17 @@
 
           item.addEventListener('click', (e) => {
             if (e.target.classList.contains('tag-delete-btn')) return;
+            const targetSheetKey = def.sheet || 'roguelike';
+            const curSheetKey = getSheetKey(sheetSelect.value);
+            if (targetSheetKey !== curSheetKey) {
+              for (const opt of sheetSelect.options) {
+                if (getSheetKey(opt.value) === targetSheetKey) {
+                  sheetSelect.value = opt.value;
+                  loadSheet();
+                  break;
+                }
+              }
+            }
             selectTile(def.col, def.row);
           });
 
@@ -1445,9 +820,8 @@
       const groundKeys = Object.keys(currentMap.ground);
       groundKeys.forEach((key, idx) => {
         const d = currentMap.ground[key];
-        const comment = d.desc ? ` // ${d.desc}` : '';
         const comma = idx === groundKeys.length - 1 ? '' : ',';
-        code += `    ${key}: { col: ${d.col}, row: ${d.row}, color: '${d.color || '#4ade80'}' }${comma}${comment}\n`;
+        code += `    ${key}: { sheet: '${d.sheet || 'roguelike'}', col: ${d.col}, row: ${d.row}, color: '${d.color || '#4ade80'}' }${comma}\n`;
       });
       code += '  },\n';
 
@@ -1456,13 +830,12 @@
       objectKeys.forEach((key, idx) => {
         const d = currentMap.objects[key];
         const keyStr = typeof key === 'string' && !key.startsWith("'") ? `'${key}'` : key;
-        let props = `col: ${d.col}, row: ${d.row}`;
+        let props = `sheet: '${d.sheet || 'roguelike'}', col: ${d.col}, row: ${d.row}`;
         if (d.yOffset) props += `, yOffset: ${d.yOffset}`;
         if (d.hExtra) props += `, hExtra: ${d.hExtra}`;
         props += `, color: '${d.color || '#15803d'}'`;
-        const comment = d.desc ? ` // ${d.desc}` : '';
         const comma = idx === objectKeys.length - 1 ? '' : ',';
-        code += `    ${keyStr}: { ${props} }${comma}${comment}\n`;
+        code += `    ${keyStr}: { ${props} }${comma}\n`;
       });
       code += '  }\n';
       code += '};';
@@ -1610,6 +983,11 @@
         try {
           const parsed = JSON.parse(evt.target.result);
           if (parsed.ground && parsed.objects) {
+            const hasExistingData = Object.keys(currentMap.ground || {}).length > 0 || Object.keys(currentMap.objects || {}).length > 0;
+            if (hasExistingData) {
+              const confirmImport = confirm(`⚠️ Importing '${file.name}' will overwrite your current tile tag configuration. Do you want to proceed?`);
+              if (!confirmImport) return;
+            }
             currentMap = parsed;
             logAudit('IMPORT', 'all', '*', `Imported external JSON map file '${file.name}'`);
             updateTagList();

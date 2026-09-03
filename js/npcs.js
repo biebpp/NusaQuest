@@ -68,10 +68,14 @@ class NpcManager {
         srcX = cIdx * 3 * 26 + 26;
         srcY = dir * 36;
       }
-      ctx.drawImage(img, srcX, srcY, 26, 36, px + 6, py - 8, 36, 52);
+      const spriteW = Math.round(tileSize * 0.75);
+      const spriteH = Math.round(tileSize * 1.0833);
+      const offsetX = Math.round((tileSize - spriteW) / 2);
+      const offsetY = Math.round(tileSize - spriteH - (tileSize * 0.08));
+      ctx.drawImage(img, srcX, srcY, 26, 36, px + offsetX, py + offsetY, spriteW, spriteH);
     } else {
       ctx.fillStyle = '#dc2626';
-      ctx.fillRect(px + 10, py + 10, 28, 34);
+      ctx.fillRect(px + Math.round(tileSize * 0.2), py + Math.round(tileSize * 0.2), Math.round(tileSize * 0.6), Math.round(tileSize * 0.7));
     }
   }
 }

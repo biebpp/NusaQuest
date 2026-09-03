@@ -11,7 +11,9 @@ class GameEngine {
       collision: Array.from({ length: 10 }, () => Array(16).fill(0))
     };
 
-    this.player = new Player(this.currentMap.spawnX || 7, this.currentMap.spawnY || 4);
+    this.tileSize = this.currentMap.tileSize || 48;
+
+    this.player = new Player(this.currentMap.spawnX || 7, this.currentMap.spawnY || 4, this.getTileSize());
     this.npcManager = new NpcManager();
     this.uiManager = new UIManager();
 
@@ -21,17 +23,56 @@ class GameEngine {
     this.pendingQuiz = null;
     this.keysPressed = {};
 
+    this.updateCanvasDimensions();
     this.bindInputs();
+  }
+
+  getTileSize() {
+    return this.tileSize || (this.currentMap && this.currentMap.tileSize) || 48;
+  }
+
+  setTileSize(newSize) {
+    const size = parseInt(newSize, 10);
+    if (!isNaN(size) && size >= 16 && size <= 128) {
+      this.tileSize = size;
+      if (this.currentMap) this.currentMap.tileSize = size;
+      this.updateCanvasDimensions();
+      this.player.updatePixelPosition(size);
+      const select = document.getElementById('tileSizeSelect');
+      if (select && select.value !== String(size)) {
+        select.value = String(size);
+      }
+    }
+  }
+
+  updateCanvasDimensions() {
+    const ts = this.getTileSize();
+    const mapW = this.currentMap ? this.currentMap.width : 16;
+    const mapH = this.currentMap ? this.currentMap.height : 10;
+
+    this.canvas.width = mapW * ts;
+    this.canvas.height = mapH * ts;
+
+    const container = document.getElementById('canvasContainer');
+    if (container) {
+      container.style.width = `${this.canvas.width}px`;
+      container.style.height = `${this.canvas.height}px`;
+    }
   }
 
   initMap(mapId = 'village') {
     if (MAPS[mapId]) {
       this.currentMapId = mapId;
       this.currentMap = MAPS[mapId];
+      if (this.currentMap.tileSize) {
+        this.tileSize = this.currentMap.tileSize;
+      }
+      this.updateCanvasDimensions();
       this.player.setPosition(
         this.currentMap.spawnX !== undefined ? this.currentMap.spawnX : 7,
         this.currentMap.spawnY !== undefined ? this.currentMap.spawnY : 4,
-        this.currentMap.spawnDir !== undefined ? this.currentMap.spawnDir : 0
+        this.currentMap.spawnDir !== undefined ? this.currentMap.spawnDir : 0,
+        this.getTileSize()
       );
     }
   }
@@ -56,19 +97,32 @@ class GameEngine {
       this.keysPressed[e.code] = false;
     });
 
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      this.advanceDialogue();
-    });
+    const nextBtn = document.getElementById('nextBtn');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        this.advanceDialogue();
+      });
+    }
+
+    const tileSizeSelect = document.getElementById('tileSizeSelect');
+    if (tileSizeSelect) {
+      tileSizeSelect.value = String(this.getTileSize());
+      tileSizeSelect.addEventListener('change', (e) => {
+        this.setTileSize(e.target.value);
+      });
+    }
 
     this.canvas.addEventListener('click', (e) => {
       if (e.shiftKey) {
         const rect = this.canvas.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const clickY = e.clientY - rect.top;
-        const tileSize = this.currentMap.tileSize || 48;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const ts = this.getTileSize();
 
-        const tileX = Math.floor(clickX / tileSize);
-        const tileY = Math.floor(clickY / tileSize);
+        const tileX = Math.floor((clickX * scaleX) / ts);
+        const tileY = Math.floor((clickY * scaleY) / ts);
 
         const npcs = this.npcManager.getNpcsForMap(this.currentMapId);
         if (npcs.length > 0) {
@@ -170,7 +224,11 @@ class GameEngine {
 
     this.currentMapId = targetMapId;
     this.currentMap = MAPS[targetMapId];
-    this.player.setPosition(targetX, targetY, targetDir);
+    if (this.currentMap.tileSize) {
+      this.tileSize = this.currentMap.tileSize;
+    }
+    this.updateCanvasDimensions();
+    this.player.setPosition(targetX, targetY, targetDir, this.getTileSize());
 
     this.uiManager.showToast(`Memasuki: ${this.currentMap.name}`);
   }
@@ -181,12 +239,15 @@ class GameEngine {
       activeNpcs: this.npcManager.getNpcsForMap(this.currentMapId)
     };
 
+    const ts = this.getTileSize();
+
     this.player.update(
       now,
       activeMapContext,
       this.activeDialogueNpc,
       this.keysPressed,
-      (tx, ty) => this.checkWarp(tx, ty)
+      (tx, ty) => this.checkWarp(tx, ty),
+      ts
     );
   }
 
@@ -201,39 +262,54 @@ class GameEngine {
 
   renderGround() {
     const map = this.currentMap;
+    const ts = this.getTileSize();
     for (let r = 0; r < map.height; r++) {
       for (let c = 0; c < map.width; c++) {
         const type = map.ground[r][c];
-        AssetManager.drawGroundTile(this.ctx, type, c * 48, r * 48, 48);
+        AssetManager.drawGroundTile(this.ctx, type, c * ts, r * ts, ts);
       }
     }
   }
 
   renderEntities(now) {
     const map = this.currentMap;
+    const ts = this.getTileSize();
     const entities = [];
+
+    const getObjectStack = (tileObj) => {
+      if (!tileObj || tileObj === '.') return [];
+      if (Array.isArray(tileObj)) return tileObj.filter(c => c && c !== '.');
+      if (typeof tileObj === 'string') {
+        return tileObj.split(',').map(s => s.trim()).filter(s => s && s !== '.');
+      }
+      return [];
+    };
 
     for (let r = 0; r < map.height; r++) {
       for (let c = 0; c < map.width; c++) {
-        const obj = map.objects[r][c];
+        const rawObj = map.objects ? map.objects[r][c] : '.';
+        const stack = getObjectStack(rawObj);
         const isOverhead = map.collision && map.collision[r] && map.collision[r][c] === 2;
 
-        if (obj !== '.') {
-          entities.push({
-            type: 'object',
-            code: obj,
-            tileX: c,
-            tileY: r,
-            sortY: isOverhead ? (r * 48 + 47) : (r * 48 + (obj === 'H' || obj === 'M' || obj === 'W' ? 12 : 24))
+        if (stack.length > 0) {
+          stack.forEach((objCode, layerIdx) => {
+            const baseSortY = isOverhead ? (r * ts + ts - 1) : (r * ts + (objCode === 'H' || objCode === 'M' || objCode === 'W' ? ts * 0.25 : ts * 0.5));
+            entities.push({
+              type: 'object',
+              code: objCode,
+              tileX: c,
+              tileY: r,
+              layerIdx: layerIdx,
+              sortY: baseSortY + (layerIdx * 0.01)
+            });
           });
         } else if (isOverhead) {
-          // If collision is 2 but object layer is empty, draw ground tile on overhead Z-index pass
           entities.push({
             type: 'ground_overhead',
             groundType: map.ground[r][c],
             tileX: c,
             tileY: r,
-            sortY: r * 48 + 47
+            sortY: r * ts + ts - 1
           });
         }
       }
@@ -244,32 +320,33 @@ class GameEngine {
       entities.push({
         type: 'npc',
         data: npc,
-        sortY: npc.tileY * 48 + 32
+        sortY: npc.tileY * ts + ts * 0.66
       });
     });
 
     entities.push({
       type: 'player',
-      sortY: this.player.pixelY + 32
+      sortY: this.player.pixelY + ts * 0.66
     });
 
     entities.sort((a, b) => a.sortY - b.sortY);
 
     entities.forEach(ent => {
-      if (ent.type === 'object') AssetManager.drawObjectTile(this.ctx, ent.code, ent.tileX, ent.tileY, 48);
-      else if (ent.type === 'ground_overhead') AssetManager.drawGroundTile(this.ctx, ent.groundType, ent.tileX * 48, ent.tileY * 48, 48);
-      else if (ent.type === 'npc') this.npcManager.drawNpc(this.ctx, ent.data, 48);
-      else if (ent.type === 'player') this.player.draw(this.ctx, 48);
+      if (ent.type === 'object') AssetManager.drawObjectTile(this.ctx, ent.code, ent.tileX, ent.tileY, ts);
+      else if (ent.type === 'ground_overhead') AssetManager.drawGroundTile(this.ctx, ent.groundType, ent.tileX * ts, ent.tileY * ts, ts);
+      else if (ent.type === 'npc') this.npcManager.drawNpc(this.ctx, ent.data, ts);
+      else if (ent.type === 'player') this.player.draw(this.ctx, ts);
     });
   }
 
   renderPrompts(now) {
     if (this.activeDialogueNpc) return;
 
+    const ts = this.getTileSize();
     const adjacentNpc = this.npcManager.getAdjacentNpc(this.player, this.currentMapId);
     if (adjacentNpc) {
-      const px = adjacentNpc.tileX * 48 + 24;
-      const py = adjacentNpc.tileY * 48 - 20;
+      const px = adjacentNpc.tileX * ts + ts / 2;
+      const py = adjacentNpc.tileY * ts - (ts * 0.4);
       const bounceY = Math.sin(now / 150) * 4;
 
       this.ctx.save();

@@ -20,9 +20,17 @@
         <span class="badge">BAIFEST 2026</span>
       </div>
 
-      <!-- Control hints -->
-      <div class="control-hint">
-        <span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku
+      <div class="control-hint" style="display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 11px; color: #fef08a; font-weight: 700;">Tile Size:</span>
+          <select id="tileSizeSelect" title="Adjust Game Tile Size (px)" style="padding: 2px 6px; font-size: 11px; background: #451a03; color: #fbbf24; border: 1px solid #78350f; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+            <option value="24">24px</option>
+            <option value="32">32px</option>
+            <option value="48" selected>48px</option>
+            <option value="64">64px</option>
+          </select>
+        </div>
+        <span><span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku</span>
       </div>
     </header>
 

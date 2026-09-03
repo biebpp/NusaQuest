@@ -4,19 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NusaQuest — Game Preview (Dev Suite)</title>
-  <!-- Google Fonts: Retro pixel font + clean readable body font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/dev/dev.css">
 </head>
 <body>
 
-  <!-- Unified Dev Suite Sidebar -->
   <script src="/js/sidebar.js"></script>
 
   <div id="gameWrapper">
-    <!-- Header HUD -->
     <header id="topHud">
       <div class="brand">
         <h1 class="game-title">NusaQuest</h1>
@@ -24,17 +22,23 @@
         <span class="badge" style="background: rgba(245,158,11,0.2); color: #f59e0b; border: 1px solid #f59e0b;">Dev Preview</span>
       </div>
 
-      <!-- Control hints -->
-      <div class="control-hint">
-        <span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku
+      <div class="control-hint" style="display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span style="font-size: 11px; color: #fef08a; font-weight: 700;">Tile Size:</span>
+          <select id="tileSizeSelect" title="Adjust Game Tile Size (px)" style="padding: 2px 6px; font-size: 11px; background: #451a03; color: #fbbf24; border: 1px solid #78350f; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700;">
+            <option value="24">24px</option>
+            <option value="32">32px</option>
+            <option value="48" selected>48px</option>
+            <option value="64">64px</option>
+          </select>
+        </div>
+        <span><span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku</span>
       </div>
     </header>
 
-    <!-- Main Game Area -->
     <div id="canvasContainer">
       <canvas id="gameCanvas" width="768" height="480"></canvas>
 
-      <!-- Vocab Notebook Overlay Panel (Top Right HUD) -->
       <aside id="vocabNotebook" class="rpg-box">
         <div class="notebook-header">
           <div class="notebook-title">
@@ -52,7 +56,6 @@
         </div>
       </aside>
 
-      <!-- Floating Dialogue Box UI (Bottom RPG Overlay) -->
       <div id="dialogueBox" class="rpg-box hidden">
         <div id="aiLoadingIndicator" class="ai-loading hidden">
           <span class="spinner"></span> Sedang merangkai kuis baru kanggo panjenengan...
@@ -72,7 +75,6 @@
         </div>
       </div>
 
-      <!-- Interactive Quiz Modal UI Overlay -->
       <div id="quizModal" class="quiz-modal hidden">
         <div class="quiz-box rpg-box">
           <div class="quiz-header">
@@ -86,9 +88,7 @@
           <div class="quiz-body">
             <div id="quizProgress" class="quiz-progress">Pertanyaan 1 dari 3</div>
             <div id="quizQuestion" class="quiz-question-text">Apa tegese tembung "sedasa"?</div>
-            <div id="quizOptions" class="quiz-options-grid">
-             
-            </div>
+            <div id="quizOptions" class="quiz-options-grid"></div>
             <div id="quizFeedback" class="quiz-feedback hidden"></div>
           </div>
 
@@ -98,12 +98,10 @@
         </div>
       </div>
 
-      <!-- Toast Notification Container -->
       <div id="toastContainer"></div>
     </div>
   </div>
 
-  <!-- Modular Game Engine Scripts -->
   <script src="/js/data/dialogues.js"></script>
   <script src="/js/data/maps.js"></script>
   <script src="/js/assets.js"></script>
