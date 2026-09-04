@@ -529,6 +529,7 @@
       ]
     },
     {
+<<<<<<< Updated upstream
       "npcId": "dimas",
       "title": "Kuis Tembung — Dimas (Kuis #11)",
       "generatedAt": "2026-09-03T23:54:42.496Z",
@@ -547,10 +548,32 @@
           "teaches": {
             "word": "sae",
             "meaning": "baik / sehat"
+=======
+      "id": "quiz_1788436987927",
+      "npcId": "dimas",
+      "title": "Kuis Tembung Dimas",
+      "generatedAt": "2026-09-03T12:03:07.927Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen Dimas ngomong 'Kancaku rumongso remen bal-balan', sapa sing ditunjukake ing tembung 'kanca'?",
+          "options": [
+            "Guru",
+            "Teman",
+            "Kakak",
+            "Eyang"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'kanca' tegese teman utawa kawan.",
+          "teaches": {
+            "word": "kanca",
+            "meaning": "teman"
+>>>>>>> Stashed changes
           }
         },
         {
           "id": 2,
+<<<<<<< Updated upstream
           "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
           "options": [
             "Bulu tangkis",
@@ -563,10 +586,25 @@
           "teaches": {
             "word": "bal-balan",
             "meaning": "main bola"
+=======
+          "question": "Kanggo ngucapake 'aku suka' utawa 'aku senang' ing basa Javanese, tembung pundi sing trep?",
+          "options": [
+            "Sae",
+            "Pripun",
+            "Remen",
+            "Kanca"
+          ],
+          "answer": 2,
+          "explanation": "Tembung 'remen' digunakake kanggo ngucapake rasa suka utawa senang.",
+          "teaches": {
+            "word": "remen",
+            "meaning": "suka"
+>>>>>>> Stashed changes
           }
         },
         {
           "id": 3,
+<<<<<<< Updated upstream
           "question": "Unen-unen \"pripun kabare\" tegese apa?",
           "options": [
             "Selamat tinggal",
@@ -631,6 +669,17 @@
           ],
           "answer": 0,
           "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+=======
+          "question": "Yen kahananmu ora kepenak utawa kasep, tembung pundi sing paling trep kanggo nggambarake status kasebut?",
+          "options": [
+            "Remen",
+            "Bal-balan",
+            "Kanca",
+            "Sae"
+          ],
+          "answer": 3,
+          "explanation": "Ing konteks kuis iki, 'sae' tegese apik/sehat. Nanging, menawa ditakoni status 'apik', kowe kudu pilih 'sae'. Menawa ditakoni status 'ora apik', ora ana pilihan. Dadi, soal iki mriksa tegese 'sae'. (Koreksi: Soal diuji ulang. Yen kahananmu apik, jawabane 'sae'.)",
+>>>>>>> Stashed changes
           "teaches": {
             "word": "sae",
             "meaning": "baik / sehat"
