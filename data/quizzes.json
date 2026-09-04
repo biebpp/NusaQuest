@@ -527,6 +527,116 @@
           }
         }
       ]
+    },
+    {
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #11)",
+      "generatedAt": "2026-09-03T23:54:42.496Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+          "options": [
+            "Sae-sae mawon",
+            "Mboten ngertos",
+            "Sampun dhahar",
+            "Matur nuwun"
+          ],
+          "answer": 0,
+          "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+          "options": [
+            "Bulu tangkis",
+            "Sepak bola",
+            "Bola voli",
+            "Renang"
+          ],
+          "answer": 1,
+          "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+          "teaches": {
+            "word": "bal-balan",
+            "meaning": "main bola"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Unen-unen \"pripun kabare\" tegese apa?",
+          "options": [
+            "Selamat tinggal",
+            "Apa kabar",
+            "Siapa namamu",
+            "Mau ke mana"
+          ],
+          "answer": 1,
+          "explanation": "\"Pripun kabare\" artinya apa kabar.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "apa kabar"
+          }
+        }
+      ]
+    },
+    {
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #12)",
+      "generatedAt": "2026-09-03T23:55:03.307Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+          "options": [
+            "Bulu tangkis",
+            "Sepak bola",
+            "Bola voli",
+            "Renang"
+          ],
+          "answer": 1,
+          "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+          "teaches": {
+            "word": "bal-balan",
+            "meaning": "main bola"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Unen-unen \"pripun kabare\" tegese apa?",
+          "options": [
+            "Selamat tinggal",
+            "Apa kabar",
+            "Siapa namamu",
+            "Mau ke mana"
+          ],
+          "answer": 1,
+          "explanation": "\"Pripun kabare\" artinya apa kabar.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "apa kabar"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+          "options": [
+            "Sae-sae mawon",
+            "Mboten ngertos",
+            "Sampun dhahar",
+            "Matur nuwun"
+          ],
+          "answer": 0,
+          "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        }
+      ]
     }
   ],
   "mbok_sari": [
@@ -1008,6 +1118,64 @@
           "teaches": {
             "word": "matur nuwun",
             "meaning": "terima kasih"
+          }
+        }
+      ]
+    }
+  ],
+  "pak_joko": [
+    {
+      "id": "quiz_1788490005814",
+      "npcId": "pak_joko",
+      "title": "Kuis Tembung Pak Joko",
+      "generatedAt": "2026-09-04T02:46:45.814Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Menurut Pak Joko, apa fungsi utama 'toya' di sawah?",
+          "options": [
+            "Untuk menyirami tanaman padi",
+            "Untuk memandikan ternak",
+            "Untuk memasak nasi",
+            "Untuk membersihkan parit"
+          ],
+          "answer": 0,
+          "explanation": "'Toya' artinya air, yang sangat penting untuk mengairi sawah agar padi tumbuh.",
+          "teaches": {
+            "word": "toya",
+            "meaning": "air"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Tembung 'panen' dalam bahasa Indonesia memiliki arti apa?",
+          "options": [
+            "Menanam benih",
+            "Membajak tanah",
+            "Memanen hasil pertanian",
+            "Membangun rumah"
+          ],
+          "answer": 2,
+          "explanation": "'Panen' sama artinya dengan memanen, yaitu mengambil hasil pertanian ketika sudah matang.",
+          "teaches": {
+            "word": "panen",
+            "meaning": "memanen"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Jika Pak Joko berkata 'Sawahku subur', apa maksudnya?",
+          "options": [
+            "Sawahnya kering dan tandus",
+            "Tanah sawahnya gembur dan tanaman tumbuh baik",
+            "Sawahnya sedang banjir",
+            "Sawahnya tidak ada pemiliknya"
+          ],
+          "answer": 1,
+          "explanation": "'Subur' berarti tanah yang kaya nutrisi sehingga tanaman (seperti padi) dapat tumbuh dengan baik.",
+          "teaches": {
+            "word": "subur",
+            "meaning": "subur"
           }
         }
       ]

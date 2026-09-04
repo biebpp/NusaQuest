@@ -23,6 +23,13 @@ class GameEngine {
     this.pendingQuiz = null;
     this.keysPressed = {};
 
+    this.isWarping = false;
+    this.warpPhase = null;
+    this.warpStartTime = 0;
+    this.warpDuration = 300;
+    this.pendingWarp = null;
+    this.warpCooldownArea = null;
+
     this.updateCanvasDimensions();
     this.bindInputs();
   }
@@ -146,7 +153,7 @@ class GameEngine {
   }
 
   handleInteractionKey() {
-    if (this.isGeneratingQuiz) return;
+    if (this.isGeneratingQuiz || this.isWarping) return;
 
     if (this.activeDialogueNpc) {
       this.advanceDialogue();
@@ -209,19 +216,56 @@ class GameEngine {
   }
 
   checkWarp(tileX, tileY) {
+    if (this.isWarping) return;
+
+    if (this.warpCooldownArea) {
+      const cdWarp = this.warpCooldownArea.warp;
+      const cdW = cdWarp.w || cdWarp.width || 1;
+      const cdH = cdWarp.h || cdWarp.height || 1;
+      const insideCd = (this.warpCooldownArea.mapId === this.currentMapId) &&
+                       (tileX >= cdWarp.x && tileX < cdWarp.x + cdW &&
+                        tileY >= cdWarp.y && tileY < cdWarp.y + cdH);
+      if (!insideCd) {
+        this.warpCooldownArea = null;
+      }
+    }
+
     if (!this.currentMap.warps) return;
 
     for (const warp of this.currentMap.warps) {
-      if (warp.x === tileX && warp.y === tileY) {
+      const w = warp.w || warp.width || 1;
+      const h = warp.h || warp.height || 1;
+
+      if (tileX >= warp.x && tileX < warp.x + w && tileY >= warp.y && tileY < warp.y + h) {
+        if (this.warpCooldownArea &&
+            this.warpCooldownArea.mapId === this.currentMapId &&
+            this.warpCooldownArea.warp === warp) {
+          return;
+        }
+
         this.warpToMap(warp.targetMap, warp.targetX, warp.targetY, warp.targetDir);
         break;
       }
     }
   }
 
-  warpToMap(targetMapId, targetX, targetY, targetDir) {
+  warpToMap(targetMapId, targetX, targetY, targetDir, immediate = false) {
     if (!MAPS[targetMapId]) return;
 
+    if (immediate) {
+      this.executeWarp(targetMapId, targetX, targetY, targetDir);
+      return;
+    }
+
+    if (this.isWarping) return;
+
+    this.isWarping = true;
+    this.warpPhase = 'fade_out';
+    this.warpStartTime = performance.now();
+    this.pendingWarp = { targetMapId, targetX, targetY, targetDir };
+  }
+
+  executeWarp(targetMapId, targetX, targetY, targetDir) {
     this.currentMapId = targetMapId;
     this.currentMap = MAPS[targetMapId];
     if (this.currentMap.tileSize) {
@@ -230,10 +274,49 @@ class GameEngine {
     this.updateCanvasDimensions();
     this.player.setPosition(targetX, targetY, targetDir, this.getTileSize());
 
+    this.warpCooldownArea = null;
+    if (this.currentMap.warps) {
+      for (const warp of this.currentMap.warps) {
+        const w = warp.w || warp.width || 1;
+        const h = warp.h || warp.height || 1;
+        if (targetX >= warp.x && targetX < warp.x + w && targetY >= warp.y && targetY < warp.y + h) {
+          this.warpCooldownArea = { mapId: targetMapId, warp };
+          break;
+        }
+      }
+    }
+
     this.uiManager.showToast(`Memasuki: ${this.currentMap.name}`);
   }
 
+  updateWarpTransition(now) {
+    if (!this.isWarping) return;
+
+    const elapsed = now - this.warpStartTime;
+    if (this.warpPhase === 'fade_out') {
+      if (elapsed >= this.warpDuration) {
+        if (this.pendingWarp) {
+          const { targetMapId, targetX, targetY, targetDir } = this.pendingWarp;
+          this.executeWarp(targetMapId, targetX, targetY, targetDir);
+          this.pendingWarp = null;
+        }
+        this.warpPhase = 'fade_in';
+        this.warpStartTime = now;
+      }
+    } else if (this.warpPhase === 'fade_in') {
+      if (elapsed >= this.warpDuration) {
+        this.isWarping = false;
+        this.warpPhase = null;
+      }
+    }
+  }
+
   update(now) {
+    if (this.isWarping) {
+      this.updateWarpTransition(now);
+      return;
+    }
+
     const activeMapContext = {
       ...this.currentMap,
       activeNpcs: this.npcManager.getNpcsForMap(this.currentMapId)
@@ -258,6 +341,7 @@ class GameEngine {
     this.renderGround();
     this.renderEntities(now);
     this.renderPrompts(now);
+    this.renderWarpTransition(now);
   }
 
   renderGround() {
@@ -340,7 +424,7 @@ class GameEngine {
   }
 
   renderPrompts(now) {
-    if (this.activeDialogueNpc) return;
+    if (this.activeDialogueNpc || this.isWarping) return;
 
     const ts = this.getTileSize();
     const adjacentNpc = this.npcManager.getAdjacentNpc(this.player, this.currentMapId);
@@ -368,6 +452,30 @@ class GameEngine {
       this.ctx.fillText(text, px, py + bounceY + 2);
       this.ctx.restore();
     }
+  }
+
+  renderWarpTransition(now) {
+    if (!this.isWarping || !this.warpPhase) return;
+
+    const elapsed = Math.max(0, now - this.warpStartTime);
+    const rawProgress = Math.min(elapsed / this.warpDuration, 1);
+    
+    // Smooth quadratic easing (easeInOut)
+    const progress = rawProgress < 0.5 
+      ? 2 * rawProgress * rawProgress 
+      : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
+
+    let alpha = 0;
+    if (this.warpPhase === 'fade_out') {
+      alpha = progress;
+    } else if (this.warpPhase === 'fade_in') {
+      alpha = 1 - progress;
+    }
+
+    this.ctx.save();
+    this.ctx.fillStyle = `rgba(0, 0, 0, ${Math.max(0, Math.min(1, alpha)).toFixed(3)})`;
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.restore();
   }
 
   start() {

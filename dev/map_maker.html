@@ -105,6 +105,26 @@
 
         <div id="tab-warps" class="tab-content">
           <div class="panel-section-title">Warp Point Editor</div>
+          <div style="display: flex; gap: 8px;">
+            <div class="form-group" style="flex: 1;">
+              <label>Source Tile X</label>
+              <input type="number" id="warpSourceXInput" class="num-input" value="0" min="0" title="Koordinat X asal warp">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Source Tile Y</label>
+              <input type="number" id="warpSourceYInput" class="num-input" value="0" min="0" title="Koordinat Y asal warp">
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <div class="form-group" style="flex: 1;">
+              <label>Collision Width (W)</label>
+              <input type="number" id="warpWidthInput" class="num-input" value="1" min="1" title="Lebar collision (tile)">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Collision Height (H)</label>
+              <input type="number" id="warpHeightInput" class="num-input" value="1" min="1" title="Tinggi collision (tile)">
+            </div>
+          </div>
           <div class="form-group">
             <label>Target Map</label>
             <select id="warpTargetMapSelect" class="select-input"></select>
@@ -128,9 +148,10 @@
               <option value="3">⬆️ Belakang / Atas (3)</option>
             </select>
           </div>
+          <button id="addOrUpdateWarpBtn" class="btn btn-primary" style="width: 100%; margin-top: 4px;">💾 Save / Apply Warp Point</button>
 
           <div class="panel-section-title" style="margin-top: 20px;">Active Warps in Map</div>
-          <div id="activeWarpsList" style="display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto;"></div>
+          <div id="activeWarpsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;"></div>
         </div>
 
         <div id="tab-stack" class="tab-content">
@@ -672,19 +693,23 @@
 
         if (document.getElementById('chkWarps').checked && currentMap.warps) {
           currentMap.warps.forEach(w => {
+            const width = w.w || w.width || 1;
+            const height = w.h || w.height || 1;
             const px = w.x * tileSize;
             const py = w.y * tileSize;
+            const pw = width * tileSize;
+            const ph = height * tileSize;
 
             ctx.fillStyle = 'rgba(59, 130, 246, 0.4)';
-            ctx.fillRect(px, py, tileSize, tileSize);
+            ctx.fillRect(px, py, pw, ph);
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
-            ctx.strokeRect(px + 3, py + 3, tileSize - 6, tileSize - 6);
+            ctx.strokeRect(px + 3, py + 3, pw - 6, ph - 6);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 16px sans-serif';
+            ctx.font = 'bold 14px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('🌀', px + tileSize / 2, py + tileSize / 2 + 6);
+            ctx.fillText(`🌀 ${width}x${height}`, px + pw / 2, py + ph / 2 + 5);
           });
         }
 
@@ -808,8 +833,12 @@
         const npcAtTile = (currentMap.npcs || []).find(n => n.tileX === tx && n.tileY === ty);
         document.getElementById('inspectNpc').textContent = npcAtTile ? `${npcAtTile.id} (dir:${npcAtTile.dir || 0})` : '-';
 
-        const warpAtTile = (currentMap.warps || []).find(w => w.x === tx && w.y === ty);
-        document.getElementById('inspectWarp').textContent = warpAtTile ? `-> ${warpAtTile.targetMap} (${warpAtTile.targetX},${warpAtTile.targetY})` : '-';
+        const warpAtTile = (currentMap.warps || []).find(w => {
+          const width = w.w || w.width || 1;
+          const height = w.h || w.height || 1;
+          return tx >= w.x && tx < w.x + width && ty >= w.y && ty < w.y + height;
+        });
+        document.getElementById('inspectWarp').textContent = warpAtTile ? `-> ${warpAtTile.targetMap} (${warpAtTile.targetX},${warpAtTile.targetY}) [${warpAtTile.w || 1}x${warpAtTile.h || 1}]` : '-';
 
         updateActiveTileStackList(tx, ty);
       }
@@ -856,15 +885,23 @@
           updatePlacedNpcsList();
           showToast(`Placed ${npcId} at (${tx}, ${ty})`);
         } else if (activeTool === 'warps') {
-          currentMap.warps = currentMap.warps.filter(w => !(w.x === tx && w.y === ty));
-          const targetMap = document.getElementById('warpTargetMapSelect').value;
-          const targetX = parseInt(document.getElementById('warpTargetXInput').value, 10);
-          const targetY = parseInt(document.getElementById('warpTargetYInput').value, 10);
-          const targetDir = parseInt(document.getElementById('warpTargetDirSelect').value, 10);
+          const existingWarp = (currentMap.warps || []).find(w => {
+            const width = w.w || w.width || 1;
+            const height = w.h || w.height || 1;
+            return tx >= w.x && tx < w.x + width && ty >= w.y && ty < w.y + height;
+          });
 
-          currentMap.warps.push({ x: tx, y: ty, targetMap, targetX, targetY, targetDir });
-          updateActiveWarpsList();
-          showToast(`Set Warp at (${tx}, ${ty}) -> ${targetMap}`);
+          const srcXEl = document.getElementById('warpSourceXInput');
+          const srcYEl = document.getElementById('warpSourceYInput');
+          if (srcXEl) srcXEl.value = tx;
+          if (srcYEl) srcYEl.value = ty;
+
+          if (existingWarp) {
+            loadWarpIntoForm(existingWarp);
+            showToast(`Loaded Warp at (${existingWarp.x}, ${existingWarp.y}) into Form`);
+          } else {
+            saveWarpFromForm();
+          }
         } else if (activeTool === 'eraser') {
           const currentStack = getObjectStack(currentMap.objects[ty][tx]);
           if (currentStack.length > 0) {
@@ -874,7 +911,11 @@
             currentMap.objects[ty][tx] = '.';
           }
           currentMap.npcs = currentMap.npcs.filter(n => !(n.tileX === tx && n.tileY === ty));
-          currentMap.warps = currentMap.warps.filter(w => !(w.x === tx && w.y === ty));
+          currentMap.warps = currentMap.warps.filter(w => {
+            const width = w.w || w.width || 1;
+            const height = w.h || w.height || 1;
+            return !(tx >= w.x && tx < w.x + width && ty >= w.y && ty < w.y + height);
+          });
           updatePlacedNpcsList();
           updateActiveWarpsList();
         }
@@ -882,6 +923,64 @@
         renderMap();
         updateInspector(tx, ty);
         triggerAutoSave();
+      }
+
+      function loadWarpIntoForm(w) {
+        if (!w) return;
+        const srcX = document.getElementById('warpSourceXInput');
+        const srcY = document.getElementById('warpSourceYInput');
+        const widthIn = document.getElementById('warpWidthInput');
+        const heightIn = document.getElementById('warpHeightInput');
+        const targetMapSel = document.getElementById('warpTargetMapSelect');
+        const targetXIn = document.getElementById('warpTargetXInput');
+        const targetYIn = document.getElementById('warpTargetYInput');
+        const targetDirSel = document.getElementById('warpTargetDirSelect');
+
+        if (srcX) srcX.value = w.x !== undefined ? w.x : 0;
+        if (srcY) srcY.value = w.y !== undefined ? w.y : 0;
+        if (widthIn) widthIn.value = w.w || w.width || 1;
+        if (heightIn) heightIn.value = w.h || w.height || 1;
+        if (targetMapSel && w.targetMap) targetMapSel.value = w.targetMap;
+        if (targetXIn) targetXIn.value = w.targetX !== undefined ? w.targetX : 0;
+        if (targetYIn) targetYIn.value = w.targetY !== undefined ? w.targetY : 0;
+        if (targetDirSel) targetDirSel.value = w.targetDir !== undefined ? w.targetDir : 0;
+      }
+
+      function saveWarpFromForm() {
+        if (!currentMap) return;
+        if (!currentMap.warps) currentMap.warps = [];
+
+        const srcX = parseInt(document.getElementById('warpSourceXInput').value, 10) || 0;
+        const srcY = parseInt(document.getElementById('warpSourceYInput').value, 10) || 0;
+        const wVal = Math.max(1, parseInt(document.getElementById('warpWidthInput').value, 10) || 1);
+        const hVal = Math.max(1, parseInt(document.getElementById('warpHeightInput').value, 10) || 1);
+        const targetMap = document.getElementById('warpTargetMapSelect').value;
+        const targetX = parseInt(document.getElementById('warpTargetXInput').value, 10) || 0;
+        const targetY = parseInt(document.getElementById('warpTargetYInput').value, 10) || 0;
+        const targetDir = parseInt(document.getElementById('warpTargetDirSelect').value, 10) || 0;
+
+        currentMap.warps = currentMap.warps.filter(w => {
+          const width = w.w || w.width || 1;
+          const height = w.h || w.height || 1;
+          const overlap = !(srcX + wVal <= w.x || srcX >= w.x + width || srcY + hVal <= w.y || srcY >= w.y + height);
+          return !overlap;
+        });
+
+        currentMap.warps.push({
+          x: srcX,
+          y: srcY,
+          w: wVal,
+          h: hVal,
+          targetMap,
+          targetX,
+          targetY,
+          targetDir
+        });
+
+        updateActiveWarpsList();
+        renderMap();
+        triggerAutoSave();
+        showToast(`Saved Warp (${wVal}x${hVal}) at (${srcX}, ${srcY}) -> ${targetMap} (${targetX}, ${targetY})`);
       }
 
       function updatePlacedNpcsList() {
@@ -928,16 +1027,109 @@
 
         currentMap.warps.forEach((w, index) => {
           const item = document.createElement('div');
-          item.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; font-size: 12px;';
+          item.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 12px;';
+
+          const curW = w.w || w.width || 1;
+          const curH = w.h || w.height || 1;
+
+          let targetMapOptions = '';
+          for (const [id, mapData] of Object.entries(MAPS)) {
+            const sel = id === w.targetMap ? 'selected' : '';
+            targetMapOptions += `<option value="${id}" ${sel}>${mapData.name || id} (${id})</option>`;
+          }
+
+          const dir0 = (w.targetDir === 0 || w.targetDir === undefined) ? 'selected' : '';
+          const dir1 = w.targetDir === 1 ? 'selected' : '';
+          const dir2 = w.targetDir === 2 ? 'selected' : '';
+          const dir3 = w.targetDir === 3 ? 'selected' : '';
+
           item.innerHTML = `
-            <div>
-              <span style="color: #60a5fa; font-weight: bold;">🌀 (${w.x}, ${w.y})</span>
-              <span style="color: var(--text-muted); font-size: 11px;"> -> ${w.targetMap} (${w.targetX},${w.targetY})</span>
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="color: #60a5fa; font-weight: bold;">🌀 Warp #${index + 1}</span>
+              <div style="display: flex; gap: 4px;">
+                <button class="btn btn-secondary load-warp-btn" style="padding: 2px 6px; font-size: 10px;" title="Load into Editor Form">Load Form</button>
+                <button class="btn btn-danger remove-warp-btn" style="padding: 2px 6px; font-size: 10px;">Remove</button>
+              </div>
             </div>
-            <button class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;">Remove</button>
+
+            <div style="display: flex; gap: 8px; align-items: center; font-size: 11px; color: var(--text-muted); flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 3px;">
+                <span>Source:</span>
+                <input type="number" class="warp-x-input num-input" style="width: 40px; padding: 2px 4px; font-size: 11px;" value="${w.x}" min="0" title="Source Tile X">
+                <span>,</span>
+                <input type="number" class="warp-y-input num-input" style="width: 40px; padding: 2px 4px; font-size: 11px;" value="${w.y}" min="0" title="Source Tile Y">
+              </div>
+              <div style="display: flex; align-items: center; gap: 3px;">
+                <span>Size:</span>
+                <input type="number" class="warp-w-input num-input" style="width: 38px; padding: 2px 4px; font-size: 11px;" value="${curW}" min="1" title="Lebar (W)">
+                <span>x</span>
+                <input type="number" class="warp-h-input num-input" style="width: 38px; padding: 2px 4px; font-size: 11px;" value="${curH}" min="1" title="Tinggi (H)">
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--text-muted);">
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <span>Target:</span>
+                <select class="warp-target-map-select select-input" style="padding: 2px 4px; font-size: 11px; flex: 1;">${targetMapOptions}</select>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 3px;">
+                  <span>To:</span>
+                  <input type="number" class="warp-tx-input num-input" style="width: 40px; padding: 2px 4px; font-size: 11px;" value="${w.targetX}" min="0" title="Target Tile X">
+                  <span>,</span>
+                  <input type="number" class="warp-ty-input num-input" style="width: 40px; padding: 2px 4px; font-size: 11px;" value="${w.targetY}" min="0" title="Target Tile Y">
+                </div>
+                <div style="display: flex; align-items: center; gap: 3px;">
+                  <span>Dir:</span>
+                  <select class="warp-dir-select select-input" style="padding: 2px 4px; font-size: 11px;">
+                    <option value="0" ${dir0}>⬇️ 0</option>
+                    <option value="1" ${dir1}>⬅️ 1</option>
+                    <option value="2" ${dir2}>➡️ 2</option>
+                    <option value="3" ${dir3}>⬆️ 3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           `;
 
-          item.querySelector('button').addEventListener('click', () => {
+          const xInput = item.querySelector('.warp-x-input');
+          const yInput = item.querySelector('.warp-y-input');
+          const wInput = item.querySelector('.warp-w-input');
+          const hInput = item.querySelector('.warp-h-input');
+          const targetMapSel = item.querySelector('.warp-target-map-select');
+          const txInput = item.querySelector('.warp-tx-input');
+          const tyInput = item.querySelector('.warp-ty-input');
+          const dirSel = item.querySelector('.warp-dir-select');
+
+          const updateWarpData = () => {
+            pushState();
+            w.x = Math.max(0, parseInt(xInput.value, 10) || 0);
+            w.y = Math.max(0, parseInt(yInput.value, 10) || 0);
+            w.w = Math.max(1, parseInt(wInput.value, 10) || 1);
+            w.h = Math.max(1, parseInt(hInput.value, 10) || 1);
+            w.targetMap = targetMapSel.value;
+            w.targetX = Math.max(0, parseInt(txInput.value, 10) || 0);
+            w.targetY = Math.max(0, parseInt(tyInput.value, 10) || 0);
+            w.targetDir = parseInt(dirSel.value, 10) || 0;
+            renderMap();
+            triggerAutoSave();
+          };
+
+          xInput.addEventListener('change', updateWarpData);
+          yInput.addEventListener('change', updateWarpData);
+          wInput.addEventListener('change', updateWarpData);
+          hInput.addEventListener('change', updateWarpData);
+          targetMapSel.addEventListener('change', updateWarpData);
+          txInput.addEventListener('change', updateWarpData);
+          tyInput.addEventListener('change', updateWarpData);
+          dirSel.addEventListener('change', updateWarpData);
+
+          item.querySelector('.load-warp-btn').addEventListener('click', () => {
+            loadWarpIntoForm(w);
+            showToast(`Loaded Warp (${w.x}, ${w.y}) into Form`);
+          });
+
+          item.querySelector('.remove-warp-btn').addEventListener('click', () => {
             pushState();
             currentMap.warps.splice(index, 1);
             updateActiveWarpsList();
@@ -1084,6 +1276,14 @@
 
         document.getElementById('undoBtn').addEventListener('click', undo);
         document.getElementById('redoBtn').addEventListener('click', redo);
+
+        const addOrUpdateWarpBtn = document.getElementById('addOrUpdateWarpBtn');
+        if (addOrUpdateWarpBtn) {
+          addOrUpdateWarpBtn.addEventListener('click', () => {
+            pushState();
+            saveWarpFromForm();
+          });
+        }
         window.addEventListener('keydown', (e) => {
           if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
           if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
