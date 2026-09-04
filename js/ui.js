@@ -167,6 +167,10 @@ class UIManager {
     }, 3000);
   }
 
+  isQuizActive() {
+    return !!this.currentQuiz && this.quizModal && !this.quizModal.classList.contains('hidden');
+  }
+
   showQuizModal(quizData, onComplete = null) {
     if (!quizData || !quizData.questions || quizData.questions.length === 0) return;
 

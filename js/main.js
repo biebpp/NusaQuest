@@ -153,7 +153,7 @@ class GameEngine {
   }
 
   handleInteractionKey() {
-    if (this.isGeneratingQuiz || this.isWarping) return;
+    if (this.isGeneratingQuiz || this.isWarping || (this.uiManager && this.uiManager.isQuizActive())) return;
 
     if (this.activeDialogueNpc) {
       this.advanceDialogue();
@@ -327,7 +327,7 @@ class GameEngine {
     this.player.update(
       now,
       activeMapContext,
-      this.activeDialogueNpc,
+      this.activeDialogueNpc || (this.uiManager && this.uiManager.isQuizActive()),
       this.keysPressed,
       (tx, ty) => this.checkWarp(tx, ty),
       ts
@@ -424,7 +424,7 @@ class GameEngine {
   }
 
   renderPrompts(now) {
-    if (this.activeDialogueNpc || this.isWarping) return;
+    if (this.activeDialogueNpc || this.isWarping || (this.uiManager && this.uiManager.isQuizActive())) return;
 
     const ts = this.getTileSize();
     const adjacentNpc = this.npcManager.getAdjacentNpc(this.player, this.currentMapId);
