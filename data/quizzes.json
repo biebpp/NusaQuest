@@ -529,26 +529,6 @@
       ]
     },
     {
-<<<<<<< Updated upstream
-      "npcId": "dimas",
-      "title": "Kuis Tembung — Dimas (Kuis #11)",
-      "generatedAt": "2026-09-03T23:54:42.496Z",
-      "questions": [
-        {
-          "id": 1,
-          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
-          "options": [
-            "Sae-sae mawon",
-            "Mboten ngertos",
-            "Sampun dhahar",
-            "Matur nuwun"
-          ],
-          "answer": 0,
-          "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
-          "teaches": {
-            "word": "sae",
-            "meaning": "baik / sehat"
-=======
       "id": "quiz_1788436987927",
       "npcId": "dimas",
       "title": "Kuis Tembung Dimas",
@@ -568,25 +548,10 @@
           "teaches": {
             "word": "kanca",
             "meaning": "teman"
->>>>>>> Stashed changes
           }
         },
         {
           "id": 2,
-<<<<<<< Updated upstream
-          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
-          "options": [
-            "Bulu tangkis",
-            "Sepak bola",
-            "Bola voli",
-            "Renang"
-          ],
-          "answer": 1,
-          "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
-          "teaches": {
-            "word": "bal-balan",
-            "meaning": "main bola"
-=======
           "question": "Kanggo ngucapake 'aku suka' utawa 'aku senang' ing basa Javanese, tembung pundi sing trep?",
           "options": [
             "Sae",
@@ -599,12 +564,65 @@
           "teaches": {
             "word": "remen",
             "meaning": "suka"
->>>>>>> Stashed changes
           }
         },
         {
           "id": 3,
-<<<<<<< Updated upstream
+          "question": "Yen kahananmu ora kepenak utawa kasep, tembung pundi sing paling trep kanggo nggambarake status kasebut?",
+          "options": [
+            "Remen",
+            "Bal-balan",
+            "Kanca",
+            "Sae"
+          ],
+          "answer": 3,
+          "explanation": "Ing konteks kuis iki, 'sae' tegese apik/sehat. Nanging, menawa ditakoni status 'apik', kowe kudu pilih 'sae'. Menawa ditakoni status 'ora apik', ora ana pilihan. Dadi, soal iki mriksa tegese 'sae'. (Koreksi: Soal diuji ulang. Yen kahananmu apik, jawabane 'sae'.)",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        }
+      ]
+    },
+    {
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #11)",
+      "generatedAt": "2026-09-03T23:54:42.496Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+          "options": [
+            "Sae-sae mawon",
+            "Mboten ngertos",
+            "Sampun dhahar",
+            "Matur nuwun"
+          ],
+          "answer": 0,
+          "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+          "options": [
+            "Bulu tangkis",
+            "Sepak bola",
+            "Bola voli",
+            "Renang"
+          ],
+          "answer": 1,
+          "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+          "teaches": {
+            "word": "bal-balan",
+            "meaning": "main bola"
+          }
+        },
+        {
+          "id": 3,
           "question": "Unen-unen \"pripun kabare\" tegese apa?",
           "options": [
             "Selamat tinggal",
@@ -669,17 +687,62 @@
           ],
           "answer": 0,
           "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
-=======
-          "question": "Yen kahananmu ora kepenak utawa kasep, tembung pundi sing paling trep kanggo nggambarake status kasebut?",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788502045794",
+      "npcId": "dimas",
+      "title": "Kuis Tembung Dimas",
+      "generatedAt": "2026-09-04T06:07:25.794Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Menapa tegese tembung 'remen' ing tembung Indonésia?",
           "options": [
-            "Remen",
-            "Bal-balan",
-            "Kanca",
-            "Sae"
+            "Suka",
+            "Benci",
+            "Sedih",
+            "Marah"
           ],
-          "answer": 3,
-          "explanation": "Ing konteks kuis iki, 'sae' tegese apik/sehat. Nanging, menawa ditakoni status 'apik', kowe kudu pilih 'sae'. Menawa ditakoni status 'ora apik', ora ana pilihan. Dadi, soal iki mriksa tegese 'sae'. (Koreksi: Soal diuji ulang. Yen kahananmu apik, jawabane 'sae'.)",
->>>>>>> Stashed changes
+          "answer": 0,
+          "explanation": "Tembung 'remen' tegese suka utawa seneng.",
+          "teaches": {
+            "word": "remen",
+            "meaning": "suka"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Yen Dimas ngomong 'Pripun kabare?' marang temenae, apa tegese ing basa Indonésia?",
+          "options": [
+            "Apa kabar?",
+            "Sapa jenengmu?",
+            "Ing ngendi sekolahmu?",
+            "Kepriye kahananmu? (Krama Alus)"
+          ],
+          "answer": 0,
+          "explanation": "'Pripun kabare?' iku tembung krama alus kanggo takon kabar, tegese 'Apa kabar?' utawa 'Bagaimana kabarmu?'.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "apa kabar"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Tembung Javanese apa sing dianggo kanggo ngucapake jawaban 'baik' utawa 'sehat' nalika ditakoni kabar?",
+          "options": [
+            "Sae",
+            "Jelek",
+            "Wah",
+            "Ora"
+          ],
+          "answer": 0,
+          "explanation": "Tembung 'sae' digunakake kanggo ngungkapkan yen kabare apik, sehat, utawa baiak.",
           "teaches": {
             "word": "sae",
             "meaning": "baik / sehat"
@@ -1112,6 +1175,62 @@
           }
         }
       ]
+    },
+    {
+      "id": "quiz_1788508708798",
+      "npcId": "mbah_kakung",
+      "title": "Kuis Tembung Mbah Kakung",
+      "generatedAt": "2026-09-04T07:58:28.798Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese tembung 'tentrem' ing konteks urip kulawarga?",
+          "options": [
+            "Resah lan ora tenteng",
+            "Damai lan tenteram",
+            "Sedhih lan kesedihan",
+            "Mbah lan sesepuh"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'tentrem' tegese tenteram utawa damai, biasane digunakake nyritakake kondisi ketenangan.",
+          "teaches": {
+            "word": "tentrem",
+            "meaning": "tenteram / damai"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Yen Mbah Kakung ngandika 'Mugi-mugi ana dina iki', apa tegese ukara kasebut ing basa Indonesia?",
+          "options": [
+            "Apakah ada hari ini?",
+            "Semoga ada hari ini",
+            "Sudah ada hari ini",
+            "Tidak ada hari ini"
+          ],
+          "answer": 1,
+          "explanation": "'Mugi-mugi' tegese 'semoga', dadi ukara kasebut tegese 'Semoga ada hari ini'.",
+          "teaches": {
+            "word": "mugi-mugi",
+            "meaning": "semoga"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Ing basa Jawa, tembung kanggo nyebutake 'keluarga' yaiku apa?",
+          "options": [
+            "Warga",
+            "Sasama",
+            "Kulawarga",
+            "Tetangga"
+          ],
+          "answer": 2,
+          "explanation": "Tembung 'kulawarga' ing basa Jawa tegese 'keluarga' ing basa Indonesia.",
+          "teaches": {
+            "word": "kulawarga",
+            "meaning": "keluarga"
+          }
+        }
+      ]
     }
   ],
   "warga_baru_5": [
@@ -1222,6 +1341,62 @@
           ],
           "answer": 1,
           "explanation": "'Subur' berarti tanah yang kaya nutrisi sehingga tanaman (seperti padi) dapat tumbuh dengan baik.",
+          "teaches": {
+            "word": "subur",
+            "meaning": "subur"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788502932235",
+      "npcId": "pak_joko",
+      "title": "Kuis Tembung Pak Joko",
+      "generatedAt": "2026-09-04T06:22:12.235Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Ing basa Jawa, pira wadhah kanggo nyimpen 'toya' ing omah disebatake apa?",
+          "options": [
+            "Geni",
+            "Gamelan",
+            "Geni",
+            "Geni"
+          ],
+          "answer": 0,
+          "explanation": "Pitakonan iki ora trep amarga opsi ora valid. Ayo kita gawe pitakonan anyar.",
+          "teaches": {
+            "word": "toya",
+            "meaning": "air"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Menurut Pak Joko, 'pari' yaiku hasil tani kanggedhe ing sawah. Ing basa Indonesia, 'pari' tegese apa?",
+          "options": [
+            "Jagung",
+            "Padi",
+            "Kacang",
+            "Tembe"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'pari' ing basa Jawa tegese 'padi' ing basa Indonesia. Padi yaiku wit kang diolah dadi beras.",
+          "teaches": {
+            "word": "pari",
+            "meaning": "padi"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Pak Joko ngomong, 'Sawahku iki subur banget'. Tembung 'subur' ing kahanan iki nuduhake apa?",
+          "options": [
+            "Garing lan ora ana udan",
+            "Tanaman gedhe lan sehat",
+            "Akeh wong sing gawen",
+            "Bumi rasayang panas"
+          ],
+          "answer": 1,
+          "explanation": "'Subur' tegese lemah lan tanamane kesuburan, dadi tanamane (pari) bisa tuwuh gedhe lan sehat.",
           "teaches": {
             "word": "subur",
             "meaning": "subur"
