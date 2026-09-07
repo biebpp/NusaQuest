@@ -1403,6 +1403,118 @@
           }
         }
       ]
+    },
+    {
+      "id": "quiz_1788753551039",
+      "npcId": "pak_joko",
+      "title": "Kuis Tembung Pak Joko",
+      "generatedAt": "2026-09-07T03:59:11.039Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Pak Joko lagi nglebokake 'toya' marang parit sawah. Ing basa Indonesia, 'toya' tegese apa?",
+          "options": [
+            "Tanah",
+            "Air",
+            "Tanaman",
+            "Petani"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'toya' ing basa Jawa krama alus tegese 'air' ing basa Indonesia.",
+          "teaches": {
+            "word": "toya",
+            "meaning": "air"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Uwit nandur pari nganti dadi 'panen', Pak Joko kudu sabar. Apa makna kata 'panen' ing konteks iki?",
+          "options": [
+            "Menebar benih",
+            "Menebak hama",
+            "Menebuh/menebek hasil tani",
+            "Menebak cuaca"
+          ],
+          "answer": 2,
+          "explanation": "'Panen' tegese proses menebuk utawa nggawa hasil tani (padi) ing wayah wis sumunar utawa dhedhep.",
+          "teaches": {
+            "word": "panen",
+            "meaning": "panen"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Sawetara wektu sawetara udan, 'sawah' Pak Joko dadi wernane ijo alus. Apa tegese 'sawah' ing tembung iki?",
+          "options": [
+            "Ladang kering",
+            "Sawah/Paduraksa",
+            "Omah rakyat",
+            "Pasar tradisionil"
+          ],
+          "answer": 1,
+          "explanation": "'Sawah' yaiku papan nandur pari kanggo entuk 'panen', biasane ana irigasi utawa aliran 'toya'.",
+          "teaches": {
+            "word": "sawah",
+            "meaning": "sawah / ladang"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788753608780",
+      "npcId": "pak_joko",
+      "title": "Kuis Tembung Pak Joko",
+      "generatedAt": "2026-09-07T04:00:08.780Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Pak Joko njlentrehake, 'Korone pari kudu akeh toya supaya bunder.' Ing basa Indonesia, 'korone' tegese apa?",
+          "options": [
+            "Biji padi",
+            "Bunga padi",
+            "Tangkai padi",
+            "Daun padi"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'korone' ing kahanan iki nuduhake bunga utawa malai dari tanaman padi sing isih proses berkembang biak.",
+          "teaches": {
+            "word": "korone",
+            "meaning": "bunga/malai"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Sawise akeh toya, tanah ing 'sawah' kasebut dadi lembut lan gampang dibajak. Apa tegese 'sawah' ing tembung iki?",
+          "options": [
+            "Ladang kering",
+            "Sawah irigasi",
+            "Taman bunga",
+            "Hutan bambu"
+          ],
+          "answer": 1,
+          "explanation": "Dadi 'sawah' ing kahanan iki yaiku sawah irigasi sing butuh toya akeh kanggo kelancaran tani.",
+          "teaches": {
+            "word": "sawah",
+            "meaning": "sawah irigasi"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Pak Joko ngomong, 'Sawetara toya alus, pari langsung tumuwuh kanthi apik.' Apa tegese 'alus' ing tembung iki?",
+          "options": [
+            "Banyak",
+            "Kurang",
+            "Tidur",
+            "Berisik"
+          ],
+          "answer": 0,
+          "explanation": "Tembung 'alus' ing konteks iki tegese banyak utawa cukup, ning tegese luwih pas 'cukup' utawa 'secukupnya' dadi opsi paling cedhak yaiku 'Banyak' (kanggo keperluan tanam).",
+          "teaches": {
+            "word": "alus",
+            "meaning": "cukup/banyak"
+          }
+        }
+      ]
     }
   ]
 }
