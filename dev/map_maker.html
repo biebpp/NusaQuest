@@ -63,6 +63,18 @@
               <input type="checkbox" id="chkStackObjects" checked> 📚 Stack / Layer
             </label>
           </div>
+          <div style="margin-bottom: 10px; background: #0b1324; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 12px; font-weight: bold; color: var(--gold);">Object Transform:</span>
+              <span id="objectTransformStatus" style="font-size: 11px; color: #60a5fa; font-weight: bold;">0° | Normal</span>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button id="btnRotateObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Rotate 90° clockwise (Hotkey: R)">🔄 Rotate (R)</button>
+              <button id="btnFlipXObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Flip horizontally (Hotkey: F)">↔️ Flip X (F)</button>
+              <button id="btnFlipYObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Flip vertically (Hotkey: V)">↕️ Flip Y (V)</button>
+              <button id="btnResetTransformObj" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" title="Reset rotation & flip">🧹 Reset</button>
+            </div>
+          </div>
           <div id="objectPalette" class="palette-grid"></div>
         </div>
 
@@ -84,7 +96,8 @@
         </div>
 
         <div id="tab-npcs" class="tab-content">
-          <div class="panel-section-title">NPC Placement Tool</div>
+          <div class="panel-section-title">NPC Palette & Placement Tool</div>
+          <div id="npcPalette" class="palette-grid" style="margin-bottom: 12px; max-height: 180px; overflow-y: auto;"></div>
           <div class="form-group">
             <label>Pilih NPC</label>
             <select id="npcSelect" class="select-input"></select>
@@ -192,6 +205,7 @@
             <div class="inspector-row"><span class="inspector-key">Solid/Blocked:</span><span id="inspectCollision" class="inspector-val">Walkable (0)</span></div>
             <div class="inspector-row"><span class="inspector-key">NPC:</span><span id="inspectNpc" class="inspector-val">-</span></div>
             <div class="inspector-row"><span class="inspector-key">Warp:</span><span id="inspectWarp" class="inspector-val">-</span></div>
+            <button id="openTileEditorBtn" class="btn btn-gold" style="width: 100%; margin-top: 10px; font-size: 11px; justify-content: center;" title="Edit ground, objects, rotation, flip, and collision for this tile">🛠️ Open Tile Property Editor</button>
           </div>
         </div>
       </aside>
@@ -344,6 +358,21 @@
     </div>
   </div>
 
+  <!-- Tile Property Editor Modal -->
+  <div id="tilePropertyModal" class="modal-overlay">
+    <div class="modal-card" style="width: 540px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 id="tilePropertyModalTitle">🛠️ Tile Property Editor</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div id="tilePropertyModalBody" style="overflow-y: auto; flex: 1; padding: 4px 4px 10px 4px; display: flex; flex-direction: column; gap: 14px;">
+      </div>
+      <div class="modal-footer" style="margin-top: 10px;">
+        <button class="modal-close btn btn-primary">Done</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toastContainer"></div>
 
   <script src="/js/sidebar.js"></script>
@@ -359,6 +388,9 @@
       let activeTool = 'ground';
       let selectedGroundId = 0;
       let selectedObjectCode = 'T';
+      let activeObjectRot = 0;
+      let activeObjectFlipX = false;
+      let activeObjectFlipY = false;
       let collisionMode = 1;
       let stackZIndex = 1;
       let stackOperationMode = 'set';
@@ -366,36 +398,183 @@
       let hoverX = -1, hoverY = -1;
       let zoomLevel = 1;
 
+      function updateTransformUI() {
+        const statusEl = document.getElementById('objectTransformStatus');
+        if (statusEl) {
+          const parts = [`${activeObjectRot}°`];
+          if (activeObjectFlipX) parts.push('FlipX');
+          if (activeObjectFlipY) parts.push('FlipY');
+          if (!activeObjectFlipX && !activeObjectFlipY && activeObjectRot === 0) parts.push('Normal');
+          statusEl.textContent = parts.join(' | ');
+        }
+        const btnRot = document.getElementById('btnRotateObj');
+        if (btnRot) btnRot.classList.toggle('active', activeObjectRot !== 0);
+        const btnFx = document.getElementById('btnFlipXObj');
+        if (btnFx) btnFx.classList.toggle('active', activeObjectFlipX);
+        const btnFy = document.getElementById('btnFlipYObj');
+        if (btnFy) btnFy.classList.toggle('active', activeObjectFlipY);
+      }
+
+      function getActiveObjItem() {
+        const rot = (activeObjectRot || 0) % 360;
+        const flipX = !!activeObjectFlipX;
+        const flipY = !!activeObjectFlipY;
+        if (rot === 0 && !flipX && !flipY) return selectedObjectCode;
+        return {
+          code: selectedObjectCode,
+          ...(rot ? { rot } : {}),
+          ...(flipX ? { flipX } : {}),
+          ...(flipY ? { flipY } : {})
+        };
+      }
+
       const undoStack = [];
       const redoStack = [];
 
       const canvas = document.getElementById('editorCanvas');
       const ctx = canvas.getContext('2d');
 
-      const AVAILABLE_NPCS = [
-        { id: 'mbok_sari', name: 'Mbok Sari' },
-        { id: 'pak_joko', name: 'Pak Joko' },
-        { id: 'dimas', name: 'Dimas' },
-        { id: 'mbah_kakung', name: 'Mbah Kakung' }
-      ];
+      let AVAILABLE_NPCS = [];
+      function refreshAvailableNpcs() {
+        AVAILABLE_NPCS = [];
+        const seen = new Set();
+        if (typeof DIALOGUES !== 'undefined') {
+          for (const [id, d] of Object.entries(DIALOGUES)) {
+            AVAILABLE_NPCS.push({ id, name: d.name || id, charIndex: d.charIndex, col: d.col, row: d.row });
+            seen.add(id);
+          }
+        }
+        if (typeof MAPS !== 'undefined') {
+          for (const mapDef of Object.values(MAPS)) {
+            if (Array.isArray(mapDef.npcs)) {
+              mapDef.npcs.forEach(n => {
+                if (n && n.id && !seen.has(n.id)) {
+                  AVAILABLE_NPCS.push({ id: n.id, name: n.id });
+                  seen.add(n.id);
+                }
+              });
+            }
+          }
+        }
+        const npcSelect = document.getElementById('npcSelect');
+        if (npcSelect) {
+          const curVal = npcSelect.value;
+          npcSelect.innerHTML = '';
+          AVAILABLE_NPCS.forEach(n => {
+            const opt = document.createElement('option');
+            opt.value = n.id;
+            opt.textContent = `${n.name} (${n.id})`;
+            npcSelect.appendChild(opt);
+          });
+          if (curVal && seen.has(curVal)) npcSelect.value = curVal;
+        }
+        renderNpcPalette();
+      }
+
+      function renderNpcPalette() {
+        const npcPalette = document.getElementById('npcPalette');
+        if (!npcPalette) return;
+        npcPalette.innerHTML = '';
+
+        const npcSelect = document.getElementById('npcSelect');
+        const activeId = npcSelect ? npcSelect.value : '';
+
+        AVAILABLE_NPCS.forEach(n => {
+          const item = document.createElement('div');
+          item.className = `palette-item ${n.id === activeId ? 'active' : ''}`;
+          item.dataset.npcId = n.id;
+
+          const pCanvas = document.createElement('canvas');
+          pCanvas.width = 40; pCanvas.height = 40;
+          const pCtx = pCanvas.getContext('2d');
+          pCtx.imageSmoothingEnabled = false;
+
+          const npcImg = AssetManager.images.characters;
+          if (npcImg && npcImg.complete && npcImg.naturalWidth !== 0) {
+            const dialogData = (typeof DIALOGUES !== 'undefined' && DIALOGUES[n.id]) || {};
+            let srcX, srcY;
+            const col = (n.col !== undefined && n.col !== null) ? n.col : dialogData.col;
+            const row = (n.row !== undefined && n.row !== null) ? n.row : dialogData.row;
+            if (col !== undefined && col !== null && row !== undefined && row !== null) {
+              srcX = col * 26;
+              srcY = row * 36;
+            } else {
+              const cIdx = dialogData.charIndex !== undefined ? dialogData.charIndex : (n.charIndex !== undefined ? n.charIndex : 0);
+              srcX = cIdx * 3 * 26 + 26;
+              srcY = 0;
+            }
+            pCtx.drawImage(npcImg, srcX, srcY, 26, 36, 7, 2, 26, 36);
+          } else {
+            pCtx.fillStyle = '#dc2626';
+            pCtx.fillRect(10, 5, 20, 30);
+          }
+
+          const lbl = document.createElement('div');
+          lbl.className = 'palette-label';
+          lbl.textContent = n.name || n.id;
+
+          item.appendChild(pCanvas);
+          item.appendChild(lbl);
+
+          item.addEventListener('click', () => {
+            document.querySelectorAll('#npcPalette .palette-item').forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+            if (npcSelect) npcSelect.value = n.id;
+            activeTool = 'npcs';
+            showToast(`Selected NPC: ${n.name || n.id}`);
+          });
+
+          npcPalette.appendChild(item);
+        });
+      }
 
       function getObjectStack(tileObj) {
         if (!tileObj || tileObj === '.') return [];
-        if (Array.isArray(tileObj)) return tileObj.filter(c => c && c !== '.');
+        if (Array.isArray(tileObj)) {
+          return tileObj.filter(c => c && c !== '.' && (typeof c === 'string' || (typeof c === 'object' && c.code && c.code !== '.')));
+        }
         if (typeof tileObj === 'string') {
-          return tileObj.split(',').map(s => s.trim()).filter(s => s && s !== '.');
+          const trimmed = tileObj.trim();
+          if (trimmed.startsWith('{')) {
+            try {
+              const parsed = JSON.parse(trimmed);
+              if (parsed && parsed.code && parsed.code !== '.') return [parsed];
+            } catch (e) {}
+          }
+          return trimmed.split(',').map(s => s.trim()).filter(s => s && s !== '.');
+        }
+        if (typeof tileObj === 'object' && tileObj !== null && tileObj.code && tileObj.code !== '.') {
+          return [tileObj];
         }
         return [];
       }
 
       function setTileObjectStack(mapObj, r, c, stack) {
-        const cleanStack = stack.filter(s => s && s !== '.');
-        if (cleanStack.length === 0) {
+        const cleanStack = stack.filter(s => s && s !== '.' && (typeof s === 'string' || (typeof s === 'object' && s.code && s.code !== '.')));
+        const normalizedStack = cleanStack.map(item => {
+          if (typeof item === 'object' && item !== null) {
+            const rot = (item.rot || 0) % 360;
+            const flipX = !!item.flipX;
+            const flipY = !!item.flipY;
+            if (rot === 0 && !flipX && !flipY) {
+              return item.code;
+            }
+            return {
+              code: item.code,
+              ...(rot ? { rot } : {}),
+              ...(flipX ? { flipX } : {}),
+              ...(flipY ? { flipY } : {})
+            };
+          }
+          return item;
+        });
+
+        if (normalizedStack.length === 0) {
           mapObj[r][c] = '.';
-        } else if (cleanStack.length === 1) {
-          mapObj[r][c] = cleanStack[0];
+        } else if (normalizedStack.length === 1) {
+          mapObj[r][c] = normalizedStack[0];
         } else {
-          mapObj[r][c] = [...cleanStack];
+          mapObj[r][c] = [...normalizedStack];
         }
       }
 
@@ -577,15 +756,7 @@
           }
         }
 
-        const npcSelect = document.getElementById('npcSelect');
-        npcSelect.innerHTML = '';
-        AVAILABLE_NPCS.forEach(n => {
-          const opt = document.createElement('option');
-          opt.value = n.id;
-          opt.textContent = `${n.name} (${n.id})`;
-          npcSelect.appendChild(opt);
-        });
-
+        refreshAvailableNpcs();
         populateMapSelectors();
       }
 
@@ -722,11 +893,21 @@
 
             if (npcImg && npcImg.complete && npcImg.naturalWidth !== 0) {
               const dialogData = DIALOGUES[npc.id] || {};
-              const cIdx = dialogData.charIndex !== undefined ? dialogData.charIndex : 0;
-              const dir = npc.dir !== undefined ? npc.dir : 0;
-
-              const srcX = cIdx * 3 * 26 + 26;
-              const srcY = dir * 36;
+              let srcX, srcY;
+              const dir = npc.dir !== undefined ? npc.dir : (dialogData.dir !== undefined ? dialogData.dir : 0);
+              const col = (npc.col !== undefined && npc.col !== null) ? npc.col : dialogData.col;
+              const row = (npc.row !== undefined && npc.row !== null) ? npc.row : dialogData.row;
+              if (col !== undefined && col !== null && row !== undefined && row !== null) {
+                const baseRow = Math.floor(row / 4) * 4;
+                srcX = col * 26;
+                srcY = (baseRow + (dir % 4)) * 36;
+              } else {
+                const cIdx = dialogData.charIndex !== undefined ? dialogData.charIndex : (npc.charIndex !== undefined ? npc.charIndex : 0);
+                const baseRow = Math.floor(cIdx / 4) * 4;
+                const baseCol = (cIdx % 4) * 3 + 1;
+                srcX = baseCol * 26;
+                srcY = (baseRow + (dir % 4)) * 36;
+              }
               ctx.drawImage(npcImg, srcX, srcY, 26, 36, px + 6, py - 8, 36, 52);
             } else {
               ctx.fillStyle = '#dc2626';
@@ -760,6 +941,16 @@
         }
 
         if (hoverX >= 0 && hoverX < currentMap.width && hoverY >= 0 && hoverY < currentMap.height) {
+          if ((activeTool === 'objects' || activeTool === 'stack') && selectedObjectCode && selectedObjectCode !== '.') {
+            ctx.save();
+            ctx.globalAlpha = 0.55;
+            AssetManager.drawObjectTile(
+              ctx,
+              getActiveObjItem(),
+              hoverX, hoverY, tileSize
+            );
+            ctx.restore();
+          }
           ctx.strokeStyle = '#f59e0b';
           ctx.lineWidth = 3;
           ctx.strokeRect(hoverX * tileSize + 1, hoverY * tileSize + 1, tileSize - 2, tileSize - 2);
@@ -787,20 +978,65 @@
         tileHeader.textContent = `Stack Tile (${tx}, ${ty}) — ${stack.length} Layer:`;
         list.appendChild(tileHeader);
 
-        stack.forEach((code, index) => {
+        stack.forEach((item, index) => {
+          const code = typeof item === 'object' ? item.code : item;
+          const itemRot = typeof item === 'object' ? (item.rot || 0) : 0;
+          const itemFlipX = typeof item === 'object' ? !!item.flipX : false;
+          const itemFlipY = typeof item === 'object' ? !!item.flipY : false;
           const objDef = (TILE_MAP.objects && TILE_MAP.objects[code]) || {};
-          const item = document.createElement('div');
-          item.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; font-size: 12px;';
-          item.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 6px;">
+
+          const badgeRot = itemRot ? `<span style="background: rgba(59, 130, 246, 0.25); border: 1px solid #3b82f6; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #93c5fd;">🔄 ${itemRot}°</span>` : '';
+          const badgeFlipX = itemFlipX ? `<span style="background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #e9d5ff;">↔️ FlipX</span>` : '';
+          const badgeFlipY = itemFlipY ? `<span style="background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #e9d5ff;">↕️ FlipY</span>` : '';
+
+          const itemEl = document.createElement('div');
+          itemEl.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; gap: 6px;';
+          itemEl.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 5px; flex-wrap: wrap;">
               <span style="background: rgba(245, 158, 11, 0.25); border: 1px solid rgba(245, 158, 11, 0.5); padding: 1px 5px; border-radius: 4px; font-size: 11px; color: #fef08a;">L${index}</span>
               <span style="color: var(--text-bright); font-weight: bold;">${objDef.name || code}</span>
               <span style="color: var(--text-muted); font-size: 11px;">(${code})</span>
+              ${badgeRot} ${badgeFlipX} ${badgeFlipY}
             </div>
-            <button class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;" title="Hapus hanya layer Z-Index ini">🗑️ Hapus</button>
+            <div style="display: flex; gap: 3px; align-items: center;">
+              <button class="btn btn-rot btn-secondary" style="padding: 2px 5px; font-size: 10px;" title="Rotate +90°">↻</button>
+              <button class="btn btn-flipx btn-secondary" style="padding: 2px 5px; font-size: 10px;" title="Toggle Flip X">↔️</button>
+              <button class="btn btn-flipy btn-secondary" style="padding: 2px 5px; font-size: 10px;" title="Toggle Flip Y">↕️</button>
+              <button class="btn btn-danger" style="padding: 2px 5px; font-size: 10px;" title="Hapus Z-Index ini">🗑️</button>
+            </div>
           `;
 
-          item.querySelector('button').addEventListener('click', () => {
+          itemEl.querySelector('.btn-rot').addEventListener('click', () => {
+            const newItem = { code, rot: (itemRot + 90) % 360, flipX: itemFlipX, flipY: itemFlipY };
+            pushState();
+            setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+            showToast(`Rotated Z-Index ${index} to ${(itemRot + 90) % 360}°`);
+          });
+
+          itemEl.querySelector('.btn-flipx').addEventListener('click', () => {
+            const newItem = { code, rot: itemRot, flipX: !itemFlipX, flipY: itemFlipY };
+            pushState();
+            setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+            showToast(`Toggled FlipX Z-Index ${index} (${!itemFlipX ? 'ON' : 'OFF'})`);
+          });
+
+          itemEl.querySelector('.btn-flipy').addEventListener('click', () => {
+            const newItem = { code, rot: itemRot, flipX: itemFlipX, flipY: !itemFlipY };
+            pushState();
+            setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+            showToast(`Toggled FlipY Z-Index ${index} (${!itemFlipY ? 'ON' : 'OFF'})`);
+          });
+
+          itemEl.querySelector('.btn-danger').addEventListener('click', () => {
             pushState();
             deleteTileObjectAtZIndex(currentMap.objects, ty, tx, index);
             renderMap();
@@ -809,7 +1045,7 @@
             showToast(`Dihapus Z-Index ${index} (${code}) dari (${tx}, ${ty})`);
           });
 
-          list.appendChild(item);
+          list.appendChild(itemEl);
         });
       }
 
@@ -824,7 +1060,17 @@
         if (stack.length === 0) {
           inspectObjEl.textContent = '.';
         } else {
-          inspectObjEl.innerHTML = stack.map((c, i) => `<span style="background: rgba(245, 158, 11, 0.25); border: 1px solid rgba(245, 158, 11, 0.5); padding: 1px 5px; border-radius: 4px; font-size: 11px; margin-right: 4px; display: inline-block; color: #fef08a;">L${i}:${c}</span>`).join('');
+          inspectObjEl.innerHTML = stack.map((item, i) => {
+            const c = typeof item === 'object' ? item.code : item;
+            const r = typeof item === 'object' ? (item.rot || 0) : 0;
+            const fx = typeof item === 'object' ? !!item.flipX : false;
+            const fy = typeof item === 'object' ? !!item.flipY : false;
+            let label = `L${i}:${c}`;
+            if (r || fx || fy) {
+              label += `(${r}°${fx ? ',FX' : ''}${fy ? ',FY' : ''})`;
+            }
+            return `<span style="background: rgba(245, 158, 11, 0.25); border: 1px solid rgba(245, 158, 11, 0.5); padding: 1px 5px; border-radius: 4px; font-size: 11px; margin-right: 4px; display: inline-block; color: #fef08a;">${label}</span>`;
+          }).join('');
         }
 
         const colVal = currentMap.collision[ty][tx];
@@ -843,6 +1089,343 @@
         updateActiveTileStackList(tx, ty);
       }
 
+      let activeModalTx = -1, activeModalTy = -1;
+
+      function openTilePropertyModal(tx, ty) {
+        if (!currentMap || tx < 0 || tx >= currentMap.width || ty < 0 || ty >= currentMap.height) return;
+        activeModalTx = tx;
+        activeModalTy = ty;
+
+        const modalTitle = document.getElementById('tilePropertyModalTitle');
+        if (modalTitle) modalTitle.textContent = `🛠️ Tile Properties at (${tx}, ${ty})`;
+
+        renderTilePropertyModal();
+
+        const modalEl = document.getElementById('tilePropertyModal');
+        if (modalEl) modalEl.classList.add('active');
+      }
+
+      function renderTilePropertyModal() {
+        const bodyEl = document.getElementById('tilePropertyModalBody');
+        if (!bodyEl || activeModalTx < 0 || activeModalTy < 0 || !currentMap) return;
+
+        const tx = activeModalTx;
+        const ty = activeModalTy;
+
+        bodyEl.innerHTML = '';
+
+        // 1. Ground Tile Section
+        const currentGroundId = currentMap.ground[ty][tx];
+        const groundDef = (TILE_MAP.ground && TILE_MAP.ground[currentGroundId]) || {};
+
+        const groundSec = document.createElement('div');
+        groundSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px;';
+        groundSec.innerHTML = `
+          <div style="font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <span>🌱 Ground Tile:</span>
+            <span style="color: var(--text-bright);">${currentGroundId} (${groundDef.desc || groundDef.name || 'Tile'})</span>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="font-size: 11px;">Change Ground Tile:</label>
+            <select id="modalGroundSelect" class="select-input" style="font-size: 12px; margin-top: 4px;"></select>
+          </div>
+        `;
+
+        const groundSel = groundSec.querySelector('#modalGroundSelect');
+        if (TILE_MAP.ground) {
+          for (const [id, def] of Object.entries(TILE_MAP.ground)) {
+            const opt = document.createElement('option');
+            opt.value = id;
+            opt.textContent = `${id}: ${def.desc || def.name || 'Tile'}`;
+            if (parseInt(id, 10) === currentGroundId || id === String(currentGroundId)) {
+              opt.selected = true;
+            }
+            groundSel.appendChild(opt);
+          }
+        }
+
+        groundSel.addEventListener('change', (e) => {
+          const val = parseInt(e.target.value, 10);
+          pushState();
+          currentMap.ground[ty][tx] = isNaN(val) ? e.target.value : val;
+          renderMap();
+          updateInspector(tx, ty);
+          triggerAutoSave();
+          renderTilePropertyModal();
+          showToast(`Ground set to ${e.target.value} at (${tx}, ${ty})`);
+        });
+
+        bodyEl.appendChild(groundSec);
+
+        // 2. Objects Stack Section
+        const stack = getObjectStack(currentMap.objects[ty][tx]);
+        const objSec = document.createElement('div');
+        objSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px;';
+        objSec.innerHTML = `
+          <div style="font-size: 13px; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: space-between;">
+            <span>🏘️ Object Stack (${stack.length} Layer${stack.length === 1 ? '' : 's'})</span>
+            <button id="modalAddObjBtn" class="btn btn-primary" style="padding: 2px 8px; font-size: 11px;">➕ Add Object</button>
+          </div>
+          <div id="modalStackList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        `;
+
+        const stackListEl = objSec.querySelector('#modalStackList');
+        if (stack.length === 0) {
+          stackListEl.innerHTML = `<div style="font-size: 11px; color: var(--text-muted); font-style: italic;">No objects on this tile.</div>`;
+        } else {
+          stack.forEach((item, index) => {
+            const code = typeof item === 'object' ? item.code : item;
+            const itemRot = typeof item === 'object' ? (item.rot || 0) : 0;
+            const itemFlipX = typeof item === 'object' ? !!item.flipX : false;
+            const itemFlipY = typeof item === 'object' ? !!item.flipY : false;
+
+            const card = document.createElement('div');
+            card.style.cssText = 'background: #131f37; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px;';
+
+            const topRow = document.createElement('div');
+            topRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; gap: 6px;';
+            topRow.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 6px; flex: 1;">
+                <span style="background: rgba(245, 158, 11, 0.25); border: 1px solid rgba(245, 158, 11, 0.5); padding: 2px 6px; border-radius: 4px; font-size: 11px; color: #fef08a; font-weight: bold;">L${index}</span>
+                <select class="select-input modal-obj-code-select" style="font-size: 11px; padding: 2px 6px; flex: 1;"></select>
+              </div>
+              <div style="display: flex; gap: 3px; align-items: center;">
+                <button class="btn btn-secondary btn-move-up" style="padding: 2px 5px; font-size: 10px;" ${index === 0 ? 'disabled style="opacity:0.4;cursor:default;"' : ''} title="Move Layer Up">⬆️</button>
+                <button class="btn btn-secondary btn-move-down" style="padding: 2px 5px; font-size: 10px;" ${index === stack.length - 1 ? 'disabled style="opacity:0.4;cursor:default;"' : ''} title="Move Layer Down">⬇️</button>
+                <button class="btn btn-danger btn-remove-layer" style="padding: 2px 5px; font-size: 10px;" title="Remove Layer">🗑️</button>
+              </div>
+            `;
+
+            const codeSel = topRow.querySelector('.modal-obj-code-select');
+            if (TILE_MAP.objects) {
+              for (const [oCode, oDef] of Object.entries(TILE_MAP.objects)) {
+                const opt = document.createElement('option');
+                opt.value = oCode;
+                opt.textContent = `${oCode}: ${oDef.name || oCode}`;
+                if (oCode === code) opt.selected = true;
+                codeSel.appendChild(opt);
+              }
+            }
+
+            codeSel.addEventListener('change', (e) => {
+              const newCode = e.target.value;
+              const newItem = (itemRot || itemFlipX || itemFlipY)
+                ? { code: newCode, rot: itemRot, flipX: itemFlipX, flipY: itemFlipY }
+                : newCode;
+              pushState();
+              setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            if (index > 0) {
+              topRow.querySelector('.btn-move-up').addEventListener('click', () => {
+                pushState();
+                const tmp = stack[index];
+                stack[index] = stack[index - 1];
+                stack[index - 1] = tmp;
+                setTileObjectStack(currentMap.objects, ty, tx, stack);
+                renderMap();
+                updateInspector(tx, ty);
+                triggerAutoSave();
+                renderTilePropertyModal();
+              });
+            }
+
+            if (index < stack.length - 1) {
+              topRow.querySelector('.btn-move-down').addEventListener('click', () => {
+                pushState();
+                const tmp = stack[index];
+                stack[index] = stack[index + 1];
+                stack[index + 1] = tmp;
+                setTileObjectStack(currentMap.objects, ty, tx, stack);
+                renderMap();
+                updateInspector(tx, ty);
+                triggerAutoSave();
+                renderTilePropertyModal();
+              });
+            }
+
+            topRow.querySelector('.btn-remove-layer').addEventListener('click', () => {
+              pushState();
+              deleteTileObjectAtZIndex(currentMap.objects, ty, tx, index);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            const botRow = document.createElement('div');
+            botRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; gap: 6px; background: rgba(0,0,0,0.2); padding: 4px 6px; border-radius: 4px;';
+            botRow.innerHTML = `
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <span style="font-size: 10px; color: var(--text-muted);">Rot:</span>
+                <button class="btn btn-rot-val ${itemRot === 0 ? 'btn-primary' : 'btn-secondary'}" data-rot="0" style="padding: 1px 5px; font-size: 10px;">0°</button>
+                <button class="btn btn-rot-val ${itemRot === 90 ? 'btn-primary' : 'btn-secondary'}" data-rot="90" style="padding: 1px 5px; font-size: 10px;">90°</button>
+                <button class="btn btn-rot-val ${itemRot === 180 ? 'btn-primary' : 'btn-secondary'}" data-rot="180" style="padding: 1px 5px; font-size: 10px;">180°</button>
+                <button class="btn btn-rot-val ${itemRot === 270 ? 'btn-primary' : 'btn-secondary'}" data-rot="270" style="padding: 1px 5px; font-size: 10px;">270°</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <button class="btn btn-flip-x ${itemFlipX ? 'btn-gold' : 'btn-secondary'}" style="padding: 1px 5px; font-size: 10px;" title="Toggle Flip Horizontal">↔️ FX</button>
+                <button class="btn btn-flip-y ${itemFlipY ? 'btn-gold' : 'btn-secondary'}" style="padding: 1px 5px; font-size: 10px;" title="Toggle Flip Vertical">↕️ FY</button>
+              </div>
+            `;
+
+            botRow.querySelectorAll('.btn-rot-val').forEach(rBtn => {
+              rBtn.addEventListener('click', () => {
+                const targetRot = parseInt(rBtn.dataset.rot, 10);
+                const newItem = { code, rot: targetRot, flipX: itemFlipX, flipY: itemFlipY };
+                pushState();
+                setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+                renderMap();
+                updateInspector(tx, ty);
+                triggerAutoSave();
+                renderTilePropertyModal();
+              });
+            });
+
+            botRow.querySelector('.btn-flip-x').addEventListener('click', () => {
+              const newItem = { code, rot: itemRot, flipX: !itemFlipX, flipY: itemFlipY };
+              pushState();
+              setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            botRow.querySelector('.btn-flip-y').addEventListener('click', () => {
+              const newItem = { code, rot: itemRot, flipX: itemFlipX, flipY: !itemFlipY };
+              pushState();
+              setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            card.appendChild(topRow);
+            card.appendChild(botRow);
+            stackListEl.appendChild(card);
+          });
+        }
+
+        objSec.querySelector('#modalAddObjBtn').addEventListener('click', () => {
+          const activeItem = getActiveObjItem();
+          const currentStack = getObjectStack(currentMap.objects[ty][tx]);
+          currentStack.push(activeItem);
+          pushState();
+          setTileObjectStack(currentMap.objects, ty, tx, currentStack);
+          renderMap();
+          updateInspector(tx, ty);
+          triggerAutoSave();
+          renderTilePropertyModal();
+        });
+
+        bodyEl.appendChild(objSec);
+
+        // 3. Collision Section
+        const curCol = currentMap.collision[ty][tx];
+        const colSec = document.createElement('div');
+        colSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px;';
+        colSec.innerHTML = `
+          <div style="font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 8px;">🧱 Collision Mode:</div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn btn-col-opt ${curCol === 0 ? 'btn-primary' : 'btn-secondary'}" data-col="0" style="flex: 1; justify-content: center; font-size: 11px;">🚶 Walkable (0)</button>
+            <button class="btn btn-col-opt ${curCol === 1 ? 'btn-danger' : 'btn-secondary'}" data-col="1" style="flex: 1; justify-content: center; font-size: 11px;">🧱 Blocked (1)</button>
+            <button class="btn btn-col-opt ${curCol === 2 ? 'btn-gold' : 'btn-secondary'}" data-col="2" style="flex: 1; justify-content: center; font-size: 11px;">☂️ Overhead (2)</button>
+          </div>
+        `;
+
+        colSec.querySelectorAll('.btn-col-opt').forEach(cBtn => {
+          cBtn.addEventListener('click', () => {
+            const targetCol = parseInt(cBtn.dataset.col, 10);
+            pushState();
+            currentMap.collision[ty][tx] = targetCol;
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+            renderTilePropertyModal();
+          });
+        });
+
+        bodyEl.appendChild(colSec);
+
+        // 4. Placed NPC Section (if present)
+        const npcAtTile = (currentMap.npcs || []).find(n => n.tileX === tx && n.tileY === ty);
+        if (npcAtTile) {
+          const npcSec = document.createElement('div');
+          npcSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;';
+          npcSec.innerHTML = `
+            <div style="font-size: 13px; font-weight: bold; color: var(--gold); display: flex; justify-content: space-between; align-items: center;">
+              <span>👤 Placed NPC: ${npcAtTile.id}</span>
+              <button id="modalRemoveNpcBtn" class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;">🗑️ Remove NPC</button>
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label style="font-size: 11px;">Facing Direction:</label>
+              <select id="modalNpcDirSelect" class="select-input" style="font-size: 12px; margin-top: 4px;">
+                <option value="0" ${npcAtTile.dir === 0 ? 'selected' : ''}>⬇️ Down / Front (0)</option>
+                <option value="1" ${npcAtTile.dir === 1 ? 'selected' : ''}>⬅️ Left (1)</option>
+                <option value="2" ${npcAtTile.dir === 2 ? 'selected' : ''}>➡️ Right (2)</option>
+                <option value="3" ${npcAtTile.dir === 3 ? 'selected' : ''}>⬆️ Up / Back (3)</option>
+              </select>
+            </div>
+          `;
+
+          npcSec.querySelector('#modalNpcDirSelect').addEventListener('change', (e) => {
+            pushState();
+            npcAtTile.dir = parseInt(e.target.value, 10);
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+          });
+
+          npcSec.querySelector('#modalRemoveNpcBtn').addEventListener('click', () => {
+            pushState();
+            currentMap.npcs = currentMap.npcs.filter(n => !(n.tileX === tx && n.tileY === ty));
+            updatePlacedNpcsList();
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+            renderTilePropertyModal();
+          });
+
+          bodyEl.appendChild(npcSec);
+        }
+
+        // 5. Placed Warp Section (if present)
+        const warpAtTile = (currentMap.warps || []).find(w => {
+          const width = w.w || w.width || 1;
+          const height = w.h || w.height || 1;
+          return tx >= w.x && tx < w.x + width && ty >= w.y && ty < w.y + height;
+        });
+
+        if (warpAtTile) {
+          const warpSec = document.createElement('div');
+          warpSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;';
+          warpSec.innerHTML = `
+            <div style="font-size: 13px; font-weight: bold; color: var(--gold); display: flex; justify-content: space-between; align-items: center;">
+              <span>🌀 Warp Point: → ${warpAtTile.targetMap} (${warpAtTile.targetX}, ${warpAtTile.targetY})</span>
+              <button id="modalRemoveWarpBtn" class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;">🗑️ Remove Warp</button>
+            </div>
+          `;
+
+          warpSec.querySelector('#modalRemoveWarpBtn').addEventListener('click', () => {
+            pushState();
+            currentMap.warps = currentMap.warps.filter(w => w !== warpAtTile);
+            updateActiveWarpsList();
+            renderMap();
+            updateInspector(tx, ty);
+            triggerAutoSave();
+            renderTilePropertyModal();
+          });
+
+          bodyEl.appendChild(warpSec);
+        }
+      }
+
       function handleGridInteraction(tx, ty) {
         if (!currentMap || tx < 0 || tx >= currentMap.width || ty < 0 || ty >= currentMap.height) return;
 
@@ -853,18 +1436,21 @@
         } else if (activeTool === 'objects') {
           const chkStack = document.getElementById('chkStackObjects');
           const isStacking = chkStack ? chkStack.checked : true;
+          const activeObjItem = getActiveObjItem();
           if (isStacking) {
             const currentStack = getObjectStack(currentMap.objects[ty][tx]);
-            currentStack.push(selectedObjectCode);
+            currentStack.push(activeObjItem);
             setTileObjectStack(currentMap.objects, ty, tx, currentStack);
           } else {
-            setTileObjectStack(currentMap.objects, ty, tx, [selectedObjectCode]);
+            setTileObjectStack(currentMap.objects, ty, tx, [activeObjItem]);
           }
         } else if (activeTool === 'stack') {
           const zIdx = parseInt(document.getElementById('stackZIndexSelect').value, 10) || 0;
+          const activeObjItem = getActiveObjItem();
           if (stackOperationMode === 'set') {
-            setTileObjectAtZIndex(currentMap.objects, ty, tx, zIdx, selectedObjectCode);
-            showToast(`Set Z-Index ${zIdx} to '${selectedObjectCode}' at (${tx}, ${ty})`);
+            setTileObjectAtZIndex(currentMap.objects, ty, tx, zIdx, activeObjItem);
+            const codeStr = typeof activeObjItem === 'object' ? activeObjItem.code : activeObjItem;
+            showToast(`Set Z-Index ${zIdx} to '${codeStr}' at (${tx}, ${ty})`);
           } else if (stackOperationMode === 'delete') {
             const deleted = deleteTileObjectAtZIndex(currentMap.objects, ty, tx, zIdx);
             if (deleted) {
@@ -994,16 +1580,39 @@
 
         currentMap.npcs.forEach((npc, index) => {
           const item = document.createElement('div');
-          item.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; font-size: 12px;';
+          item.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; gap: 6px;';
+          
+          const dir0 = (npc.dir === 0 || npc.dir === undefined) ? 'selected' : '';
+          const dir1 = npc.dir === 1 ? 'selected' : '';
+          const dir2 = npc.dir === 2 ? 'selected' : '';
+          const dir3 = npc.dir === 3 ? 'selected' : '';
+
           item.innerHTML = `
-            <div>
+            <div style="flex: 1;">
               <span style="color: var(--gold); font-weight: bold;">${npc.id}</span>
               <span style="color: var(--text-muted); font-size: 11px;"> @ (${npc.tileX}, ${npc.tileY})</span>
             </div>
-            <button class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;">Remove</button>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <select class="npc-dir-select select-input" style="padding: 2px 4px; font-size: 11px;">
+                <option value="0" ${dir0}>⬇️ Down</option>
+                <option value="1" ${dir1}>⬅️ Left</option>
+                <option value="2" ${dir2}>➡️ Right</option>
+                <option value="3" ${dir3}>⬆️ Up</option>
+              </select>
+              <button class="btn btn-danger remove-npc-btn" style="padding: 2px 6px; font-size: 10px;">Remove</button>
+            </div>
           `;
 
-          item.querySelector('button').addEventListener('click', () => {
+          const dirSelect = item.querySelector('.npc-dir-select');
+          dirSelect.addEventListener('change', (e) => {
+            pushState();
+            npc.dir = parseInt(e.target.value, 10) || 0;
+            renderMap();
+            triggerAutoSave();
+            showToast(`Updated NPC ${npc.id} direction to ${e.target.options[e.target.selectedIndex].text}`);
+          });
+
+          item.querySelector('.remove-npc-btn').addEventListener('click', () => {
             pushState();
             currentMap.npcs.splice(index, 1);
             updatePlacedNpcsList();
@@ -1239,6 +1848,7 @@
         });
 
         canvas.addEventListener('mousedown', (e) => {
+          if (e.button !== 0) return;
           isMouseDown = true;
           const rect = canvas.getBoundingClientRect();
           const scaleX = canvas.width / rect.width;
@@ -1248,6 +1858,41 @@
           const ty = Math.floor(((e.clientY - rect.top) * scaleY) / tileSize);
           handleGridInteraction(tx, ty);
         });
+
+        const handleContextMenuTrigger = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          isMouseDown = false;
+          const rect = canvas.getBoundingClientRect();
+          const scaleX = canvas.width / rect.width;
+          const scaleY = canvas.height / rect.height;
+          const tileSize = (currentMap && currentMap.tileSize) || 48;
+          const tx = Math.floor(((e.clientX - rect.left) * scaleX) / tileSize);
+          const ty = Math.floor(((e.clientY - rect.top) * scaleY) / tileSize);
+
+          if (currentMap && tx >= 0 && tx < currentMap.width && ty >= 0 && ty < currentMap.height) {
+            hoverX = tx;
+            hoverY = ty;
+            renderMap();
+            updateInspector(tx, ty);
+            openTilePropertyModal(tx, ty);
+          }
+        };
+
+        canvas.addEventListener('contextmenu', handleContextMenuTrigger);
+        const canvasContainer = document.querySelector('.canvas-container');
+        if (canvasContainer) {
+          canvasContainer.addEventListener('contextmenu', handleContextMenuTrigger);
+        }
+
+        const openTileEdBtn = document.getElementById('openTileEditorBtn');
+        if (openTileEdBtn) {
+          openTileEdBtn.addEventListener('click', () => {
+            let tx = hoverX >= 0 ? hoverX : 0;
+            let ty = hoverY >= 0 ? hoverY : 0;
+            openTilePropertyModal(tx, ty);
+          });
+        }
 
         canvas.addEventListener('mousemove', (e) => {
           const rect = canvas.getBoundingClientRect();
@@ -1277,6 +1922,45 @@
         document.getElementById('undoBtn').addEventListener('click', undo);
         document.getElementById('redoBtn').addEventListener('click', redo);
 
+        const btnRot = document.getElementById('btnRotateObj');
+        if (btnRot) {
+          btnRot.addEventListener('click', () => {
+            activeObjectRot = (activeObjectRot + 90) % 360;
+            updateTransformUI();
+            renderMap();
+            showToast(`Object Rotation: ${activeObjectRot}°`);
+          });
+        }
+        const btnFx = document.getElementById('btnFlipXObj');
+        if (btnFx) {
+          btnFx.addEventListener('click', () => {
+            activeObjectFlipX = !activeObjectFlipX;
+            updateTransformUI();
+            renderMap();
+            showToast(`Flip X: ${activeObjectFlipX ? 'ON' : 'OFF'}`);
+          });
+        }
+        const btnFy = document.getElementById('btnFlipYObj');
+        if (btnFy) {
+          btnFy.addEventListener('click', () => {
+            activeObjectFlipY = !activeObjectFlipY;
+            updateTransformUI();
+            renderMap();
+            showToast(`Flip Y: ${activeObjectFlipY ? 'ON' : 'OFF'}`);
+          });
+        }
+        const btnResetTrans = document.getElementById('btnResetTransformObj');
+        if (btnResetTrans) {
+          btnResetTrans.addEventListener('click', () => {
+            activeObjectRot = 0;
+            activeObjectFlipX = false;
+            activeObjectFlipY = false;
+            updateTransformUI();
+            renderMap();
+            showToast('Reset Object Transform');
+          });
+        }
+
         const addOrUpdateWarpBtn = document.getElementById('addOrUpdateWarpBtn');
         if (addOrUpdateWarpBtn) {
           addOrUpdateWarpBtn.addEventListener('click', () => {
@@ -1285,8 +1969,29 @@
           });
         }
         window.addEventListener('keydown', (e) => {
-          if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
-          if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); }
+          if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); return; }
+          if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redo(); return; }
+
+          const activeEl = document.activeElement;
+          const isInput = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.tagName === 'SELECT');
+          if (!isInput) {
+            if (e.key === 'r' || e.key === 'R') {
+              activeObjectRot = (activeObjectRot + 90) % 360;
+              updateTransformUI();
+              renderMap();
+              showToast(`Object Rotation: ${activeObjectRot}°`);
+            } else if (e.key === 'f' || e.key === 'F' || e.key === 'h' || e.key === 'H') {
+              activeObjectFlipX = !activeObjectFlipX;
+              updateTransformUI();
+              renderMap();
+              showToast(`Flip X: ${activeObjectFlipX ? 'ON' : 'OFF'}`);
+            } else if (e.key === 'v' || e.key === 'V') {
+              activeObjectFlipY = !activeObjectFlipY;
+              updateTransformUI();
+              renderMap();
+              showToast(`Flip Y: ${activeObjectFlipY ? 'ON' : 'OFF'}`);
+            }
+          }
         });
 
         document.querySelectorAll('.layer-toggles input').forEach(chk => {
@@ -1304,12 +2009,14 @@
         const newMapModal = document.getElementById('newMapModal');
         const mapSettingsModal = document.getElementById('mapSettingsModal');
         const jsonModal = document.getElementById('jsonModal');
+        const tilePropertyModal = document.getElementById('tilePropertyModal');
 
         document.querySelectorAll('.modal-close').forEach(btn => {
           btn.addEventListener('click', () => {
             newMapModal.classList.remove('active');
             mapSettingsModal.classList.remove('active');
             jsonModal.classList.remove('active');
+            if (tilePropertyModal) tilePropertyModal.classList.remove('active');
           });
         });
 

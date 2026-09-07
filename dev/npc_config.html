@@ -19,9 +19,15 @@
         <h1>NusaQuest NPC Configurator</h1>
         <span class="badge">Animation & Dialogue Editor</span>
       </div>
-      <div class="sync-status">
-        <span class="dot"></span>
-        <span id="syncText">Auto-Synced to Game</span>
+
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button id="exportJsonBtn" class="btn btn-gold" title="Export NPC JSON">📥 Export JSON</button>
+        <button id="importJsonBtn" class="btn" title="Import NPC JSON">📤 Import JSON</button>
+
+        <div class="sync-status">
+          <span class="dot"></span>
+          <span id="syncText">Auto-Synced to Game</span>
+        </div>
       </div>
     </header>
 
@@ -63,6 +69,7 @@
         <div class="npc-selector-bar">
           <label style="font-size: 12px; font-weight: 700; color: var(--text-muted);">Select NPC:</label>
           <select id="npcSelect" style="flex: 1; font-weight: 700;"></select>
+          <button id="exportSingleNpcBtn" class="btn-secondary" style="font-size: 11px; padding: 4px 8px;">Export NPC</button>
           <button id="deleteNpcBtn" class="btn-danger">Delete</button>
         </div>
 
@@ -96,10 +103,7 @@
             <div class="form-row">
               <div class="form-field">
                 <label for="npcMapId">Assigned Map:</label>
-                <select id="npcMapId">
-                  <option value="village">village (Outdoor)</option>
-                  <option value="balai_indoor">balai_indoor (Indoor)</option>
-                </select>
+                <select id="npcMapId"></select>
               </div>
               <div class="form-field" style="max-width: 70px;">
                 <label for="npcTileX">Tile X:</label>
@@ -133,6 +137,7 @@
                 <div style="font-size: 11px; color: var(--text-muted);">
                   Selected Tile: Col <strong id="selTileCol" style="color: var(--gold);">0</strong>, Row <strong id="selTileRow" style="color: var(--gold);">0</strong>
                   <button type="button" id="setSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px; margin-left: 6px;">Set as Idle Tile</button>
+                  <button type="button" id="clearSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px; margin-left: 4px;">Use CharIndex</button>
                 </div>
                 <div class="anim-frames-list" id="animFramesList">
                   <span style="font-size: 11px; color: var(--text-muted);">Default charIndex animation</span>
@@ -160,10 +165,39 @@
           <pre class="code-preview" id="codeOutput"></pre>
           <div style="display: flex; gap: 8px; margin-top: 8px;">
             <button id="copyJsBtn" class="btn-primary" style="flex: 1;">Copy JS</button>
-            <button id="downloadJsonBtn" class="btn-secondary">Export JSON</button>
+            <button id="exportJsonBottomBtn" class="btn-secondary">Export JSON</button>
+            <button id="importJsonBottomBtn" class="btn-secondary">Import JSON</button>
           </div>
         </div>
 
+      </div>
+    </div>
+  </div>
+
+  <div id="jsonModal" class="modal-overlay">
+    <div class="modal-card" style="width: 600px;">
+      <div class="modal-header">
+        <h3 id="jsonModalTitle">Export / Import NPC JSON</h3>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div class="form-group">
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <button type="button" id="exportModeCurrentBtn" class="btn btn-secondary active" style="font-size: 11px; padding: 3px 10px;">Current NPC</button>
+          <button type="button" id="exportModeAllBtn" class="btn btn-secondary" style="font-size: 11px; padding: 3px 10px;">All NPCs Bundle</button>
+        </div>
+        <textarea id="jsonArea" style="width: 100%; height: 240px; background: #0b1324; color: #4ade80; border: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 10px; border-radius: 6px; resize: vertical;"></textarea>
+      </div>
+      <div class="modal-footer" style="display: flex; gap: 8px; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 6px;">
+          <button id="downloadJsonFileBtn" class="btn btn-secondary">💾 Download File</button>
+          <button id="uploadJsonFileBtn" class="btn btn-secondary">📁 Upload File</button>
+          <input type="file" id="importJsonFileInput" accept=".json" style="display: none;">
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button id="copyJsonBtn" class="btn btn-gold">📋 Copy</button>
+          <button id="applyImportJsonBtn" class="btn btn-primary hidden">Import & Apply</button>
+          <button class="modal-close btn">Tutup</button>
+        </div>
       </div>
     </div>
   </div>
@@ -388,6 +422,8 @@
       if (tile) {
         selectedCol = tile.col;
         selectedRow = tile.row;
+        customCol = tile.col;
+        customRow = tile.row;
 
         document.getElementById('selTileCol').textContent = tile.col;
         document.getElementById('selTileRow').textContent = tile.row;
@@ -414,6 +450,42 @@
     document.getElementById('setSpecificTileBtn').addEventListener('click', () => {
       customCol = selectedCol;
       customRow = selectedRow;
+      updateAnimPreview();
+    });
+
+    document.getElementById('clearSpecificTileBtn').addEventListener('click', () => {
+      customCol = null;
+      customRow = null;
+      selectedCol = (parseInt(npcCharIndex.value, 10) || 0) * 3 + 1;
+      selectedRow = 0;
+      document.getElementById('selTileCol').textContent = selectedCol;
+      document.getElementById('selTileRow').textContent = selectedRow;
+      renderCharGrid();
+      updateAnimPreview();
+    });
+
+    npcCharIndex.addEventListener('input', () => {
+      if (customCol === null && customRow === null) {
+        selectedCol = (parseInt(npcCharIndex.value, 10) || 0) * 3 + 1;
+        document.getElementById('selTileCol').textContent = selectedCol;
+        renderCharGrid();
+      }
+      updateAnimPreview();
+    });
+
+    npcDir.addEventListener('change', () => {
+      const dir = parseInt(npcDir.value, 10) || 0;
+      if (customCol !== null && customRow !== null) {
+        const baseRow = Math.floor(customRow / 4) * 4;
+        selectedRow = baseRow + dir;
+        customRow = selectedRow;
+      } else {
+        const cIdx = parseInt(npcCharIndex.value, 10) || 0;
+        const baseRow = Math.floor(cIdx / 4) * 4;
+        selectedRow = baseRow + dir;
+      }
+      document.getElementById('selTileRow').textContent = selectedRow;
+      renderCharGrid();
       updateAnimPreview();
     });
 
@@ -461,13 +533,16 @@
           r = current.row;
           animStep++;
         } else if (customCol !== null && customRow !== null) {
+          const dir = parseInt(npcDir.value, 10) || 0;
+          const baseRow = Math.floor(customRow / 4) * 4;
           c = customCol;
-          r = customRow;
+          r = baseRow + dir;
         } else {
           const cIdx = parseInt(npcCharIndex.value, 10) || 0;
           const dir = parseInt(npcDir.value, 10) || 0;
-          c = cIdx * 3 + 1;
-          r = dir;
+          const baseRow = Math.floor(cIdx / 4) * 4;
+          c = (cIdx % 4) * 3 + 1;
+          r = baseRow + dir;
         }
 
         animPreviewCtx.drawImage(
@@ -480,6 +555,34 @@
       drawFrame();
       if (animSequence.length > 1) {
         animTimer = setInterval(drawFrame, 250);
+      }
+    }
+
+    function populateMapSelect() {
+      const mapSelect = document.getElementById('npcMapId');
+      if (!mapSelect) return;
+      const currentVal = mapSelect.value;
+      mapSelect.innerHTML = '';
+      const mapKeys = new Set();
+      if (typeof MAPS !== 'undefined' && Object.keys(MAPS).length > 0) {
+        Object.keys(MAPS).forEach(k => mapKeys.add(k));
+      }
+      if (npcPlacements) {
+        Object.keys(npcPlacements).forEach(k => mapKeys.add(k));
+      }
+      if (mapKeys.size === 0) {
+        mapKeys.add('village');
+        mapKeys.add('balai_indoor');
+      }
+      mapKeys.forEach(mId => {
+        const opt = document.createElement('option');
+        opt.value = mId;
+        const name = (typeof MAPS !== 'undefined' && MAPS[mId] && MAPS[mId].name) ? MAPS[mId].name : mId;
+        opt.textContent = `${name} (${mId})`;
+        mapSelect.appendChild(opt);
+      });
+      if (currentVal && mapKeys.has(currentVal)) {
+        mapSelect.value = currentVal;
       }
     }
 
@@ -520,19 +623,9 @@
       customRow = npc.row !== undefined ? npc.row : null;
       animSequence = npc.animList ? JSON.parse(JSON.stringify(npc.animList)) : [];
 
-      if (customCol !== null && customRow !== null) {
-        selectedCol = customCol;
-        selectedRow = customRow;
-      } else {
-        selectedCol = parseInt(npcCharIndex.value, 10) * 3 + 1;
-        selectedRow = 0;
-      }
-
-      document.getElementById('selTileCol').textContent = selectedCol;
-      document.getElementById('selTileRow').textContent = selectedRow;
-
       let foundMap = 'village';
-      let foundX = 4, foundY = 7, foundDir = 0;
+      let foundX = 4, foundY = 7;
+      let foundDir = npc.dir !== undefined ? npc.dir : 0;
 
       for (const [mId, list] of Object.entries(npcPlacements)) {
         const ref = list.find(r => r.id === id);
@@ -540,15 +633,31 @@
           foundMap = mId;
           foundX = ref.tileX;
           foundY = ref.tileY;
-          foundDir = ref.dir !== undefined ? ref.dir : 0;
+          if (ref.dir !== undefined) foundDir = ref.dir;
           break;
         }
       }
 
-      npcMapId.value = foundMap;
+      populateMapSelect();
+      if (npcMapId.querySelector(`option[value="${foundMap}"]`)) {
+        npcMapId.value = foundMap;
+      }
       npcTileX.value = foundX;
       npcTileY.value = foundY;
       npcDir.value = foundDir;
+
+      if (customCol !== null && customRow !== null) {
+        selectedCol = customCol;
+        const baseRow = Math.floor(customRow / 4) * 4;
+        selectedRow = baseRow + foundDir;
+      } else {
+        const cIdx = parseInt(npcCharIndex.value, 10) || 0;
+        selectedCol = (cIdx % 4) * 3 + 1;
+        selectedRow = Math.floor(cIdx / 4) * 4 + foundDir;
+      }
+
+      document.getElementById('selTileCol').textContent = selectedCol;
+      document.getElementById('selTileRow').textContent = selectedRow;
 
       renderCharGrid();
       renderAnimChips();
@@ -676,6 +785,7 @@
         name: npcName.value.trim(),
         role: npcRole.value.trim(),
         charIndex: parseInt(npcCharIndex.value, 10) || 0,
+        dir: parseInt(npcDir.value, 10) || 0,
         lines
       };
 
@@ -803,16 +913,248 @@
       });
     });
 
-    document.getElementById('downloadJsonBtn').addEventListener('click', () => {
-      const dataStr = JSON.stringify({ dialogues, npcPlacements }, null, 2);
+    const jsonModal = document.getElementById('jsonModal');
+    const jsonArea = document.getElementById('jsonArea');
+    const jsonModalTitle = document.getElementById('jsonModalTitle');
+    const applyImportJsonBtn = document.getElementById('applyImportJsonBtn');
+
+    document.querySelectorAll('.modal-close').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (jsonModal) jsonModal.classList.remove('active');
+      });
+    });
+
+    if (jsonModal) {
+      jsonModal.addEventListener('click', (e) => {
+        if (e.target === jsonModal) jsonModal.classList.remove('active');
+      });
+    }
+
+    function getSingleNpcExport(id) {
+      if (!id || !dialogues[id]) return null;
+      const d = JSON.parse(JSON.stringify(dialogues[id]));
+      let placement = null;
+      for (const [mId, list] of Object.entries(npcPlacements)) {
+        const ref = list.find(r => r.id === id);
+        if (ref) {
+          placement = {
+            mapId: mId,
+            tileX: ref.tileX,
+            tileY: ref.tileY,
+            dir: ref.dir !== undefined ? ref.dir : 0
+          };
+          if (ref.col !== undefined && ref.col !== null) placement.col = ref.col;
+          if (ref.row !== undefined && ref.row !== null) placement.row = ref.row;
+          break;
+        }
+      }
+      if (placement) d.placement = placement;
+      return d;
+    }
+
+    let jsonModalExportMode = 'single';
+
+    const exportModeCurrentBtn = document.getElementById('exportModeCurrentBtn');
+    const exportModeAllBtn = document.getElementById('exportModeAllBtn');
+
+    function updateExportModalContent() {
+      if (jsonModalExportMode === 'single') {
+        if (exportModeCurrentBtn) exportModeCurrentBtn.classList.add('active');
+        if (exportModeAllBtn) exportModeAllBtn.classList.remove('active');
+        const singleData = getSingleNpcExport(currentNpcId);
+        jsonArea.value = singleData ? JSON.stringify(singleData, null, 2) : '{}';
+      } else {
+        if (exportModeCurrentBtn) exportModeCurrentBtn.classList.remove('active');
+        if (exportModeAllBtn) exportModeAllBtn.classList.add('active');
+        jsonArea.value = JSON.stringify({ dialogues, npcPlacements }, null, 2);
+      }
+    }
+
+    if (exportModeCurrentBtn) {
+      exportModeCurrentBtn.addEventListener('click', () => {
+        jsonModalExportMode = 'single';
+        updateExportModalContent();
+      });
+    }
+
+    if (exportModeAllBtn) {
+      exportModeAllBtn.addEventListener('click', () => {
+        jsonModalExportMode = 'all';
+        updateExportModalContent();
+      });
+    }
+
+    function openExportModal(mode = 'single') {
+      if (!jsonModal) return;
+      jsonModalExportMode = mode;
+      jsonModalTitle.textContent = mode === 'single' ? `Export NPC JSON (${currentNpcId || 'selected'})` : 'Export All NPCs JSON';
+      updateExportModalContent();
+      applyImportJsonBtn.classList.add('hidden');
+      jsonModal.classList.add('active');
+    }
+
+    function openImportModal() {
+      if (!jsonModal) return;
+      jsonModalTitle.textContent = 'Import NPC JSON (Individual or Bundle)';
+      jsonArea.value = '';
+      applyImportJsonBtn.classList.remove('hidden');
+      jsonModal.classList.add('active');
+    }
+
+    const exportSingleNpcBtn = document.getElementById('exportSingleNpcBtn');
+    if (exportSingleNpcBtn) {
+      exportSingleNpcBtn.addEventListener('click', () => {
+        openExportModal('single');
+      });
+    }
+
+    const exportJsonBtn = document.getElementById('exportJsonBtn');
+    const exportJsonBottomBtn = document.getElementById('exportJsonBottomBtn');
+    if (exportJsonBtn) exportJsonBtn.addEventListener('click', () => openExportModal('all'));
+    if (exportJsonBottomBtn) exportJsonBottomBtn.addEventListener('click', () => openExportModal('all'));
+
+    const importJsonBtn = document.getElementById('importJsonBtn');
+    const importJsonBottomBtn = document.getElementById('importJsonBottomBtn');
+    if (importJsonBtn) importJsonBtn.addEventListener('click', openImportModal);
+    if (importJsonBottomBtn) importJsonBottomBtn.addEventListener('click', openImportModal);
+
+    document.getElementById('copyJsonBtn').addEventListener('click', () => {
+      jsonArea.select();
+      document.execCommand('copy');
+      const btn = document.getElementById('copyJsonBtn');
+      const orig = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = orig, 2000);
+    });
+
+    document.getElementById('downloadJsonFileBtn').addEventListener('click', () => {
+      const dataStr = jsonArea.value || JSON.stringify({ dialogues, npcPlacements }, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `nusaquest_npcs_${Date.now()}.json`;
+      a.download = `nusaquest_npc_${currentNpcId || 'export'}_${Date.now()}.json`;
       a.click();
       URL.revokeObjectURL(url);
     });
+
+    const uploadJsonFileBtn = document.getElementById('uploadJsonFileBtn');
+    const importJsonFileInput = document.getElementById('importJsonFileInput');
+    if (uploadJsonFileBtn && importJsonFileInput) {
+      uploadJsonFileBtn.addEventListener('click', () => {
+        importJsonFileInput.click();
+      });
+
+      importJsonFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          jsonArea.value = evt.target.result;
+          importJsonFileInput.value = '';
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    if (applyImportJsonBtn) {
+      applyImportJsonBtn.addEventListener('click', () => {
+        try {
+          const rawText = jsonArea.value.trim();
+          if (!rawText) throw new Error('JSON input is empty');
+          const data = JSON.parse(rawText);
+          if (!data || typeof data !== 'object') throw new Error('Invalid JSON format');
+
+          let importedCount = 0;
+          let importedId = null;
+
+          function processSingleNpc(npcObj) {
+            if (!npcObj || typeof npcObj !== 'object') return false;
+            const targetId = npcObj.id || currentNpcId || `imported_npc_${Date.now()}`;
+            const placement = npcObj.placement || (npcObj.mapId ? {
+              mapId: npcObj.mapId,
+              tileX: npcObj.tileX || 0,
+              tileY: npcObj.tileY || 0,
+              dir: npcObj.dir || 0,
+              col: npcObj.col,
+              row: npcObj.row
+            } : null);
+
+            const npcDef = {
+              id: targetId,
+              name: npcObj.name || targetId,
+              role: npcObj.role || '',
+              charIndex: npcObj.charIndex !== undefined ? npcObj.charIndex : 1,
+              lines: Array.isArray(npcObj.lines) ? npcObj.lines : []
+            };
+            if (npcObj.col !== undefined && npcObj.col !== null) npcDef.col = npcObj.col;
+            if (npcObj.row !== undefined && npcObj.row !== null) npcDef.row = npcObj.row;
+            if (npcObj.animList) npcDef.animList = npcObj.animList;
+
+            dialogues[targetId] = npcDef;
+            importedCount++;
+            importedId = targetId;
+
+            if (placement && placement.mapId) {
+              for (const mId of Object.keys(npcPlacements)) {
+                npcPlacements[mId] = npcPlacements[mId].filter(r => r.id !== targetId);
+              }
+              if (!npcPlacements[placement.mapId]) npcPlacements[placement.mapId] = [];
+              const placeObj = {
+                id: targetId,
+                tileX: parseInt(placement.tileX, 10) || 0,
+                tileY: parseInt(placement.tileY, 10) || 0,
+                dir: parseInt(placement.dir, 10) || 0
+              };
+              if (placement.col !== undefined && placement.col !== null) placeObj.col = placement.col;
+              if (placement.row !== undefined && placement.row !== null) placeObj.row = placement.row;
+              npcPlacements[placement.mapId].push(placeObj);
+            }
+            return true;
+          }
+
+          if (data.dialogues || data.npcPlacements) {
+            if (data.dialogues && typeof data.dialogues === 'object') {
+              for (const [id, val] of Object.entries(data.dialogues)) {
+                if (!val.id) val.id = id;
+                processSingleNpc(val);
+              }
+            }
+            if (data.npcPlacements && typeof data.npcPlacements === 'object') {
+              Object.assign(npcPlacements, data.npcPlacements);
+            }
+          } else if (data.id && (data.lines || data.name || data.role)) {
+            processSingleNpc(data);
+          } else if (Array.isArray(data)) {
+            data.forEach(item => processSingleNpc(item));
+          } else {
+            let hasValidNpc = false;
+            for (const [key, val] of Object.entries(data)) {
+              if (val && typeof val === 'object' && (val.lines || val.name || val.id)) {
+                if (!val.id) val.id = key;
+                processSingleNpc(val);
+                hasValidNpc = true;
+              }
+            }
+            if (!hasValidNpc) throw new Error('Unrecognized NPC JSON structure');
+          }
+
+          saveToGameSession();
+          populateNpcSelect();
+          populateMapSelect();
+
+          if (importedId && dialogues[importedId]) {
+            currentNpcId = importedId;
+            loadNpcIntoForm(importedId);
+          }
+
+          if (jsonModal) jsonModal.classList.remove('active');
+          alert(`Successfully imported ${importedCount} NPC(s)!`);
+        } catch (err) {
+          alert(`Failed to import JSON: ${err.message}`);
+        }
+      });
+    }
 
     function loadServerJsonData() {
       fetch('/api/npc-config')
@@ -832,6 +1174,7 @@
               }
             }
             populateNpcSelect();
+            populateMapSelect();
             if (dialogues[currentNpcId]) {
               loadNpcIntoForm(currentNpcId);
             } else {
@@ -842,6 +1185,7 @@
         }).catch(() => {});
     }
 
+    populateMapSelect();
     populateNpcSelect();
     loadNpcIntoForm(currentNpcId);
     loadServerJsonData();

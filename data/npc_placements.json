@@ -17,6 +17,12 @@
       "tileX": 13,
       "tileY": 2,
       "dir": 0
+    },
+    {
+      "id": "budi",
+      "tileX": 2,
+      "tileY": 3,
+      "dir": 2
     }
   ],
   "balai_indoor": [
