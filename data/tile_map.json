@@ -354,6 +354,12 @@
       "row": 9,
       "color": "#b48355"
     },
+    "97": {
+      "sheet": "roguelike",
+      "col": 28,
+      "row": 3,
+      "color": "#be9369"
+    },
     "99": {
       "col": 18,
       "row": 22,
@@ -364,6 +370,12 @@
       "col": 0,
       "row": 5,
       "color": "#4ade80"
+    },
+    "101": {
+      "sheet": "roguelike",
+      "col": 21,
+      "row": 3,
+      "color": "#ac8660"
     }
   },
   "objects": {
@@ -373,6 +385,108 @@
       "row": 10,
       "color": "#854d0e",
       "desc": "Sawah Mud"
+    },
+    "101": {
+      "sheet": "roguelike",
+      "col": 21,
+      "row": 3,
+      "color": "#ac8660"
+    },
+    "111": {
+      "sheet": "roguelike",
+      "col": 23,
+      "row": 1,
+      "color": "#ac8660"
+    },
+    "121": {
+      "sheet": "roguelike",
+      "col": 55,
+      "row": 15,
+      "color": "#e9e9e9"
+    },
+    "123": {
+      "sheet": "roguelike",
+      "col": 45,
+      "row": 14,
+      "color": "#ab8b4c"
+    },
+    "134": {
+      "sheet": "roguelike",
+      "col": 24,
+      "row": 1,
+      "color": "#b5906a"
+    },
+    "201": {
+      "sheet": "roguelike",
+      "col": 22,
+      "row": 3,
+      "color": "#a7815b"
+    },
+    "231": {
+      "sheet": "roguelike",
+      "col": 18,
+      "row": 0,
+      "color": "#b98b5e"
+    },
+    "301": {
+      "sheet": "roguelike",
+      "col": 19,
+      "row": 6,
+      "color": "#c8a480"
+    },
+    "321": {
+      "sheet": "roguelike",
+      "col": 17,
+      "row": 0,
+      "color": "#b98b5e"
+    },
+    "323": {
+      "sheet": "roguelike",
+      "col": 13,
+      "row": 5,
+      "color": "#e8b328"
+    },
+    "432": {
+      "sheet": "roguelike",
+      "col": 13,
+      "row": 6,
+      "color": "#eeb71b"
+    },
+    "453": {
+      "sheet": "roguelike",
+      "col": 17,
+      "row": 7,
+      "color": "#b58b62"
+    },
+    "456": {
+      "sheet": "roguelike",
+      "col": 46,
+      "row": 14,
+      "color": "#ab8b4c"
+    },
+    "789": {
+      "sheet": "roguelike",
+      "col": 47,
+      "row": 14,
+      "color": "#8b9a68"
+    },
+    "890": {
+      "sheet": "roguelike",
+      "col": 48,
+      "row": 14,
+      "color": "#8b9a68"
+    },
+    "901": {
+      "sheet": "roguelike",
+      "col": 49,
+      "row": 14,
+      "color": "#a28155"
+    },
+    "908": {
+      "sheet": "roguelike",
+      "col": 28,
+      "row": 4,
+      "color": "#be9369"
     },
     "T": {
       "col": 19,
@@ -946,6 +1060,66 @@
       "col": 15,
       "row": 2,
       "color": "#c66527"
+    },
+    "WBO": {
+      "sheet": "roguelike",
+      "col": 44,
+      "row": 3,
+      "color": "#9e7a57"
+    },
+    "ABC": {
+      "sheet": "roguelike",
+      "col": 23,
+      "row": 6,
+      "color": "#b58b62"
+    },
+    "DEF": {
+      "sheet": "roguelike",
+      "col": 14,
+      "row": 0,
+      "color": "#5a463a"
+    },
+    "HIJ": {
+      "sheet": "roguelike",
+      "col": 29,
+      "row": 3,
+      "color": "#c4cad8"
+    },
+    "KLM": {
+      "sheet": "roguelike",
+      "col": 29,
+      "row": 4,
+      "color": "#c8a480"
+    },
+    "OPQ": {
+      "sheet": "roguelike",
+      "col": 54,
+      "row": 9,
+      "color": "#454545"
+    },
+    "RSU": {
+      "sheet": "roguelike",
+      "col": 54,
+      "row": 10,
+      "color": "#ca862d"
+    },
+    "VWX": {
+      "sheet": "roguelike",
+      "col": 45,
+      "row": 7,
+      "color": "#a27b55"
+    },
+    "097": {
+      "sheet": "roguelike",
+      "col": 28,
+      "row": 3,
+      "color": "#be9369"
+    },
+    "ODBK": {
+      "sheet": "roguelike",
+      "col": 37,
+      "row": 2,
+      "color": "#404040"
     }
   }
 }
