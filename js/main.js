@@ -16,6 +16,8 @@ class GameEngine {
     this.player = new Player(this.currentMap.spawnX || 7, this.currentMap.spawnY || 4, this.getTileSize());
     this.npcManager = new NpcManager();
     this.uiManager = new UIManager();
+    this.questEngine = new QuestEngine(this.uiManager);
+    this.uiManager.setQuestEngine(this.questEngine);
 
     this.activeDialogueNpc = null;
     this.activeDialogueStep = 0;
@@ -93,6 +95,9 @@ class GameEngine {
       } else if (e.code === 'KeyN' || e.code === 'Tab') {
         e.preventDefault();
         this.uiManager.toggleNotebook();
+      } else if (e.code === 'KeyQ') {
+        e.preventDefault();
+        this.uiManager.toggleQuestModal();
       }
 
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
@@ -153,7 +158,7 @@ class GameEngine {
   }
 
   handleInteractionKey() {
-    if (this.isGeneratingQuiz || this.isWarping || (this.uiManager && this.uiManager.isQuizActive())) return;
+    if (this.isGeneratingQuiz || this.isWarping || (this.uiManager && (this.uiManager.isQuizActive() || this.uiManager.isQuestModalActive()))) return;
 
     if (this.activeDialogueNpc) {
       this.advanceDialogue();
@@ -170,6 +175,10 @@ class GameEngine {
     this.activeDialogueNpc = npc;
     this.activeDialogueStep = 0;
     this.pendingQuiz = null;
+
+    if (this.questEngine) {
+      this.questEngine.onTalkNpc(npc.id);
+    }
 
     if (DIALOGUES[npc.id] && DIALOGUES[npc.id].lines && DIALOGUES[npc.id].lines.length > 0) {
       npc.dialogue = DIALOGUES[npc.id].lines;
@@ -295,6 +304,9 @@ class GameEngine {
     }
 
     this.uiManager.showToast(`Memasuki: ${this.currentMap.name}`);
+    if (this.questEngine) {
+      this.questEngine.onMapEnter(targetMapId);
+    }
   }
 
   updateWarpTransition(now) {
@@ -335,7 +347,7 @@ class GameEngine {
     this.player.update(
       now,
       activeMapContext,
-      this.activeDialogueNpc || (this.uiManager && this.uiManager.isQuizActive()),
+      this.activeDialogueNpc || (this.uiManager && (this.uiManager.isQuizActive() || this.uiManager.isQuestModalActive())),
       this.keysPressed,
       (tx, ty) => this.checkWarp(tx, ty),
       ts

@@ -39,6 +39,17 @@ class UIManager {
     this.quizFeedback = document.getElementById('quizFeedback');
     this.nextQuizBtn = document.getElementById('nextQuizBtn');
     this.closeQuizBtn = document.getElementById('closeQuizBtn');
+
+    this.questTracker = document.getElementById('questTracker');
+    this.questTrackerText = document.getElementById('questTrackerText');
+    this.questModal = document.getElementById('questModal');
+    this.questHudBtn = document.getElementById('questHudBtn');
+    this.closeQuestBtn = document.getElementById('closeQuestBtn');
+    this.questList = document.getElementById('questList');
+    this.questPlayerXp = document.getElementById('questPlayerXp');
+    this.badgeContainer = document.getElementById('badgeContainer');
+
+    this.questEngine = null;
   }
 
   bindEvents() {
@@ -56,6 +67,26 @@ class UIManager {
 
     if (this.nextQuizBtn) {
       this.nextQuizBtn.addEventListener('click', () => this.handleNextQuestion());
+    }
+
+    if (this.questHudBtn) {
+      this.questHudBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        this.toggleQuestModal();
+      });
+    }
+
+    if (this.closeQuestBtn) {
+      this.closeQuestBtn.addEventListener('click', () => this.hideQuestModalUI());
+    }
+
+    if (this.questModal) {
+      this.questModal.addEventListener('click', (e) => {
+        if (e.target === this.questModal) {
+          this.hideQuestModalUI();
+        }
+      });
     }
   }
 
@@ -145,6 +176,9 @@ class UIManager {
     this.learnedVocab.set(word, meaning);
     this.updateVocabUI(word, meaning);
     this.showToast(`+1 Kata Baru: ${word}!`);
+    if (this.questEngine) {
+      this.questEngine.onLearnVocab(this.learnedVocab);
+    }
   }
 
   updateVocabUI(newWord, newMeaning) {
@@ -197,10 +231,16 @@ class UIManager {
   }
 
   hideQuizModal() {
+    const finishedQuiz = this.currentQuiz;
+    const finalScore = this.score;
     this.quizModal.classList.add('hidden');
     this.currentQuiz = null;
     if (this.onQuizComplete) {
-      this.onQuizComplete(this.score);
+      this.onQuizComplete(finalScore);
+    }
+    if (this.questEngine && finishedQuiz) {
+      const total = finishedQuiz.questions ? finishedQuiz.questions.length : 0;
+      this.questEngine.onQuizComplete(finishedQuiz.npcId, finalScore, total);
     }
   }
 
@@ -325,6 +365,113 @@ class UIManager {
       const total = this.currentQuiz.questions.length;
       this.showToast(`Kuis Selesai! Skor: ${this.score} / ${total}`);
       this.hideQuizModal();
+    }
+  }
+
+  setQuestEngine(questEngine) {
+    this.questEngine = questEngine;
+    if (this.questEngine) {
+      this.questEngine.setUiManager(this);
+    }
+    this.updateQuestTracker();
+  }
+
+  updateQuestTracker() {
+    if (!this.questTrackerText) return;
+    if (this.questEngine) {
+      this.questTrackerText.innerText = this.questEngine.getActiveStepInstruction();
+    }
+  }
+
+  toggleQuestModal() {
+    if (!this.questModal) return;
+    const isHidden = this.questModal.classList.contains('hidden');
+    if (isHidden) {
+      this.showQuestModalUI();
+    } else {
+      this.hideQuestModalUI();
+    }
+  }
+
+  showQuestModalUI() {
+    if (!this.questModal) return;
+    this.questModal.classList.remove('hidden');
+    this.renderQuestLog();
+  }
+
+  hideQuestModalUI() {
+    if (!this.questModal) return;
+    this.questModal.classList.add('hidden');
+  }
+
+  isQuestModalActive() {
+    return this.questModal && !this.questModal.classList.contains('hidden');
+  }
+
+  renderQuestLog() {
+    if (!this.questEngine || !this.questList) return;
+
+    const quests = this.questEngine.getAllQuests();
+    const xp = this.questEngine.getPlayerXP();
+    const playerBadges = this.questEngine.getPlayerBadges();
+
+    if (this.questPlayerXp) {
+      this.questPlayerXp.innerText = `⭐ ${xp} XP`;
+    }
+
+    this.questList.innerHTML = '';
+    quests.forEach(quest => {
+      const card = document.createElement('div');
+      const statusClass = quest.status.toLowerCase();
+      card.className = `quest-card ${statusClass}`;
+
+      let statusLabel = 'Belum Dimulai';
+      if (quest.status === 'IN_PROGRESS') statusLabel = 'Sedang Berjalan';
+      if (quest.status === 'COMPLETED') statusLabel = 'Selesai';
+
+      const stepsHtml = quest.steps.map((step, idx) => {
+        let stepStatusClass = '';
+        if (step.completed) {
+          stepStatusClass = 'completed';
+        } else if (quest.status === 'IN_PROGRESS' && quest.steps.findIndex(s => !s.completed) === idx) {
+          stepStatusClass = 'active';
+        }
+
+        const icon = step.completed ? '✅' : (stepStatusClass === 'active' ? '👉' : '⚪');
+        return `<li class="quest-step-item ${stepStatusClass}"><span>${icon}</span> ${step.description}</li>`;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="quest-card-header">
+          <span class="quest-card-title">${quest.title}</span>
+          <span class="status-badge ${statusClass}">${statusLabel}</span>
+        </div>
+        <div class="quest-card-desc">${quest.description}</div>
+        <ul class="quest-steps-list">
+          ${stepsHtml}
+        </ul>
+        <div class="quest-card-reward">
+          🎁 Hadiah: +${quest.reward.xp} XP | ${quest.reward.icon} ${quest.reward.badge}
+        </div>
+      `;
+
+      this.questList.appendChild(card);
+    });
+
+    if (this.badgeContainer) {
+      this.badgeContainer.innerHTML = '';
+      const allPossibleBadges = [
+        { name: 'Lencana Pasar Gede', icon: '🛍️' },
+        { name: 'Lencana Tata Krama', icon: '🏛️' }
+      ];
+
+      allPossibleBadges.forEach(b => {
+        const isUnlocked = playerBadges.includes(b.name);
+        const item = document.createElement('div');
+        item.className = `badge-item ${isUnlocked ? 'unlocked' : ''}`;
+        item.innerHTML = `<span>${b.icon}</span> <span>${b.name}</span>`;
+        this.badgeContainer.appendChild(item);
+      });
     }
   }
 }

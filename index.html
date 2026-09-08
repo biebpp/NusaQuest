@@ -30,13 +30,22 @@
             <option value="64">64px</option>
           </select>
         </div>
-        <span><span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku</span>
+        <span><span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku &nbsp;•&nbsp; <span class="key">Q</span> Misi</span>
+        <button id="questHudBtn" title="Buka Quest Log (Q)" style="padding: 3px 10px; font-size: 11px; background: #78350f; color: #fef08a; border: 1px solid #fbbf24; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 4px;">📜 Misi (Q)</button>
       </div>
     </header>
 
     <!-- Main Game Area -->
     <div id="canvasContainer">
       <canvas id="gameCanvas" width="768" height="480"></canvas>
+
+      <!-- Mini Quest Tracker Widget (Top Left HUD Overlay) -->
+      <div id="questTracker" class="rpg-box mini-tracker">
+        <div class="tracker-header">
+          <span class="tracker-icon">📜</span>
+          <span id="questTrackerText" class="tracker-text">📌 Misi: Bicara dengan Mbok Sari di Pasar</span>
+        </div>
+      </div>
 
       <!-- Vocab Notebook Overlay Panel (Top Right HUD) -->
       <aside id="vocabNotebook" class="rpg-box">
@@ -102,6 +111,34 @@
         </div>
       </div>
 
+      <!-- Quest Log Drawer / Modal UI Overlay -->
+      <div id="questModal" class="quest-modal hidden">
+        <div class="quest-box rpg-box">
+          <div class="quest-header">
+            <div class="quest-title-area">
+              <span class="quest-icon">📜</span>
+              <h2>Skenario Misi Budaya</h2>
+            </div>
+            <div class="quest-header-stats">
+              <span id="questPlayerXp" class="xp-badge">⭐ 0 XP</span>
+              <button id="closeQuestBtn" class="quiz-close-btn">&times;</button>
+            </div>
+          </div>
+
+          <div class="quest-body">
+            <div id="questList" class="quest-list">
+              <!-- Rendered dynamically -->
+            </div>
+            <div class="badge-rewards-section">
+              <h3>🏆 Hadiah & Lencana Budaya</h3>
+              <div id="badgeContainer" class="badge-grid">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Toast Notification Container -->
       <div id="toastContainer"></div>
     </div>
@@ -111,6 +148,7 @@
   <script src="/js/data/dialogues.js"></script>
   <script src="/js/data/maps.js"></script>
   <script src="/js/assets.js"></script>
+  <script src="/js/quests.js"></script>
   <script src="/js/player.js"></script>
   <script src="/js/npcs.js"></script>
   <script src="/js/ui.js"></script>
