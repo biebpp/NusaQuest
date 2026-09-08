@@ -1,0 +1,61 @@
+[
+  {
+    "id": "quest_1",
+    "title": "Misi Belanja ing Pasar Gede",
+    "description": "Bantu Mbok Sari ing pasar lan sinau basa Jawa seputar angka & harga.",
+    "npcId": "mbok_sari",
+    "npcName": "Mbok Sari",
+    "reward": {
+      "xp": 100,
+      "badge": "Lencana Pasar Gede",
+      "icon": "🛍️"
+    },
+    "steps": [
+      {
+        "id": "step_1",
+        "description": "Bicara dengan Mbok Sari di pasar.",
+        "type": "TALK_NPC",
+        "targetNpc": "mbok_sari"
+      },
+      {
+        "id": "step_2",
+        "description": "Pelajari 3 kata seputar angka & harga (sedasa, pinten, regine).",
+        "type": "LEARN_VOCAB",
+        "targetWords": ["sedasa", "pinten", "regine"]
+      },
+      {
+        "id": "step_3",
+        "description": "Selesaikan Kuis Pasar dengan skor sempurna.",
+        "type": "PERFECT_QUIZ",
+        "targetNpc": "mbok_sari"
+      }
+    ]
+  },
+  {
+    "id": "quest_2",
+    "title": "Misi Sowan marang Omah Pak RT",
+    "description": "Sowan marang Omah Pak RT / Balai Desa lan sinau basa Krama kanggo bertamu.",
+    "npcId": "mbah_kakung",
+    "npcName": "Pak RT / Mbah Kakung",
+    "reward": {
+      "xp": 150,
+      "badge": "Lencana Tata Krama",
+      "icon": "🏛️"
+    },
+    "steps": [
+      {
+        "id": "step_1",
+        "description": "Cari rumah Pak RT di peta.",
+        "type": "VISIT_MAP",
+        "targetMap": "balai_indoor"
+      },
+      {
+        "id": "step_2",
+        "description": "Lakukan peragaan bertamu menggunakan bahasa Krama (sugeng rawuh, kulawarga).",
+        "type": "TALK_OR_VOCAB",
+        "targetNpc": "mbah_kakung",
+        "targetWords": ["sugeng rawuh", "kulawarga"]
+      }
+    ]
+  }
+]

@@ -22,6 +22,10 @@
   user-select: none;
 }
 
+.hidden {
+  display: none !important;
+}
+
 body {
   background-color: #1a1410;
   background-image: radial-gradient(#2d1f15 15%, transparent 16%), radial-gradient(#2d1f15 15%, transparent 16%);
@@ -686,5 +690,258 @@ body {
 .quiz-btn {
   padding: 8px 18px;
   font-size: 13px;
+}
+
+/* Mini Quest Tracker Widget (Top Left HUD) */
+.mini-tracker {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 80;
+  max-width: 320px;
+  padding: 6px 12px;
+  background: rgba(28, 25, 23, 0.9);
+  border: 2px solid #78350f;
+  border-radius: 6px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  transition: all 0.2s ease;
+}
+
+.mini-tracker .tracker-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mini-tracker .tracker-icon {
+  font-size: 14px;
+}
+
+.mini-tracker .tracker-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fef08a;
+  line-height: 1.3;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Quest Log Drawer / Modal */
+.quest-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+}
+
+.quest-modal.hidden {
+  display: none !important;
+}
+
+.quest-box {
+  width: 580px;
+  max-width: 90%;
+  max-height: 85%;
+  display: flex;
+  flex-direction: column;
+  background: #29180d;
+  border: 3px solid #78350f;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+  color: #fef3c7;
+  overflow: hidden;
+}
+
+.quest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #78350f;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.quest-title-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quest-title-area h2 {
+  font-size: 15px;
+  color: #fbbf24;
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.quest-header-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.xp-badge {
+  background: #78350f;
+  color: #fef08a;
+  padding: 4px 10px;
+  border-radius: 12px;
+  border: 1px solid #fbbf24;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.quest-body {
+  overflow-y: auto;
+  padding-right: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quest-card {
+  background: #1c1917;
+  border: 2px solid #451a03;
+  border-radius: 6px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.quest-card.in-progress {
+  border-color: #fbbf24;
+  background: #3b1d0c;
+}
+
+.quest-card.completed {
+  border-color: #22c55e;
+  background: #14301d;
+  opacity: 0.9;
+}
+
+.quest-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.quest-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fef08a;
+}
+
+.status-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.status-badge.unstarted {
+  background: #44403c;
+  color: #a8a29e;
+}
+
+.status-badge.in_progress {
+  background: #b45309;
+  color: #fef08a;
+}
+
+.status-badge.completed {
+  background: #15803d;
+  color: #bbf7d0;
+}
+
+.quest-card-desc {
+  font-size: 12px;
+  color: #d6d3d1;
+  margin-bottom: 10px;
+}
+
+.quest-steps-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quest-step-item {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a8a29e;
+}
+
+.quest-step-item.active {
+  color: #fef08a;
+  font-weight: 700;
+  background: rgba(251, 191, 36, 0.15);
+  border-left: 3px solid #fbbf24;
+}
+
+.quest-step-item.completed {
+  color: #86efac;
+  text-decoration: line-through;
+}
+
+.quest-card-reward {
+  font-size: 11px;
+  color: #fbbf24;
+  background: rgba(120, 53, 15, 0.4);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.badge-rewards-section {
+  border-top: 2px solid #78350f;
+  padding-top: 10px;
+}
+
+.badge-rewards-section h3 {
+  font-size: 13px;
+  color: #fbbf24;
+  margin: 0 0 8px 0;
+}
+
+.badge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #451a03;
+  border: 1px solid #78350f;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #78716c;
+}
+
+.badge-item.unlocked {
+  background: #78350f;
+  border-color: #fbbf24;
+  color: #fef08a;
+  font-weight: 700;
 }
 

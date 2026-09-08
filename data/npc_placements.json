@@ -36,5 +36,14 @@
   "east_village": [],
   "west_village": [],
   "rumah_joko": [],
-  "istana_atif": []
+  "istana_atif": [
+    {
+      "id": "raden_atif",
+      "tileX": 2,
+      "tileY": 4,
+      "dir": 0,
+      "col": 6,
+      "row": 4
+    }
+  ]
 }

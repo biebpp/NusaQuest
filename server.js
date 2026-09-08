@@ -42,6 +42,7 @@ const TILESHEETS_FILE = path.join(__dirname, 'assets', 'tiles', 'tilesheets.json
 const DIALOGUES_FILE = path.join(__dirname, 'data', 'dialogues.json');
 const NPC_PLACEMENTS_FILE = path.join(__dirname, 'data', 'npc_placements.json');
 const MAPS_FILE = path.join(__dirname, 'data', 'maps.json');
+const QUESTS_FILE = path.join(__dirname, 'data', 'quests.json');
 
 function ensureDirForFile(filePath) {
   const dir = path.dirname(filePath);
@@ -142,48 +143,50 @@ const NPC_INFO = {
 };
 
 function getNpcMeta(npcId) {
-  if (NPC_INFO[npcId]) {
-    return NPC_INFO[npcId];
-  }
-
   const dialogues = readDb(DIALOGUES_FILE);
-  const dialogueData = dialogues[npcId];
+  const dialogueData = dialogues[npcId] || {};
+  const baseInfo = NPC_INFO[npcId] || {};
 
-  if (dialogueData) {
-    const vocab = [];
-    if (Array.isArray(dialogueData.vocab)) {
-      vocab.push(...dialogueData.vocab);
-    }
-    if (Array.isArray(dialogueData.lines)) {
-      dialogueData.lines.forEach(line => {
-        if (line.teaches && line.teaches.word) {
-          vocab.push({ word: line.teaches.word, meaning: line.teaches.meaning });
-        } else if (line.javanese && line.indonesian && vocab.length === 0) {
-          vocab.push({ word: line.javanese, meaning: line.indonesian });
-        }
-      });
-    }
+  const name = dialogueData.name || baseInfo.name || (npcId ? npcId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'NPC');
+  const role = dialogueData.role || baseInfo.role || 'Warga Desa (Villager)';
+  const persona = dialogueData.persona || baseInfo.persona || `${name} adalah warga desa NusaQuest.`;
 
-    return {
-      name: dialogueData.name || npcId,
-      role: dialogueData.role || 'Warga Desa (Villager)',
-      persona: dialogueData.persona || `${dialogueData.name || npcId} adalah warga desa NusaQuest.`,
-      vocab: vocab.length > 0 ? vocab : [
-        { word: 'sugeng', meaning: 'selamat' },
-        { word: 'matur nuwun', meaning: 'terima kasih' }
-      ]
-    };
+  const lines = Array.isArray(dialogueData.lines) ? dialogueData.lines : [];
+
+  const vocab = [];
+  if (baseInfo.vocab && Array.isArray(baseInfo.vocab)) {
+    vocab.push(...baseInfo.vocab);
+  }
+  if (Array.isArray(dialogueData.vocab)) {
+    vocab.push(...dialogueData.vocab);
   }
 
-  const formattedName = npcId ? npcId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'NPC';
-  return {
-    name: formattedName,
-    role: 'Warga Desa (Villager)',
-    persona: `${formattedName} is a resident of NusaQuest village. Teaches conversational Javanese.`,
-    vocab: [
+  lines.forEach(line => {
+    if (line.teaches && line.teaches.word) {
+      if (!vocab.some(v => v.word.toLowerCase() === line.teaches.word.toLowerCase())) {
+        vocab.push({ word: line.teaches.word, meaning: line.teaches.meaning });
+      }
+    } else if (line.javanese && line.indonesian) {
+      if (line.javanese.split(' ').length <= 3 && !vocab.some(v => v.word.toLowerCase() === line.javanese.toLowerCase())) {
+        vocab.push({ word: line.javanese, meaning: line.indonesian });
+      }
+    }
+  });
+
+  if (vocab.length === 0) {
+    vocab.push(
       { word: 'sugeng', meaning: 'selamat' },
       { word: 'matur nuwun', meaning: 'terima kasih' }
-    ]
+    );
+  }
+
+  return {
+    id: npcId,
+    name,
+    role,
+    persona,
+    lines,
+    vocab
   };
 }
 
@@ -295,40 +298,130 @@ const questionPool = {
   ]
 };
 
-function generateFallbackQuiz(npcId, attemptIndex = 1) {
-  const npc = getNpcMeta(npcId);
-  const pool = questionPool[npcId];
+function shuffleArray(arr) {
+  const array = [...arr];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
-  let selectedQuestions = [];
-  if (pool && pool.length > 0) {
-    const startIndex = (attemptIndex - 1) % pool.length;
-    for (let i = 0; i < Math.min(3, pool.length); i++) {
-      const q = pool[(startIndex + i) % pool.length];
-      selectedQuestions.push({
-        id: i + 1,
-        ...q
-      });
-    }
-  } else {
-    const vocabList = npc.vocab || [{ word: 'sugeng', meaning: 'selamat' }, { word: 'matur nuwun', meaning: 'terima kasih' }];
-    vocabList.forEach((v, idx) => {
-      selectedQuestions.push({
-        id: idx + 1,
-        question: `Apa tegese tembung "${v.word}" ing basa Indonesia?`,
-        options: [v.meaning, 'Ora mengko', 'Liyane', 'Beda'],
-        answer: 0,
-        explanation: `"${v.word}" tegese ${v.meaning}.`,
-        teaches: { word: v.word, meaning: v.meaning }
-      });
+function generateFallbackQuiz(npcId, attemptIndex = 1, previousQuestions = []) {
+  const npc = getNpcMeta(npcId);
+  const candidates = [];
+
+  if (npc.lines && npc.lines.length > 0) {
+    npc.lines.forEach(l => {
+      if (l.teaches && l.teaches.word && l.teaches.meaning) {
+        candidates.push({
+          question: `Apa tegese tembung "${l.teaches.word}" ing basa Indonesia?`,
+          correct: l.teaches.meaning,
+          explanation: `"${l.teaches.word}" tegese ${l.teaches.meaning}.`,
+          word: l.teaches.word
+        });
+      } else if (l.javanese && l.indonesian) {
+        candidates.push({
+          question: `Apa tegese ukara "${l.javanese}" ing basa Indonesia?`,
+          correct: l.indonesian,
+          explanation: `"${l.javanese}" artine "${l.indonesian}".`,
+          word: l.javanese
+        });
+      }
     });
-    if (selectedQuestions.length > 3) selectedQuestions = selectedQuestions.slice(0, 3);
   }
 
+  if (npc.vocab && npc.vocab.length > 0) {
+    npc.vocab.forEach(v => {
+      candidates.push({
+        question: `Apa tegese tembung "${v.word}"?`,
+        correct: v.meaning,
+        explanation: `"${v.word}" tegese ${v.meaning}.`,
+        word: v.word
+      });
+    });
+  }
+
+  if (questionPool[npcId]) {
+    questionPool[npcId].forEach(pq => {
+      candidates.push({
+        question: pq.question,
+        correct: pq.options[pq.answer],
+        explanation: pq.explanation,
+        word: pq.teaches ? pq.teaches.word : 'tembung'
+      });
+    });
+  }
+
+  const globalDistractors = [
+    'Sepuluh (10)', 'Berapa', 'Terima kasih', 'Sawah / Ladang', 'Padi',
+    'Air', 'Apa kabar', 'Baik / Sehat', 'Keluarga', 'Tenteram',
+    'Membeli', 'Harganya', 'Selamat', 'Main bola', 'Teman'
+  ];
+
+  const genericDefaults = [
+    { question: 'Apa tegese tembung "sugeng" ing basa Indonesia?', correct: 'Selamat', explanation: '"Sugeng" tegese selamat.', word: 'sugeng' },
+    { question: 'Kepriye ngandhakake "Terima kasih" ing basa Jawa?', correct: 'Matur nuwun', explanation: '"Matur nuwun" tegese terima kasih.', word: 'matur nuwun' },
+    { question: 'Unen-unen "pripun kabare" tegese apa?', correct: 'Apa kabar', explanation: '"Pripun kabare" artine apa kabar.', word: 'pripun kabare' },
+    { question: 'Apa tegese tembung "sae" ing basa Jawa?', correct: 'Baik / Sehat', explanation: '"Sae" tegese baik atau sehat.', word: 'sae' },
+    { question: 'Tembung "kanca" tegese apa?', correct: 'Teman', explanation: '"Kanca" tegese teman.', word: 'kanca' }
+  ];
+
+  candidates.push(...genericDefaults);
+
+  const prevSet = new Set((previousQuestions || []).map(q => q.toLowerCase().trim()));
+  let freshCandidates = candidates.filter(c => !prevSet.has(c.question.toLowerCase().trim()));
+
+  if (freshCandidates.length < 3) {
+    freshCandidates = [...freshCandidates, ...candidates];
+  }
+
+  const selectedCandidates = [];
+  const usedWords = new Set();
+  for (const item of freshCandidates) {
+    const key = (item.word || item.correct).toLowerCase().trim();
+    if (!usedWords.has(key)) {
+      usedWords.add(key);
+      selectedCandidates.push(item);
+    }
+    if (selectedCandidates.length >= 3) break;
+  }
+
+  const finalQuestions = selectedCandidates.map((cand, idx) => {
+    const options = [cand.correct];
+    const pool = shuffleArray(globalDistractors);
+    for (const d of pool) {
+      if (options.length >= 4) break;
+      if (d.toLowerCase() !== cand.correct.toLowerCase() && !options.includes(d)) {
+        options.push(d);
+      }
+    }
+    while (options.length < 4) {
+      options.push(`Pilihan ${options.length + 1}`);
+    }
+
+    const shuffledOptions = shuffleArray(options);
+    const correctIndex = shuffledOptions.indexOf(cand.correct);
+
+    return {
+      id: idx + 1,
+      question: cand.question,
+      options: shuffledOptions,
+      answer: correctIndex,
+      explanation: cand.explanation,
+      teaches: {
+        word: cand.word,
+        meaning: cand.correct
+      }
+    };
+  });
+
   return {
+    id: `quiz_fallback_${Date.now()}`,
     npcId,
     title: `Kuis Tembung — ${npc.name} (Kuis #${attemptIndex})`,
     generatedAt: new Date().toISOString(),
-    questions: selectedQuestions
+    questions: finalQuestions
   };
 }
 
@@ -378,26 +471,46 @@ app.post('/api/npc/quiz', async (req, res) => {
     if (groqClient) {
       try {
         const npcMeta = getNpcMeta(npcId);
-        const prevQuestionsText = previousQuestions.length > 0 
-          ? previousQuestions.map((q, i) => `${i+1}. ${q}`).join('\n')
-          : '(No previous questions generated yet.)';
+
+        let dialogueLinesText = '(No predefined dialogue script found.)';
+        if (npcMeta.lines && npcMeta.lines.length > 0) {
+          dialogueLinesText = npcMeta.lines.map((l, i) => {
+            let text = `${i + 1}. Javanese: "${l.javanese}" | Indonesian: "${l.indonesian}"`;
+            if (l.teaches && l.teaches.word) {
+              text += ` [Teaches: ${l.teaches.word} = ${l.teaches.meaning}]`;
+            }
+            return text;
+          }).join('\n');
+        }
 
         const vocabListText = npcMeta.vocab.map(v => `- ${v.word}: ${v.meaning}`).join('\n');
 
+        let prevQuizzesText = '(No previous quizzes generated yet.)';
+        if (previousQuizHistory.length > 0) {
+          const recentHistory = previousQuizHistory.slice(-5);
+          prevQuizzesText = recentHistory.map((qSet, idx) => {
+            const qList = (qSet.questions || []).map(q => `   - Question: "${q.question}" (Correct Answer: ${q.options ? q.options[q.answer] : ''})`).join('\n');
+            return `Quiz Set #${idx + 1} (${qSet.title || 'Quiz'}):\n${qList}`;
+          }).join('\n');
+        }
+
         const prompt = `
-You are generating a NEW interactive multiple-choice Javanese quiz for NPC "${npcMeta.name}" (${npcMeta.role}) in NusaQuest.
+You are generating a NEW interactive multiple-choice Javanese learning quiz for NPC "${npcMeta.name}" (${npcMeta.role}) in NusaQuest.
+
+PREDEFINED DIALOGUE SCRIPT SPOKEN BY THIS NPC IN GAME:
+${dialogueLinesText}
 
 VOCABULARY TAUGHT BY THIS NPC:
 ${vocabListText}
 
-PREVIOUS QUESTIONS ALREADY GIVEN TO THE PLAYER (DO NOT REPEAT THESE QUESTIONS!):
-${prevQuestionsText}
+PREVIOUSLY GENERATED QUIZZES / QUESTIONS HISTORY GIVEN TO THE PLAYER:
+${prevQuizzesText}
 
 INSTRUCTIONS:
-1. Generate a NEW, UNIQUE 3-question quiz testing Javanese vocabulary, sentence translations, or cultural meanings related to ${npcMeta.name}.
-2. CRITICAL: Read the PREVIOUS QUESTIONS list carefully! Do NOT repeat or duplicate questions that were already asked before. Create new angles, different options, or ask about other Javanese words taught by this NPC.
-3. Provide 4 options per question (indices 0 to 3) and set "answer" to the integer index of the correct option.
-4. Add a "teaches" object with "word" and "meaning" for the vocabulary word tested in each question.
+1. Generate a NEW, UNIQUE 3-question quiz testing Javanese vocabulary, sentence translations, or dialogue comprehension directly based on "${npcMeta.name}"'s predefined dialogue script and vocabulary above.
+2. CRITICAL: Read the PREVIOUSLY GENERATED QUIZZES history carefully! Do NOT repeat or duplicate questions that were already asked before. Create new question formulations, ask about different words/sentences in the dialogue, or test different option choices.
+3. Provide 4 option choices per question (indices 0 to 3) and set "answer" to the integer index of the correct option. Vary the correct answer index across questions (do not make option 0 always correct).
+4. Add a "teaches" object with "word" and "meaning" for the vocabulary word or phrase tested in each question.
 5. Output MUST be strict valid JSON matching this schema:
 {
   "title": "Kuis Tembung ${npcMeta.name}",
@@ -405,8 +518,8 @@ INSTRUCTIONS:
     {
       "id": 1,
       "question": "Apa tegese tembung 'sedasa' in basa Indonesia?",
-      "options": ["Sepuluh (10)", "Lima (5)", "Dua (2)", "Satu (1)"],
-      "answer": 0,
+      "options": ["Lima (5)", "Sepuluh (10)", "Dua (2)", "Satu (1)"],
+      "answer": 1,
       "explanation": "'Sedasa' tegese sepuluh (10).",
       "teaches": {
         "word": "sedasa",
@@ -443,27 +556,110 @@ INSTRUCTIONS:
       }
     }
 
-  
     if (!generatedQuiz) {
       const attemptCount = previousQuizHistory.length + 1;
       console.log(`[FALLBACK DYNAMIC] Generating fallback quiz variant #${attemptCount} for NPC ${npcId}`);
-      generatedQuiz = generateFallbackQuiz(npcId, attemptCount);
+      generatedQuiz = generateFallbackQuiz(npcId, attemptCount, previousQuestions);
     }
 
-   
     previousQuizHistory.push(generatedQuiz);
     db[npcId] = previousQuizHistory;
     writeDb(QUIZZES_FILE, db);
     console.log(`Saved newly generated quiz to data/quizzes.json (Total quizzes for ${npcId} = ${previousQuizHistory.length})`);
 
     return res.json({
-      source: groqClient ? 'groq_ai' : 'fallback_generator',
+      source: groqClient && generatedQuiz && !generatedQuiz.id.startsWith('quiz_fallback_') ? 'groq_ai' : 'fallback_generator',
       quiz: generatedQuiz
     });
 
   } catch (err) {
     console.error('Error in /api/npc/quiz:', err);
     res.status(500).json({ error: 'Failed to process quiz request', details: err.message });
+  }
+});
+
+app.get('/api/npc/quiz/get', (req, res) => {
+  try {
+    const npcId = req.query.npcId || 'mbok_sari';
+    const db = readDb(QUIZZES_FILE);
+    const rawHistory = db[npcId];
+    let quizList = [];
+
+    if (Array.isArray(rawHistory)) {
+      quizList = rawHistory;
+    } else if (rawHistory && typeof rawHistory === 'object') {
+      if (Array.isArray(rawHistory.questions)) {
+        quizList = [rawHistory];
+      } else {
+        quizList = Object.values(rawHistory).flatMap(val => 
+          Array.isArray(val) ? val : (val && val.questions ? [val] : [])
+        );
+      }
+    }
+
+    let latestQuiz = quizList.length > 0 ? quizList[quizList.length - 1] : null;
+    if (!latestQuiz) {
+      latestQuiz = generateFallbackQuiz(npcId, 1, []);
+    }
+
+    return res.json({
+      status: 'ok',
+      npcId,
+      totalQuizzes: quizList.length,
+      quiz: latestQuiz,
+      history: quizList
+    });
+  } catch (err) {
+    console.error('Error in /api/npc/quiz/get:', err);
+    res.status(500).json({ error: 'Failed to retrieve quiz', details: err.message });
+  }
+});
+
+app.post('/api/npc/quiz/save', (req, res) => {
+  try {
+    const { npcId, quiz } = req.body || {};
+    if (!npcId || !quiz || !Array.isArray(quiz.questions)) {
+      return res.status(400).json({ error: 'Invalid quiz payload' });
+    }
+
+    const db = readDb(QUIZZES_FILE);
+    let rawHistory = db[npcId];
+    let previousQuizHistory = [];
+
+    if (Array.isArray(rawHistory)) {
+      previousQuizHistory = rawHistory;
+    } else if (rawHistory && typeof rawHistory === 'object') {
+      if (Array.isArray(rawHistory.questions)) {
+        previousQuizHistory = [rawHistory];
+      } else {
+        previousQuizHistory = Object.values(rawHistory).flatMap(val => 
+          Array.isArray(val) ? val : (val && val.questions ? [val] : [])
+        );
+      }
+    }
+
+    const savedQuiz = {
+      id: quiz.id || `quiz_custom_${Date.now()}`,
+      npcId,
+      title: quiz.title || `Kuis Tembung — ${getNpcMeta(npcId).name}`,
+      generatedAt: new Date().toISOString(),
+      isCustom: true,
+      questions: quiz.questions
+    };
+
+    previousQuizHistory.push(savedQuiz);
+    db[npcId] = previousQuizHistory;
+    writeDb(QUIZZES_FILE, db);
+    console.log(`Saved custom/edited quiz for NPC ${npcId} to data/quizzes.json!`);
+
+    return res.json({
+      status: 'ok',
+      message: `Quiz saved for ${npcId}`,
+      quiz: savedQuiz
+    });
+  } catch (err) {
+    console.error('Error in /api/npc/quiz/save:', err);
+    res.status(500).json({ error: 'Failed to save quiz', details: err.message });
   }
 });
 
@@ -535,6 +731,25 @@ app.post('/api/dialogues', (req, res) => {
     res.json({ status: 'ok', file: 'data/dialogues.json' });
   } else {
     res.status(500).json({ error: 'Failed to write data/dialogues.json' });
+  }
+});
+
+app.get('/api/quests', (req, res) => {
+  const quests = readDb(QUESTS_FILE);
+  res.json(quests);
+});
+
+app.post('/api/quests', (req, res) => {
+  const data = req.body;
+  if (!data || !Array.isArray(data)) {
+    return res.status(400).json({ error: 'Invalid payload' });
+  }
+  const ok = writeDb(QUESTS_FILE, data);
+  if (ok) {
+    console.log('Auto-saved data/quests.json');
+    res.json({ status: 'ok', file: 'data/quests.json' });
+  } else {
+    res.status(500).json({ error: 'Failed to write data/quests.json' });
   }
 });
 

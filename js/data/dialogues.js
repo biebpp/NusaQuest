@@ -52,67 +52,101 @@ async function fetchNpcQuiz(npcId) {
 
   const dialogData = DIALOGUES[npcId] || {};
   const npcName = dialogData.name || (npcId ? npcId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'NPC');
-  const vocabItems = [];
-
-  if (Array.isArray(dialogData.vocab)) {
-    vocabItems.push(...dialogData.vocab);
-  }
+  
+  const candidates = [];
 
   if (Array.isArray(dialogData.lines)) {
     dialogData.lines.forEach(l => {
-      if (l.teaches && l.teaches.word) {
-        vocabItems.push({ word: l.teaches.word, meaning: l.teaches.meaning });
-      } else if (l.javanese && l.indonesian && vocabItems.length === 0) {
-        vocabItems.push({ word: l.javanese, meaning: l.indonesian });
+      if (l.teaches && l.teaches.word && l.teaches.meaning) {
+        candidates.push({
+          question: `Apa tegese tembung "${l.teaches.word}" ing basa Indonesia?`,
+          correct: l.teaches.meaning,
+          explanation: `"${l.teaches.word}" tegese ${l.teaches.meaning}.`,
+          word: l.teaches.word
+        });
+      } else if (l.javanese && l.indonesian) {
+        candidates.push({
+          question: `Apa tegese ukara "${l.javanese}" ing basa Indonesia?`,
+          correct: l.indonesian,
+          explanation: `"${l.javanese}" artine "${l.indonesian}".`,
+          word: l.javanese
+        });
       }
     });
   }
 
-  const questions = [];
-  const distractorPool = ['Selamat', 'Terima kasih', 'Berapa', 'Keluarga', 'Baik / Sehat', 'Sawah / Ladang', 'Padi', 'Air'];
-
-  if (vocabItems.length > 0) {
-    vocabItems.slice(0, 3).forEach((v, idx) => {
-      const options = [v.meaning];
-      distractorPool.forEach(d => {
-        if (options.length < 4 && d !== v.meaning) options.push(d);
-      });
-      while (options.length < 4) {
-        options.push(`Pilihan ${options.length + 1}`);
-      }
-
-      questions.push({
-        id: idx + 1,
+  if (Array.isArray(dialogData.vocab)) {
+    dialogData.vocab.forEach(v => {
+      candidates.push({
         question: `Apa tegese tembung "${v.word}"?`,
-        options: options,
-        answer: 0,
+        correct: v.meaning,
         explanation: `"${v.word}" tegese ${v.meaning}.`,
-        teaches: { word: v.word, meaning: v.meaning }
+        word: v.word
       });
     });
-  } else {
-    questions.push(
-      {
-        id: 1,
-        question: 'Tembung "Sugeng" ing basa Indonesia tegese apa?',
-        options: ['Selamat', 'Terima kasih', 'Maaf', 'Sampai jumpa'],
-        answer: 0,
-        explanation: '"Sugeng" tegese selamat.'
-      },
-      {
-        id: 2,
-        question: 'Tembung "Matur nuwun" tegese apa?',
-        options: ['Terima kasih', 'Selamat pagi', 'Apa kabar', 'Sama-sama'],
-        answer: 0,
-        explanation: '"Matur nuwun" tegese terima kasih.'
-      }
-    );
   }
+
+  const genericDefaults = [
+    { question: 'Apa tegese tembung "sugeng" ing basa Indonesia?', correct: 'Selamat', explanation: '"Sugeng" tegese selamat.', word: 'sugeng' },
+    { question: 'Kepriye ngandhakake "Terima kasih" ing basa Jawa?', correct: 'Matur nuwun', explanation: '"Matur nuwun" tegese terima kasih.', word: 'matur nuwun' },
+    { question: 'Unen-unen "pripun kabare" tegese apa?', correct: 'Apa kabar', explanation: '"Pripun kabare" artine apa kabar.', word: 'pripun kabare' }
+  ];
+
+  genericDefaults.forEach(gd => {
+    if (candidates.length < 3 && !candidates.some(c => c.question === gd.question)) {
+      candidates.push(gd);
+    }
+  });
+
+  const distractorPool = ['Selamat', 'Terima kasih', 'Berapa', 'Keluarga', 'Baik / Sehat', 'Sawah / Ladang', 'Padi', 'Air', 'Sepuluh (10)', 'Harganya'];
+
+  const shuffle = (arr) => {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  };
+
+  const selectedCandidates = [];
+  const usedQ = new Set();
+  for (const c of candidates) {
+    if (!usedQ.has(c.question)) {
+      usedQ.add(c.question);
+      selectedCandidates.push(c);
+    }
+    if (selectedCandidates.length >= 3) break;
+  }
+
+  const questions = selectedCandidates.map((cand, idx) => {
+    const opts = [cand.correct];
+    const pool = shuffle(distractorPool);
+    for (const d of pool) {
+      if (opts.length >= 4) break;
+      if (d.toLowerCase() !== cand.correct.toLowerCase() && !opts.includes(d)) {
+        opts.push(d);
+      }
+    }
+    while (opts.length < 4) opts.push(`Pilihan ${opts.length + 1}`);
+
+    const shuffledOpts = shuffle(opts);
+    const ansIdx = shuffledOpts.indexOf(cand.correct);
+
+    return {
+      id: idx + 1,
+      question: cand.question,
+      options: shuffledOpts,
+      answer: ansIdx,
+      explanation: cand.explanation,
+      teaches: { word: cand.word, meaning: cand.correct }
+    };
+  });
 
   return {
     npcId,
     title: `Kuis Tembung — ${npcName}`,
-    questions: questions
+    questions
   };
 }
 

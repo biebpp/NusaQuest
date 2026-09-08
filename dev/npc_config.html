@@ -160,6 +160,29 @@
           </div>
         </form>
 
+        <!-- NPC Quiz Editor & AI Generator Section -->
+        <div style="border-top: 1px solid var(--border); padding-top: 12px; margin-top: 14px;">
+          <div class="section-title">
+            <span>NPC Quiz Editor & Generator</span>
+            <div style="display: flex; gap: 4px;">
+              <button type="button" id="addQuizQuestionBtn" class="btn-primary" style="font-size: 11px; padding: 4px 8px;">➕ Add Question</button>
+              <button type="button" id="generateAiQuizBtn" class="btn-gold" style="font-size: 11px; padding: 4px 8px;">🤖 AI Quiz</button>
+              <button type="button" id="generateDefaultQuizBtn" class="btn-secondary" style="font-size: 11px; padding: 4px 8px;">⚡ Default Quiz</button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px;">
+            <div id="quizStatusBadge" style="color: var(--text-muted);">
+              Status: <span id="quizStatusText" style="color: var(--gold); font-weight: 600;">Custom Quiz Editor Ready</span>
+            </div>
+            <button type="button" id="saveQuizBtn" class="btn-gold" style="font-size: 11px; padding: 3px 10px;">💾 Save Quiz</button>
+          </div>
+
+          <div id="quizEditorContainer" class="lines-container" style="max-height: 480px; overflow-y: auto; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 6px; padding: 10px;">
+            <div style="color: var(--text-muted); text-align: center; padding: 12px;">Loading NPC Quiz configuration...</div>
+          </div>
+        </div>
+
         <div style="border-top: 1px solid var(--border); padding-top: 10px;">
           <div class="section-title">Export DIALOGUES JavaScript</div>
           <pre class="code-preview" id="codeOutput"></pre>
@@ -663,6 +686,9 @@
       renderAnimChips();
       updateAnimPreview();
       renderDialogueLines(npc.lines || []);
+      if (typeof loadNpcQuiz === 'function') {
+        loadNpcQuiz(id);
+      }
       updateJsExporter();
     }
 
@@ -822,6 +848,9 @@
       editingOriginalId = newId;
 
       saveToGameSession();
+      if (typeof saveCurrentQuiz === 'function') {
+        saveCurrentQuiz();
+      }
       populateNpcSelect();
       loadNpcIntoForm(newId);
     });
@@ -912,6 +941,285 @@
         setTimeout(() => btn.textContent = 'Copy JS', 2000);
       });
     });
+
+    let currentQuizState = { npcId: currentNpcId, questions: [] };
+
+    const quizEditorContainer = document.getElementById('quizEditorContainer');
+    const quizStatusText = document.getElementById('quizStatusText');
+    const saveQuizBtn = document.getElementById('saveQuizBtn');
+    const addQuizQuestionBtn = document.getElementById('addQuizQuestionBtn');
+    const generateAiQuizBtn = document.getElementById('generateAiQuizBtn');
+    const generateDefaultQuizBtn = document.getElementById('generateDefaultQuizBtn');
+
+    function extractQuizFromEditor() {
+      if (!quizEditorContainer) return [];
+      const cards = quizEditorContainer.querySelectorAll('.quiz-q-card');
+      const questions = [];
+
+      cards.forEach((card, idx) => {
+        const qText = card.querySelector('.quiz-q-text').value.trim();
+        const opt0 = card.querySelector('.quiz-opt-0').value.trim();
+        const opt1 = card.querySelector('.quiz-opt-1').value.trim();
+        const opt2 = card.querySelector('.quiz-opt-2').value.trim();
+        const opt3 = card.querySelector('.quiz-opt-3').value.trim();
+        const ans = parseInt(card.querySelector('.quiz-ans-select').value, 10) || 0;
+        const exp = card.querySelector('.quiz-exp-text').value.trim();
+        const word = card.querySelector('.quiz-word-text').value.trim();
+        const meaning = card.querySelector('.quiz-meaning-text').value.trim();
+
+        questions.push({
+          id: idx + 1,
+          question: qText || `Pertanyaan #${idx + 1}`,
+          options: [opt0 || 'Pilihan A', opt1 || 'Pilihan B', opt2 || 'Pilihan C', opt3 || 'Pilihan D'],
+          answer: ans,
+          explanation: exp || '',
+          teaches: word || meaning ? { word: word || '', meaning: meaning || '' } : undefined
+        });
+      });
+
+      return questions;
+    }
+
+    function renderQuizEditor(quiz) {
+      if (quiz) {
+        currentQuizState = JSON.parse(JSON.stringify(quiz));
+      }
+      if (!currentQuizState.questions) currentQuizState.questions = [];
+
+      if (!quizEditorContainer) return;
+      quizEditorContainer.innerHTML = '';
+
+      if (currentQuizState.questions.length === 0) {
+        quizEditorContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 12px;">No quiz questions configured. Click "➕ Add Question", "🤖 AI Quiz", or "⚡ Default Quiz" to generate questions.</div>';
+        return;
+      }
+
+      currentQuizState.questions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'line-card quiz-q-card';
+        card.style.background = '#1e293b';
+        card.style.marginBottom = '10px';
+
+        const opts = q.options || ['Option A', 'Option B', 'Option C', 'Option D'];
+        const ansVal = q.answer !== undefined ? q.answer : 0;
+        const wordVal = q.teaches ? (q.teaches.word || '') : '';
+        const meaningVal = q.teaches ? (q.teaches.meaning || '') : '';
+
+        card.innerHTML = `
+          <div class="line-card-header" style="margin-bottom: 6px;">
+            <span style="font-weight: 700; color: var(--gold);">Question #${idx + 1}</span>
+            <div class="line-actions">
+              <button type="button" class="btn-secondary q-up-btn" title="Move Up">▲</button>
+              <button type="button" class="btn-secondary q-down-btn" title="Move Down">▼</button>
+              <button type="button" class="btn-danger q-del-btn" title="Delete Question">✖</button>
+            </div>
+          </div>
+          
+          <div class="form-field" style="margin-bottom: 6px;">
+            <label style="font-size: 10px;">Question Text:</label>
+            <input type="text" class="quiz-q-text" value="${q.question || ''}" required placeholder="e.g. Apa tegese tembung 'sedasa'?" style="font-size: 11px; padding: 4px 6px;">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px;">
+            <div class="form-field">
+              <label style="font-size: 10px; color: ${ansVal === 0 ? '#4ade80' : 'var(--text-muted)'};">Option A ${ansVal === 0 ? '✓ (Correct)' : ''}:</label>
+              <input type="text" class="quiz-opt-0" value="${opts[0] || ''}" required placeholder="Option A" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+            <div class="form-field">
+              <label style="font-size: 10px; color: ${ansVal === 1 ? '#4ade80' : 'var(--text-muted)'};">Option B ${ansVal === 1 ? '✓ (Correct)' : ''}:</label>
+              <input type="text" class="quiz-opt-1" value="${opts[1] || ''}" required placeholder="Option B" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+            <div class="form-field">
+              <label style="font-size: 10px; color: ${ansVal === 2 ? '#4ade80' : 'var(--text-muted)'};">Option C ${ansVal === 2 ? '✓ (Correct)' : ''}:</label>
+              <input type="text" class="quiz-opt-2" value="${opts[2] || ''}" required placeholder="Option C" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+            <div class="form-field">
+              <label style="font-size: 10px; color: ${ansVal === 3 ? '#4ade80' : 'var(--text-muted)'};">Option D ${ansVal === 3 ? '✓ (Correct)' : ''}:</label>
+              <input type="text" class="quiz-opt-3" value="${opts[3] || ''}" required placeholder="Option D" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-bottom: 6px;">
+            <div class="form-field">
+              <label style="font-size: 10px;">Correct Answer Choice:</label>
+              <select class="quiz-ans-select" style="font-size: 11px; padding: 4px 6px; font-weight: 600; color: #4ade80;">
+                <option value="0" ${ansVal === 0 ? 'selected' : ''}>Option A (0)</option>
+                <option value="1" ${ansVal === 1 ? 'selected' : ''}>Option B (1)</option>
+                <option value="2" ${ansVal === 2 ? 'selected' : ''}>Option C (2)</option>
+                <option value="3" ${ansVal === 3 ? 'selected' : ''}>Option D (3)</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label style="font-size: 10px;">Explanation (Optional):</label>
+              <input type="text" class="quiz-exp-text" value="${q.explanation || ''}" placeholder="e.g. 'Sedasa' artine sepuluh (10)." style="font-size: 11px; padding: 4px 6px;">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label style="font-size: 10px;">Teaches Word (Optional):</label>
+              <input type="text" class="quiz-word-text" value="${wordVal}" placeholder="e.g. sedasa" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+            <div class="form-field">
+              <label style="font-size: 10px;">Meaning:</label>
+              <input type="text" class="quiz-meaning-text" value="${meaningVal}" placeholder="e.g. sepuluh (10)" style="font-size: 11px; padding: 4px 6px;">
+            </div>
+          </div>
+        `;
+
+        card.querySelector('.q-up-btn').addEventListener('click', () => {
+          if (idx > 0) {
+            currentQuizState.questions = extractQuizFromEditor();
+            const temp = currentQuizState.questions[idx];
+            currentQuizState.questions[idx] = currentQuizState.questions[idx - 1];
+            currentQuizState.questions[idx - 1] = temp;
+            renderQuizEditor();
+          }
+        });
+
+        card.querySelector('.q-down-btn').addEventListener('click', () => {
+          currentQuizState.questions = extractQuizFromEditor();
+          if (idx < currentQuizState.questions.length - 1) {
+            const temp = currentQuizState.questions[idx];
+            currentQuizState.questions[idx] = currentQuizState.questions[idx + 1];
+            currentQuizState.questions[idx + 1] = temp;
+            renderQuizEditor();
+          }
+        });
+
+        card.querySelector('.q-del-btn').addEventListener('click', () => {
+          currentQuizState.questions = extractQuizFromEditor();
+          currentQuizState.questions.splice(idx, 1);
+          renderQuizEditor();
+        });
+
+        card.querySelector('.quiz-ans-select').addEventListener('change', () => {
+          currentQuizState.questions = extractQuizFromEditor();
+          renderQuizEditor();
+        });
+
+        quizEditorContainer.appendChild(card);
+      });
+    }
+
+    async function loadNpcQuiz(npcIdToLoad) {
+      if (!quizEditorContainer) return;
+      quizStatusText.textContent = 'Loading NPC Quiz...';
+      quizStatusText.style.color = '#38bdf8';
+
+      try {
+        const res = await fetch(`/api/npc/quiz/get?npcId=${npcIdToLoad}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data && data.quiz) {
+          renderQuizEditor(data.quiz);
+          quizStatusText.textContent = data.quiz.isCustom ? 'Custom Saved Quiz Loaded' : 'Latest Quiz Loaded';
+          quizStatusText.style.color = '#4ade80';
+          return;
+        }
+      } catch (e) {
+        console.warn('Could not fetch quiz from server, generating fallback:', e);
+      }
+
+      const fallback = await fetchNpcQuiz(npcIdToLoad);
+      renderQuizEditor(fallback);
+      quizStatusText.textContent = 'Default Fallback Quiz Loaded';
+      quizStatusText.style.color = '#f59e0b';
+    }
+
+    async function saveCurrentQuiz() {
+      const activeId = npcId.value.trim() || currentNpcId;
+      const questions = extractQuizFromEditor();
+      if (questions.length === 0) {
+        alert('⚠️ Please add at least one question before saving the quiz.');
+        return;
+      }
+
+      currentQuizState.npcId = activeId;
+      currentQuizState.questions = questions;
+
+      quizStatusText.textContent = 'Saving Quiz...';
+      quizStatusText.style.color = '#38bdf8';
+
+      try {
+        const res = await fetch('/api/npc/quiz/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ npcId: activeId, quiz: currentQuizState })
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data && data.quiz) {
+          currentQuizState = data.quiz;
+          quizStatusText.textContent = `Quiz Saved (${new Date().toLocaleTimeString()})`;
+          quizStatusText.style.color = '#4ade80';
+          setTimeout(() => {
+            quizStatusText.textContent = 'Custom Saved Quiz Ready';
+          }, 3000);
+        }
+      } catch (err) {
+        console.error('Failed to save quiz:', err);
+        quizStatusText.textContent = 'Failed to Save Quiz';
+        quizStatusText.style.color = 'var(--danger)';
+      }
+    }
+
+    if (addQuizQuestionBtn) {
+      addQuizQuestionBtn.addEventListener('click', () => {
+        currentQuizState.questions = extractQuizFromEditor();
+        currentQuizState.questions.push({
+          id: currentQuizState.questions.length + 1,
+          question: '',
+          options: ['', '', '', ''],
+          answer: 0,
+          explanation: '',
+          teaches: { word: '', meaning: '' }
+        });
+        renderQuizEditor();
+      });
+    }
+
+    if (generateAiQuizBtn) {
+      generateAiQuizBtn.addEventListener('click', async () => {
+        const activeId = npcId.value.trim() || currentNpcId;
+        quizStatusText.textContent = 'Generating AI Quiz...';
+        quizStatusText.style.color = '#38bdf8';
+        try {
+          const res = await fetch('/api/npc/quiz', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ npcId: activeId })
+          });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          if (data && data.quiz) {
+            renderQuizEditor(data.quiz);
+            quizStatusText.textContent = data.source === 'groq_ai' ? 'AI Quiz Generated' : 'Fallback Quiz Generated';
+            quizStatusText.style.color = '#4ade80';
+          }
+        } catch (err) {
+          const fb = await fetchNpcQuiz(activeId);
+          renderQuizEditor(fb);
+          quizStatusText.textContent = 'Default Fallback Loaded';
+          quizStatusText.style.color = '#f59e0b';
+        }
+      });
+    }
+
+    if (generateDefaultQuizBtn) {
+      generateDefaultQuizBtn.addEventListener('click', async () => {
+        const activeId = npcId.value.trim() || currentNpcId;
+        quizStatusText.textContent = 'Generating Default Quiz...';
+        quizStatusText.style.color = '#f59e0b';
+        const fb = await fetchNpcQuiz(activeId);
+        renderQuizEditor(fb);
+        quizStatusText.textContent = 'Default Quiz Loaded';
+      });
+    }
+
+    if (saveQuizBtn) {
+      saveQuizBtn.addEventListener('click', saveCurrentQuiz);
+    }
 
     const jsonModal = document.getElementById('jsonModal');
     const jsonArea = document.getElementById('jsonArea');
