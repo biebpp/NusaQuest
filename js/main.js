@@ -171,8 +171,16 @@ class GameEngine {
     this.activeDialogueStep = 0;
     this.pendingQuiz = null;
 
-    if (DIALOGUES[npc.id] && DIALOGUES[npc.id].lines) {
+    if (DIALOGUES[npc.id] && DIALOGUES[npc.id].lines && DIALOGUES[npc.id].lines.length > 0) {
       npc.dialogue = DIALOGUES[npc.id].lines;
+    }
+    if (!npc.dialogue || npc.dialogue.length === 0) {
+      npc.dialogue = [
+        {
+          javanese: `Sugeng rawuh! Kula ${npc.name || npc.id}.`,
+          indonesian: `Selamat datang! Saya ${npc.name || npc.id}.`
+        }
+      ];
     }
 
     if (this.player.tileX < npc.tileX) { this.player.dir = 2; npc.dir = 1; }
@@ -362,9 +370,21 @@ class GameEngine {
 
     const getObjectStack = (tileObj) => {
       if (!tileObj || tileObj === '.') return [];
-      if (Array.isArray(tileObj)) return tileObj.filter(c => c && c !== '.');
+      if (Array.isArray(tileObj)) {
+        return tileObj.filter(c => c && c !== '.' && (typeof c === 'string' || (typeof c === 'object' && c.code && c.code !== '.')));
+      }
       if (typeof tileObj === 'string') {
-        return tileObj.split(',').map(s => s.trim()).filter(s => s && s !== '.');
+        const trimmed = tileObj.trim();
+        if (trimmed.startsWith('{')) {
+          try {
+            const parsed = JSON.parse(trimmed);
+            if (parsed && parsed.code && parsed.code !== '.') return [parsed];
+          } catch (e) {}
+        }
+        return trimmed.split(',').map(s => s.trim()).filter(s => s && s !== '.');
+      }
+      if (typeof tileObj === 'object' && tileObj !== null && tileObj.code && tileObj.code !== '.') {
+        return [tileObj];
       }
       return [];
     };
@@ -376,10 +396,19 @@ class GameEngine {
         const isOverhead = map.collision && map.collision[r] && map.collision[r][c] === 2;
 
         if (stack.length > 0) {
-          stack.forEach((objCode, layerIdx) => {
-            const baseSortY = isOverhead ? (r * ts + ts - 1) : (r * ts + (objCode === 'H' || objCode === 'M' || objCode === 'W' ? ts * 0.25 : ts * 0.5));
+          stack.forEach((objItem, layerIdx) => {
+            const objCode = typeof objItem === 'object' ? objItem.code : objItem;
+            const objDef = (typeof TILE_MAP !== 'undefined' && TILE_MAP.objects) ? TILE_MAP.objects[objCode] : null;
+            let offsetRatio = 0.5;
+            if (objDef && objDef.ySortRatio !== undefined) {
+              offsetRatio = objDef.ySortRatio;
+            } else if (objCode.startsWith('H') || objCode.startsWith('M') || objCode.startsWith('W') || objCode.startsWith('CT') || (objDef && objDef.yOffset && objDef.yOffset < 0)) {
+              offsetRatio = 0.25;
+            }
+            const baseSortY = isOverhead ? (r * ts + ts - 1) : (r * ts + ts * offsetRatio);
             entities.push({
               type: 'object',
+              item: objItem,
               code: objCode,
               tileX: c,
               tileY: r,
@@ -416,7 +445,7 @@ class GameEngine {
     entities.sort((a, b) => a.sortY - b.sortY);
 
     entities.forEach(ent => {
-      if (ent.type === 'object') AssetManager.drawObjectTile(this.ctx, ent.code, ent.tileX, ent.tileY, ts);
+      if (ent.type === 'object') AssetManager.drawObjectTile(this.ctx, ent.item || ent.code, ent.tileX, ent.tileY, ts);
       else if (ent.type === 'ground_overhead') AssetManager.drawGroundTile(this.ctx, ent.groundType, ent.tileX * ts, ent.tileY * ts, ts);
       else if (ent.type === 'npc') this.npcManager.drawNpc(this.ctx, ent.data, ts);
       else if (ent.type === 'player') this.player.draw(this.ctx, ts);

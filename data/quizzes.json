@@ -1516,5 +1516,231 @@
         }
       ]
     }
+  ],
+  "budi": [
+    {
+      "id": "quiz_1788788797084",
+      "npcId": "budi",
+      "title": "Kuis Tembung Mbok Sari",
+      "generatedAt": "2026-09-07T13:46:37.084Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Ing pasar, Mbok Sari takon: 'Pinten regine iki?' Apa tegese tembung 'pinten'?",
+          "options": [
+            "Berapa",
+            "Apanya",
+            "Sapa",
+            "Nalika"
+          ],
+          "answer": 0,
+          "explanation": "Tembung 'pinten' tegese 'berapa' ing basa Indonesia, biasane digunakake kanggo takon kuantitas utawa jumlah.",
+          "teaches": {
+            "word": "pinten",
+            "meaning": "berapa"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Yen sampeyan arep tuku sayur, sampeyan ngomong: 'Mbok, aku arep mundhut tomat.' Apa tegese tembung 'mundhut'?",
+          "options": [
+            "Menjual",
+            "Memasak",
+            "Membeli",
+            "Memakan"
+          ],
+          "answer": 2,
+          "explanation": "Tembung 'mundhut' tegese 'membeli' utawa 'membayar' barang saka penjual.",
+          "teaches": {
+            "word": "mundhut",
+            "meaning": "membeli"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Setelah paid, Mbok Sari says, 'Matur nuwun'. Apa tegese tembung-tembungan mau ing basa Indonesia?",
+          "options": [
+            "Maafkan saya",
+            "Sampai jumpa",
+            "Terima kasih",
+            "Selamat datang"
+          ],
+          "answer": 2,
+          "explanation": "'Matur nuwun' iku tembung sopan ing basa Jawa kang tegese 'terima kasih'.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788788808198",
+      "npcId": "budi",
+      "title": "Kuis Tembung Mbok Sari",
+      "generatedAt": "2026-09-07T13:46:48.199Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Nalika sampeyan tuku barang, Mbok Sari nanya: 'Pinten regine iki?' Apa tegese tembung 'regine'?",
+          "options": [
+            "Warnanya",
+            "Harganya",
+            "Bentuknya",
+            "Rasanya"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'regine' tegese 'harganya'.",
+          "teaches": {
+            "word": "regine",
+            "meaning": "harganya"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Mbok Sari duwe 10 (sepuluh) keranjang sayur. Ing basa Jawa, carane nyebut angka sepuluh iku apa?",
+          "options": [
+            "Sepuluh",
+            "Sepuluh (10)",
+            "Sedasa",
+            "Dasa"
+          ],
+          "answer": 2,
+          "explanation": "Ing basa Jawa, angka sepuluh (10) diarani 'sedasa'.",
+          "teaches": {
+            "word": "sedasa",
+            "meaning": "sepuluh (10)"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Yen sampeyan tuku tomat saka Mbok Sari lan wis mbayar, sopan yen sampeyan ngucapake: 'Matur nuwun, Mbok.' Apa tegese tembung 'matur nuwun' ing konteks iki?",
+          "options": [
+            "Selamat pagi",
+            "Permisi",
+            "Terima kasih",
+            "Sampai jumpa"
+          ],
+          "answer": 2,
+          "explanation": "'Matur nuwun' iku ungkapan sopan kanggo ngucapake 'terima kasih'.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788789384612",
+      "npcId": "budi",
+      "title": "Kuis Tembung Mbok Sari",
+      "generatedAt": "2026-09-07T13:56:24.612Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Pak Tono arep tuku tomat. Dheweke takon marang Mbok Sari: 'Mbok, ___ regine tomat iki?' Tembung apa ingkang trep kanggo ngisi titik-titik mau?",
+          "options": [
+            "Sedasa",
+            "Pinten",
+            "Mundhut",
+            "Matur nuwun"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'pinten' digunakake kanggo nanya jumlah utawa harga, tegese 'berapa'.",
+          "teaches": {
+            "word": "pinten",
+            "meaning": "berapa"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Yen sampeyan duwe 10 (sepuluh) bungkus kripik, lan arep nyebut angka kasebut nganggo tembung Jawa sing diajokake Mbok Sari, sampeyan bakal ngomong apa?",
+          "options": [
+            "Pinten",
+            "Matur nuwun",
+            "Sedasa",
+            "Regine"
+          ],
+          "answer": 2,
+          "explanation": "Angka sepuluh (10) ing basa Jawa kasebut 'sedasa'.",
+          "teaches": {
+            "word": "sedasa",
+            "meaning": "sepuluh (10)"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Setelah membayar, Mbok Sari ngucapake 'Matur nuwun'. Yen sampeyan kudu ngucapake tembung sing padha kanggo njawab sopan, apa sing kudu sampeyan ucapake?",
+          "options": [
+            "Matur nuwun",
+            "Pinten",
+            "Mundhut",
+            "Sedasa"
+          ],
+          "answer": 0,
+          "explanation": "'Matur nuwun' tegese terima kasih. Iki cara sing trep kanggo njawab ucapan terimakasih saka penjual.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1788789739018",
+      "npcId": "budi",
+      "title": "Kuis Tembung Mbok Sari",
+      "generatedAt": "2026-09-07T14:02:19.018Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Mbok Sari ngomong, 'Wong kasebut mundhut sedasa bungkus gula.' Berapa jumlah bungkus gula yang dibeli orang tersebut?",
+          "options": [
+            "Lima (5)",
+            "Sepuluh (10)",
+            "Seratus (100)",
+            "Satu (1)"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'sedasa' tegese sepuluh (10). Dadi, wong kasebut mundhut 10 bungkus gula.",
+          "teaches": {
+            "word": "sedasa",
+            "meaning": "sepuluh (10)"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Sampeyan arep tuku iwak. Mbok Sari takon, 'Pinten regine iwak iki?' Apa tegese pitakonan kasebut ing basa Indonesia?",
+          "options": [
+            "Apa nama ikan ini?",
+            "Berapa harganya ikan ini?",
+            "Di mana ikan ini?",
+            "Siapa penjual ikan ini?"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'pinten' tegese 'berapa' lan 'regine' tegese 'harganya'. Dadi pitakonan kasebut tegese 'Berapa harganya ikan ini?'",
+          "teaches": {
+            "word": "pinten",
+            "meaning": "berapa"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Setelah sampeyan menehi dhuwit kanggo bayar, Mbok Sari ngucapake, 'Matur nuwun.' Yen sampeyan pengin ngrungokake trep lan sopan, apa sing kudu dijawab?",
+          "options": [
+            "Sugeng rawuh",
+            "Matur nuwun",
+            "Pergi",
+            "Salametan"
+          ],
+          "answer": 1,
+          "explanation": "Miturut wewarah, yen ana wong sing ngucapake 'matur nuwun' (terima kasih), wong liya kudu ngrungokake uga 'matur nuwun' (terima kasih) minangka wangsulan sing sopan.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        }
+      ]
+    }
   ]
 }

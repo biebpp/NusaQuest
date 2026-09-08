@@ -118,8 +118,17 @@ class UIManager {
 
     const img = AssetManager.images.characters;
     if (img && img.complete && img.naturalWidth !== 0) {
-      const srcX = npc.charIndex * 3 * 26 + 26;
-      const srcY = 0;
+      let srcX, srcY;
+      if (npc.col !== undefined && npc.col !== null && npc.row !== undefined && npc.row !== null) {
+        srcX = npc.col * 26;
+        srcY = npc.row * 36;
+      } else {
+        const cIdx = npc.charIndex !== undefined ? npc.charIndex : 0;
+        const baseRow = Math.floor(cIdx / 4) * 4;
+        const baseCol = (cIdx % 4) * 3 + 1;
+        srcX = baseCol * 26;
+        srcY = baseRow * 36;
+      }
       ctx.drawImage(img, srcX, srcY, 26, 36, 6, 2, 52, 60);
     } else {
       ctx.fillStyle = '#b45309';
@@ -282,9 +291,26 @@ class UIManager {
       { word: 'tentrem', meaning: 'tenteram / damai' }
     ];
 
+    if (typeof DIALOGUES !== 'undefined') {
+      for (const d of Object.values(DIALOGUES)) {
+        if (Array.isArray(d.vocab)) {
+          d.vocab.forEach(v => {
+            if (v.word && v.meaning) vocabList.push(v);
+          });
+        }
+        if (Array.isArray(d.lines)) {
+          d.lines.forEach(l => {
+            if (l.javanese && l.indonesian) {
+              vocabList.push({ word: l.javanese, meaning: l.indonesian });
+            }
+          });
+        }
+      }
+    }
+
     const textToSearch = `${q.question} ${q.explanation || ''}`.toLowerCase();
     for (const v of vocabList) {
-      if (textToSearch.includes(v.word.toLowerCase())) {
+      if (v && v.word && textToSearch.includes(v.word.toLowerCase())) {
         this.addVocab(v.word, v.meaning);
         break;
       }

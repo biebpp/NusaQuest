@@ -84,7 +84,7 @@ const AssetManager = {
     return img && img.complete && img.naturalWidth !== 0;
   },
 
-  drawSprite(ctx, tileInfo, px, py, tileSize) {
+  drawSprite(ctx, tileInfo, px, py, tileSize, rot = 0, flipX = false, flipY = false) {
     if (!tileInfo) return;
     const sheetName = tileInfo.sheet || 'roguelike';
     const img = this.images[sheetName] || this.images['roguelike'];
@@ -112,11 +112,32 @@ const AssetManager = {
     const sx = margin + col * stride;
     const sy = margin + row * stride;
 
-    ctx.drawImage(
-      img,
-      sx, sy, srcTileSize, srcTileSize,
-      px, py + yOffset, tileSize, tileSize + hExtra
-    );
+    const totalH = tileSize + hExtra;
+
+    if (rot || flipX || flipY) {
+      ctx.save();
+      const cx = px + tileSize / 2;
+      const cy = py + yOffset + totalH / 2;
+      ctx.translate(cx, cy);
+      if (rot) {
+        ctx.rotate((rot * Math.PI) / 180);
+      }
+      if (flipX || flipY) {
+        ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+      }
+      ctx.drawImage(
+        img,
+        sx, sy, srcTileSize, srcTileSize,
+        -tileSize / 2, -totalH / 2, tileSize, totalH
+      );
+      ctx.restore();
+    } else {
+      ctx.drawImage(
+        img,
+        sx, sy, srcTileSize, srcTileSize,
+        px, py + yOffset, tileSize, totalH
+      );
+    }
   },
 
   drawGroundTile(ctx, type, px, py, tileSize) {
@@ -132,18 +153,44 @@ const AssetManager = {
     }
   },
 
-  drawObjectTile(ctx, code, c, r, tileSize) {
+  drawObjectTile(ctx, objCodeOrObj, c, r, tileSize, rotOverride = 0, flipXOverride = false, flipYOverride = false) {
+    let code = objCodeOrObj;
+    let instanceRot = rotOverride || 0;
+    let instanceFlipX = flipXOverride || false;
+    let instanceFlipY = flipYOverride || false;
+
+    if (typeof objCodeOrObj === 'object' && objCodeOrObj !== null) {
+      code = objCodeOrObj.code;
+      if (objCodeOrObj.rot !== undefined) instanceRot = (instanceRot + objCodeOrObj.rot) % 360;
+      if (objCodeOrObj.flipX !== undefined) instanceFlipX = instanceFlipX ^ Boolean(objCodeOrObj.flipX);
+      if (objCodeOrObj.flipY !== undefined) instanceFlipY = instanceFlipY ^ Boolean(objCodeOrObj.flipY);
+    }
+
     const px = c * tileSize;
     const py = r * tileSize;
 
     if (TILE_MAP.objects[code]) {
       const objDef = TILE_MAP.objects[code];
+      const rot = ((objDef.rot || 0) + instanceRot) % 360;
+      const flipX = Boolean(objDef.flipX) ^ Boolean(instanceFlipX);
+      const flipY = Boolean(objDef.flipY) ^ Boolean(instanceFlipY);
+
       const sheetName = objDef.sheet || 'roguelike';
       if (this.hasSheet(sheetName) || this.hasSheet('roguelike')) {
-        this.drawSprite(ctx, objDef, px, py, tileSize);
+        this.drawSprite(ctx, objDef, px, py, tileSize, rot, flipX, flipY);
       } else {
-        ctx.fillStyle = objDef.color || '#15803d';
-        ctx.fillRect(px + 4, py + 8, tileSize - 8, tileSize - 16);
+        ctx.save();
+        if (rot || flipX || flipY) {
+          ctx.translate(px + tileSize / 2, py + tileSize / 2);
+          if (rot) ctx.rotate((rot * Math.PI) / 180);
+          if (flipX || flipY) ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+          ctx.fillStyle = objDef.color || '#15803d';
+          ctx.fillRect(-tileSize / 2 + 4, -tileSize / 2 + 8, tileSize - 8, tileSize - 16);
+        } else {
+          ctx.fillStyle = objDef.color || '#15803d';
+          ctx.fillRect(px + 4, py + 8, tileSize - 8, tileSize - 16);
+        }
+        ctx.restore();
       }
     }
   }

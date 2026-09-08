@@ -129,8 +129,63 @@ const NPC_INFO = {
       { word: 'mugi-mugi', meaning: 'semoga' },
       { word: 'balai desa', meaning: 'balai desa' }
     ]
+  },
+  budi: {
+    name: 'Budi',
+    role: 'Anak Rantau',
+    persona: 'New kid in town. Teaches casual Javanese words.',
+    vocab: [
+      { word: 'sampeyan', meaning: 'kamu' },
+      { word: 'arek', meaning: 'anak' }
+    ]
   }
 };
+
+function getNpcMeta(npcId) {
+  if (NPC_INFO[npcId]) {
+    return NPC_INFO[npcId];
+  }
+
+  const dialogues = readDb(DIALOGUES_FILE);
+  const dialogueData = dialogues[npcId];
+
+  if (dialogueData) {
+    const vocab = [];
+    if (Array.isArray(dialogueData.vocab)) {
+      vocab.push(...dialogueData.vocab);
+    }
+    if (Array.isArray(dialogueData.lines)) {
+      dialogueData.lines.forEach(line => {
+        if (line.teaches && line.teaches.word) {
+          vocab.push({ word: line.teaches.word, meaning: line.teaches.meaning });
+        } else if (line.javanese && line.indonesian && vocab.length === 0) {
+          vocab.push({ word: line.javanese, meaning: line.indonesian });
+        }
+      });
+    }
+
+    return {
+      name: dialogueData.name || npcId,
+      role: dialogueData.role || 'Warga Desa (Villager)',
+      persona: dialogueData.persona || `${dialogueData.name || npcId} adalah warga desa NusaQuest.`,
+      vocab: vocab.length > 0 ? vocab : [
+        { word: 'sugeng', meaning: 'selamat' },
+        { word: 'matur nuwun', meaning: 'terima kasih' }
+      ]
+    };
+  }
+
+  const formattedName = npcId ? npcId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : 'NPC';
+  return {
+    name: formattedName,
+    role: 'Warga Desa (Villager)',
+    persona: `${formattedName} is a resident of NusaQuest village. Teaches conversational Javanese.`,
+    vocab: [
+      { word: 'sugeng', meaning: 'selamat' },
+      { word: 'matur nuwun', meaning: 'terima kasih' }
+    ]
+  };
+}
 
 
 let groqClient = null;
@@ -145,113 +200,128 @@ if (process.env.GROQ_API_KEY && Groq) {
   console.log('GROQ_API_KEY not set. Using smart dynamic quiz generator.');
 }
 
-function generateFallbackQuiz(npcId, attemptIndex = 1) {
-  const npc = NPC_INFO[npcId] || NPC_INFO.mbok_sari;
-  
-  const questionPool = {
-    mbok_sari: [
-      {
-        question: 'Apa tegese tembung "sedasa" ing basa Indonesia?',
-        options: ['Sepuluh (10)', 'Lima (5)', 'Satu (1)', 'Dua puluh (20)'],
-        answer: 0,
-        explanation: '"Sedasa" tegese sepuluh (10).',
-        teaches: { word: 'sedasa', meaning: 'sepuluh (10)' }
-      },
-      {
-        question: 'Tembung "pinten" digunakake kanggo takon babagan apa?',
-        options: ['Waktu (Kapan)', 'Jumlah / Harga (Berapa)', 'Tempat (Di mana)', 'Nama orang (Siapa)'],
-        answer: 1,
-        explanation: '"Pinten" artine berapa.',
-        teaches: { word: 'pinten', meaning: 'berapa' }
-      },
-      {
-        question: 'Kepriye ngandhakake "Terima kasih" ing basa Jawa ngoko/krama?',
-        options: ['Sugeng enjing', 'Matur nuwun', 'Pripun kabare', 'Sae-sae mawon'],
-        answer: 1,
-        explanation: '"Matur nuwun" tegese terima kasih.',
-        teaches: { word: 'matur nuwun', meaning: 'terima kasih' }
-      },
-      {
-        question: 'Apa tegese tembung "mundhut" ing pasar?',
-        options: ['Membeli / Beli', 'Menjual', 'Melihat', 'Membuang'],
-        answer: 0,
-        explanation: '"Mundhut" tegese tuku utawa membeli.',
-        teaches: { word: 'mundhut', meaning: 'membeli' }
-      }
-    ],
-    pak_joko: [
-      {
-        question: 'Apa tegese tembung "sawah" ing basa Indonesia?',
-        options: ['Lautan', 'Sawah / Ladang', 'Hutan', 'Pasar'],
-        answer: 1,
-        explanation: '"Sawah" tegese sawah utawa ladang.',
-        teaches: { word: 'sawah', meaning: 'sawah / ladang' }
-      },
-      {
-        question: 'Tembung "pari" tegese apa yen durung diolah dadi beras?',
-        options: ['Jagung', 'Padi', 'Gandum', 'Singkong'],
-        answer: 1,
-        explanation: '"Pari" artine padi.',
-        teaches: { word: 'pari', meaning: 'padi' }
-      },
-      {
-        question: 'Tembung "toya" ing basa Jawa tegese apa?',
-        options: ['Air', 'Tanah', 'Api', 'Angin'],
-        answer: 0,
-        explanation: '"Toya" tegese banyu / air.',
-        teaches: { word: 'toya', meaning: 'air' }
-      }
-    ],
-    dimas: [
-      {
-        question: 'Unen-unen "pripun kabare" tegese apa?',
-        options: ['Selamat tinggal', 'Apa kabar', 'Siapa namamu', 'Mau ke mana'],
-        answer: 1,
-        explanation: '"Pripun kabare" artinya apa kabar.',
-        teaches: { word: 'pripun kabare', meaning: 'apa kabar' }
-      },
-      {
-        question: 'Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?',
-        options: ['Sae-sae mawon', 'Mboten ngertos', 'Sampun dhahar', 'Matur nuwun'],
-        answer: 0,
-        explanation: '"Sae-sae mawon" artine baik-baik saja.',
-        teaches: { word: 'sae', meaning: 'baik / sehat' }
-      },
-      {
-        question: 'Olahraga apa sing dimaksud "bal-balan"?',
-        options: ['Bulu tangkis', 'Sepak bola', 'Bola voli', 'Renang'],
-        answer: 1,
-        explanation: '"Bal-balan" artinya bermain sepak bola.',
-        teaches: { word: 'bal-balan', meaning: 'main bola' }
-      }
-    ],
-    mbah_kakung: [
-      {
-        question: 'Apa tegese tembung "kulawarga"?',
-        options: ['Tetangga', 'Keluarga', 'Masyarakat', 'Teman'],
-        answer: 1,
-        explanation: '"Kulawarga" tegese keluarga.',
-        teaches: { word: 'kulawarga', meaning: 'keluarga' }
-      },
-      {
-        question: 'Tembung "tentrem" tegese apa?',
-        options: ['Ramai', 'Tenteram / Damai', 'Sedih', 'Marah'],
-        answer: 1,
-        explanation: '"Tentrem" tegese tenteram dan damai.',
-        teaches: { word: 'tentrem', meaning: 'tenteram' }
-      }
-    ]
-  };
+const questionPool = {
+  mbok_sari: [
+    {
+      question: 'Apa tegese tembung "sedasa" ing basa Indonesia?',
+      options: ['Sepuluh (10)', 'Lima (5)', 'Satu (1)', 'Dua puluh (20)'],
+      answer: 0,
+      explanation: '"Sedasa" tegese sepuluh (10).',
+      teaches: { word: 'sedasa', meaning: 'sepuluh (10)' }
+    },
+    {
+      question: 'Tembung "pinten" digunakake kanggo takon babagan apa?',
+      options: ['Waktu (Kapan)', 'Jumlah / Harga (Berapa)', 'Tempat (Di mana)', 'Nama orang (Siapa)'],
+      answer: 1,
+      explanation: '"Pinten" artine berapa.',
+      teaches: { word: 'pinten', meaning: 'berapa' }
+    },
+    {
+      question: 'Kepriye ngandhakake "Terima kasih" ing basa Jawa ngoko/krama?',
+      options: ['Sugeng enjing', 'Matur nuwun', 'Pripun kabare', 'Sae-sae mawon'],
+      answer: 1,
+      explanation: '"Matur nuwun" tegese terima kasih.',
+      teaches: { word: 'matur nuwun', meaning: 'terima kasih' }
+    },
+    {
+      question: 'Apa tegese tembung "mundhut" ing pasar?',
+      options: ['Membeli / Beli', 'Menjual', 'Melihat', 'Membuang'],
+      answer: 0,
+      explanation: '"Mundhut" tegese tuku utawa membeli.',
+      teaches: { word: 'mundhut', meaning: 'membeli' }
+    }
+  ],
+  pak_joko: [
+    {
+      question: 'Apa tegese tembung "sawah" ing basa Indonesia?',
+      options: ['Lautan', 'Sawah / Ladang', 'Hutan', 'Pasar'],
+      answer: 1,
+      explanation: '"Sawah" tegese sawah utawa ladang.',
+      teaches: { word: 'sawah', meaning: 'sawah / ladang' }
+    },
+    {
+      question: 'Tembung "pari" tegese apa yen durung diolah dadi beras?',
+      options: ['Jagung', 'Padi', 'Gandum', 'Singkong'],
+      answer: 1,
+      explanation: '"Pari" artine padi.',
+      teaches: { word: 'pari', meaning: 'padi' }
+    },
+    {
+      question: 'Tembung "toya" ing basa Jawa tegese apa?',
+      options: ['Air', 'Tanah', 'Api', 'Angin'],
+      answer: 0,
+      explanation: '"Toya" tegese banyu / air.',
+      teaches: { word: 'toya', meaning: 'air' }
+    }
+  ],
+  dimas: [
+    {
+      question: 'Unen-unen "pripun kabare" tegese apa?',
+      options: ['Selamat tinggal', 'Apa kabar', 'Siapa namamu', 'Mau ke mana'],
+      answer: 1,
+      explanation: '"Pripun kabare" artinya apa kabar.',
+      teaches: { word: 'pripun kabare', meaning: 'apa kabar' }
+    },
+    {
+      question: 'Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?',
+      options: ['Sae-sae mawon', 'Mboten ngertos', 'Sampun dhahar', 'Matur nuwun'],
+      answer: 0,
+      explanation: '"Sae-sae mawon" artine baik-baik saja.',
+      teaches: { word: 'sae', meaning: 'baik / sehat' }
+    },
+    {
+      question: 'Olahraga apa sing dimaksud "bal-balan"?',
+      options: ['Bulu tangkis', 'Sepak bola', 'Bola voli', 'Renang'],
+      answer: 1,
+      explanation: '"Bal-balan" artinya bermain sepak bola.',
+      teaches: { word: 'bal-balan', meaning: 'main bola' }
+    }
+  ],
+  mbah_kakung: [
+    {
+      question: 'Apa tegese tembung "kulawarga"?',
+      options: ['Tetangga', 'Keluarga', 'Masyarakat', 'Teman'],
+      answer: 1,
+      explanation: '"Kulawarga" tegese keluarga.',
+      teaches: { word: 'kulawarga', meaning: 'keluarga' }
+    },
+    {
+      question: 'Tembung "tentrem" tegese apa?',
+      options: ['Ramai', 'Tenteram / Damai', 'Sedih', 'Marah'],
+      answer: 1,
+      explanation: '"Tentrem" tegese tenteram dan damai.',
+      teaches: { word: 'tentrem', meaning: 'tenteram' }
+    }
+  ]
+};
 
-  const pool = questionPool[npcId] || questionPool.mbok_sari;
-  const startIndex = (attemptIndex - 1) % pool.length;
-  const selectedQuestions = [];
-  for (let i = 0; i < Math.min(3, pool.length); i++) {
-    const q = pool[(startIndex + i) % pool.length];
-    selectedQuestions.push({
-      id: i + 1,
-      ...q
+function generateFallbackQuiz(npcId, attemptIndex = 1) {
+  const npc = getNpcMeta(npcId);
+  const pool = questionPool[npcId];
+
+  let selectedQuestions = [];
+  if (pool && pool.length > 0) {
+    const startIndex = (attemptIndex - 1) % pool.length;
+    for (let i = 0; i < Math.min(3, pool.length); i++) {
+      const q = pool[(startIndex + i) % pool.length];
+      selectedQuestions.push({
+        id: i + 1,
+        ...q
+      });
+    }
+  } else {
+    const vocabList = npc.vocab || [{ word: 'sugeng', meaning: 'selamat' }, { word: 'matur nuwun', meaning: 'terima kasih' }];
+    vocabList.forEach((v, idx) => {
+      selectedQuestions.push({
+        id: idx + 1,
+        question: `Apa tegese tembung "${v.word}" ing basa Indonesia?`,
+        options: [v.meaning, 'Ora mengko', 'Liyane', 'Beda'],
+        answer: 0,
+        explanation: `"${v.word}" tegese ${v.meaning}.`,
+        teaches: { word: v.word, meaning: v.meaning }
+      });
     });
+    if (selectedQuestions.length > 3) selectedQuestions = selectedQuestions.slice(0, 3);
   }
 
   return {
@@ -307,7 +377,7 @@ app.post('/api/npc/quiz', async (req, res) => {
 
     if (groqClient) {
       try {
-        const npcMeta = NPC_INFO[npcId] || NPC_INFO.mbok_sari;
+        const npcMeta = getNpcMeta(npcId);
         const prevQuestionsText = previousQuestions.length > 0 
           ? previousQuestions.map((q, i) => `${i+1}. ${q}`).join('\n')
           : '(No previous questions generated yet.)';
@@ -469,6 +539,37 @@ app.post('/api/dialogues', (req, res) => {
 });
 
 
+function syncPlacementsToMaps(placements) {
+  if (!placements || typeof placements !== 'object') return;
+  const maps = readDb(MAPS_FILE);
+  if (!maps || typeof maps !== 'object') return;
+  let modified = false;
+  for (const [mapId, npcList] of Object.entries(placements)) {
+    if (maps[mapId]) {
+      maps[mapId].npcs = npcList;
+      modified = true;
+    }
+  }
+  if (modified) {
+    writeDb(MAPS_FILE, maps);
+  }
+}
+
+function syncMapsToPlacements(maps) {
+  if (!maps || typeof maps !== 'object') return;
+  const placements = readDb(NPC_PLACEMENTS_FILE) || {};
+  let modified = false;
+  for (const [mapId, mapDef] of Object.entries(maps)) {
+    if (mapDef && Array.isArray(mapDef.npcs)) {
+      placements[mapId] = mapDef.npcs;
+      modified = true;
+    }
+  }
+  if (modified) {
+    writeDb(NPC_PLACEMENTS_FILE, placements);
+  }
+}
+
 app.get('/api/npc-placements', (req, res) => {
   const placements = readDb(NPC_PLACEMENTS_FILE);
   res.json(placements);
@@ -481,6 +582,7 @@ app.post('/api/npc-placements', (req, res) => {
   }
   const ok = writeDb(NPC_PLACEMENTS_FILE, data);
   if (ok) {
+    syncPlacementsToMaps(data);
     console.log('Auto-saved data/npc_placements.json');
     res.json({ status: 'ok', file: 'data/npc_placements.json' });
   } else {
@@ -500,13 +602,13 @@ app.post('/api/maps', (req, res) => {
   }
   const ok = writeDb(MAPS_FILE, data);
   if (ok) {
+    syncMapsToPlacements(data);
     console.log('Auto-saved data/maps.json');
     res.json({ status: 'ok', file: 'data/maps.json' });
   } else {
     res.status(500).json({ error: 'Failed to write data/maps.json' });
   }
 });
-
 
 app.get('/api/npc-config', (req, res) => {
   const dialogues = readDb(DIALOGUES_FILE);
@@ -523,6 +625,7 @@ app.post('/api/npc-config', (req, res) => {
   }
   if (npcPlacements) {
     ok = writeDb(NPC_PLACEMENTS_FILE, npcPlacements) && ok;
+    syncPlacementsToMaps(npcPlacements);
     console.log('Auto-saved data/npc_placements.json');
   }
   if (ok) {
@@ -532,7 +635,11 @@ app.post('/api/npc-config', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`NusaQuest running at http://localhost:${PORT}`);
-  console.log(`====================================================`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`NusaQuest running at http://localhost:${PORT}`);
+    console.log(`====================================================`);
+  });
+}
+
+module.exports = { app, getNpcMeta, generateFallbackQuiz };

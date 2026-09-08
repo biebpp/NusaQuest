@@ -142,5 +142,32 @@
         }
       }
     ]
+  },
+  "budi": {
+    "id": "budi",
+    "name": "Budi",
+    "role": "Anak Rantau",
+    "charIndex": 1,
+    "dir": 2,
+    "lines": [
+      {
+        "javanese": "Halo mas! Sampeyan arek anyar pisan yo?",
+        "indonesian": "Halo mas! kamu anak baru juga ya?",
+        "teaches": {
+          "word": "sampeyan",
+          "meaning": "kamu"
+        }
+      },
+      {
+        "javanese": "Aku sisan arek rantau sing pindah nang deso NusaQuest",
+        "indonesian": "Aku juga anak rantau yang pindah ke desa NusaQuest",
+        "teaches": {
+          "word": "arek",
+          "meaning": "anak"
+        }
+      }
+    ],
+    "col": 1,
+    "row": 4
   }
 }
