@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/dev/dev.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -24,9 +26,9 @@
         </div>
       </div>
       <div style="display: flex; gap: 10px;">
-        <button id="exportJsonConfigBtn" class="nav-btn" title="Export tilesheet config JSON">Save Tilesheet JSON</button>
-        <button id="importBtn" class="nav-btn">Import JSON</button>
-        <button id="exportJsonBtn" class="nav-btn">Export JSON</button>
+        <button id="exportJsonConfigBtn" class="nav-btn" title="Export tilesheet config JSON"><i data-lucide="save" style="width: 13px; height: 13px;"></i> Save Tilesheet JSON</button>
+        <button id="importBtn" class="nav-btn"><i data-lucide="upload" style="width: 13px; height: 13px;"></i> Import JSON</button>
+        <button id="exportJsonBtn" class="nav-btn"><i data-lucide="download" style="width: 13px; height: 13px;"></i> Export JSON</button>
         <input type="file" id="importFileInput" accept=".json" style="display: none;">
       </div>
     </header>
@@ -130,7 +132,7 @@
                 <div class="form-field">
                   <label for="tagKey">Key / ID:</label>
                   <input type="text" id="tagKey" placeholder="e.g. 0 or 1" required>
-                  <span id="tagKeyError" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;">⚠️ Ground ID must be a numeric integer!</span>
+                  <span id="tagKeyError" style="display: none; color: #ef4444; font-size: 11px; margin-top: 4px; font-weight: 600;">Ground ID must be a numeric integer!</span>
                 </div>
               </div>
 
@@ -705,7 +707,7 @@
       if (cat === 'ground') {
         if (!/^\d+$/.test(key)) {
           validateTagKeyInput();
-          alert(`⚠️ Invalid Ground Tile Key/ID: "${key}"\n\nGround tile Key/ID must be a numeric integer (e.g. 0, 1, 2).\n\nIf you want to use string codes (e.g. 'T', 'Ta1'), please select Category: "Objects".`);
+          alert(`Invalid Ground Tile Key/ID: "${key}"\n\nGround tile Key/ID must be a numeric integer (e.g. 0, 1, 2).\n\nIf you want to use string codes (e.g. 'T', 'Ta1'), please select Category: "Objects".`);
           tagKey.focus();
           return;
         }
@@ -734,7 +736,7 @@
       const isUpdate = Boolean(prevDef);
 
       if (isUpdate && (prevDef.col !== selectedTile.col || prevDef.row !== selectedTile.row || (prevDef.sheet || 'roguelike') !== currentSheetKey)) {
-        const confirmOverride = confirm(`⚠️ Key/ID Tag '${key}' in [${cat}] is already assigned to tile (${prevDef.sheet || 'roguelike'}, col: ${prevDef.col}, row: ${prevDef.row}).\nAre you sure you want to overwrite it with tile (${currentSheetKey}, col: ${selectedTile.col}, row: ${selectedTile.row})?`);
+        const confirmOverride = confirm(`Key/ID Tag '${key}' in [${cat}] is already assigned to tile (${prevDef.sheet || 'roguelike'}, col: ${prevDef.col}, row: ${prevDef.row}).\nAre you sure you want to overwrite it with tile (${currentSheetKey}, col: ${selectedTile.col}, row: ${selectedTile.row})?`);
         if (!confirmOverride) return;
       }
 
@@ -799,7 +801,7 @@
                 <span class="meta">[${cat}] (${sheetKey}) col: ${def.col}, row: ${def.row}</span>
               </div>
             </div>
-            <button class="tag-delete-btn" title="Delete tag">✖</button>
+            <button class="tag-delete-btn" title="Delete tag">&times;</button>
           `;
 
           item.addEventListener('click', (e) => {
@@ -1012,12 +1014,12 @@
           if (parsed.ground && parsed.objects) {
             const invalidGroundKeys = Object.keys(parsed.ground).filter(k => !/^\d+$/.test(k));
             if (invalidGroundKeys.length > 0) {
-              alert(`⚠️ Cannot import JSON: "ground" category contains non-numeric string keys (${invalidGroundKeys.slice(0, 3).map(k => '"' + k + '"').join(', ')}).\n\nGround tiles must have numeric integer IDs (e.g. 0, 1, 2).`);
+              alert(`Cannot import JSON: "ground" category contains non-numeric string keys (${invalidGroundKeys.slice(0, 3).map(k => '"' + k + '"').join(', ')}).\n\nGround tiles must have numeric integer IDs (e.g. 0, 1, 2).`);
               return;
             }
             const hasExistingData = Object.keys(currentMap.ground || {}).length > 0 || Object.keys(currentMap.objects || {}).length > 0;
             if (hasExistingData) {
-              const confirmImport = confirm(`⚠️ Importing '${file.name}' will overwrite your current tile tag configuration. Do you want to proceed?`);
+              const confirmImport = confirm(`Importing '${file.name}' will overwrite your current tile tag configuration. Do you want to proceed?`);
               if (!confirmImport) return;
             }
             currentMap = parsed;
@@ -1122,6 +1124,7 @@
     updateJsExporter();
     updateAuditUI();
     loadServerJsonData();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
   </script>
 </body>
 </html>

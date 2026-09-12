@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/dev/dev.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -21,8 +23,8 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 8px;">
-        <button id="exportJsonBtn" class="btn btn-gold" title="Export NPC JSON">📥 Export JSON</button>
-        <button id="importJsonBtn" class="btn" title="Import NPC JSON">📤 Import JSON</button>
+        <button id="exportJsonBtn" class="btn btn-gold" title="Export NPC JSON"><i data-lucide="download" style="width: 14px; height: 14px;"></i> Export JSON</button>
+        <button id="importJsonBtn" class="btn" title="Import NPC JSON"><i data-lucide="upload" style="width: 14px; height: 14px;"></i> Import JSON</button>
 
         <div class="sync-status">
           <span class="dot"></span>
@@ -73,10 +75,10 @@
           <button id="deleteNpcBtn" class="btn-danger">Delete</button>
         </div>
 
-        <form id="npcForm" class="form-grid">
+        <form id="npcForm" style="display: flex; flex-direction: column; gap: 10px;">
           <div class="form-row">
             <div class="form-field">
-              <label for="npcId">NPC ID (Unique Code):</label>
+              <label for="npcId">NPC ID (Key in DIALOGUES):</label>
               <input type="text" id="npcId" required placeholder="e.g. mbok_sari">
             </div>
             <div class="form-field">
@@ -87,57 +89,76 @@
 
           <div class="form-row">
             <div class="form-field">
-              <label for="npcRole">Role / Title:</label>
-              <input type="text" id="npcRole" placeholder="e.g. Market Seller">
+              <label for="npcRole">Role / Profession:</label>
+              <input type="text" id="npcRole" placeholder="e.g. Bakul Sayur Pasar">
             </div>
-            <div class="form-field" style="max-width: 100px;">
-              <label for="npcCharIndex">Char Index:</label>
-              <input type="number" id="npcCharIndex" value="1" min="0" max="10">
+            <div class="form-field">
+              <label for="npcCharIndex">Base Character Sprite Index:</label>
+              <input type="number" id="npcCharIndex" min="0" max="63" value="0">
             </div>
           </div>
 
-          <div style="border-top: 1px solid var(--border); padding-top: 10px;">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="npcCol">Custom Spritesheet Col (Optional):</label>
+              <input type="number" id="npcCol" min="0" max="11" placeholder="Auto from Index">
+            </div>
+            <div class="form-field">
+              <label for="npcRow">Custom Spritesheet Row (Optional):</label>
+              <input type="number" id="npcRow" min="0" max="15" placeholder="Auto from Index">
+            </div>
+          </div>
+
+          <!-- Manual Map Coordinates Placement Card -->
+          <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border); border-radius: 6px; padding: 10px;">
             <div class="section-title" style="margin-bottom: 8px;">
-              <span>Manual Map Coordinates Placement</span>
+              <span><i data-lucide="map-pin" class="icon-inline"></i> Map Placement & Coordinates</span>
             </div>
             <div class="form-row">
-              <div class="form-field">
+              <div class="form-field" style="flex: 2;">
                 <label for="npcMapId">Assigned Map:</label>
                 <select id="npcMapId"></select>
               </div>
-              <div class="form-field" style="max-width: 70px;">
+              <div class="form-field" style="flex: 1; max-width: 80px;">
                 <label for="npcTileX">Tile X:</label>
-                <input type="number" id="npcTileX" value="4" min="0" max="50">
+                <input type="number" id="npcTileX" value="4" min="0" max="100">
               </div>
-              <div class="form-field" style="max-width: 70px;">
+              <div class="form-field" style="flex: 1; max-width: 80px;">
                 <label for="npcTileY">Tile Y:</label>
-                <input type="number" id="npcTileY" value="7" min="0" max="50">
+                <input type="number" id="npcTileY" value="7" min="0" max="100">
               </div>
-              <div class="form-field" style="max-width: 90px;">
+              <div class="form-field" style="flex: 1; max-width: 140px;">
                 <label for="npcDir">Facing Dir:</label>
                 <select id="npcDir">
-                  <option value="0">Down (0)</option>
-                  <option value="1">Left (1)</option>
-                  <option value="2">Right (2)</option>
-                  <option value="3">Up (3)</option>
+                  <option value="0">Down / Depan (0)</option>
+                  <option value="1">Left / Kiri (1)</option>
+                  <option value="2">Right / Kanan (2)</option>
+                  <option value="3">Up / Atas (3)</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <div style="border-top: 1px solid var(--border); padding-top: 10px;">
-            <div class="section-title">
-              <span>Tile & Animation Sequence</span>
-              <button type="button" id="addAnimFrameBtn" class="btn-secondary" style="font-size: 11px;">Add Tile to Anim</button>
+          <!-- Animation Sequencer Card -->
+          <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+              <span style="font-size: 12px; font-weight: 700; color: var(--gold);"><i data-lucide="film" class="icon-inline"></i> Custom Walk / Idle Animation Sequence</span>
+              <div style="display: flex; gap: 4px;">
+                <button type="button" id="addAnimFrameBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px;"><i data-lucide="plus" style="width:11px;height:11px;"></i> Add Tile to Anim</button>
+                <button type="button" id="clearAnimBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px;">Clear Frames</button>
+              </div>
             </div>
-
-            <div class="anim-box">
-              <canvas id="animPreviewCanvas" width="52" height="72" class="anim-preview-canvas" title="Live Animation Preview"></canvas>
-              <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
-                <div style="font-size: 11px; color: var(--text-muted);">
-                  Selected Tile: Col <strong id="selTileCol" style="color: var(--gold);">0</strong>, Row <strong id="selTileRow" style="color: var(--gold);">0</strong>
-                  <button type="button" id="setSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px; margin-left: 6px;">Set as Idle Tile</button>
-                  <button type="button" id="clearSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px; margin-left: 4px;">Use CharIndex</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <div class="anim-preview-box">
+                <canvas id="animPreviewCanvas" width="52" height="72"></canvas>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                <div style="font-size: 11px; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+                  <span>Selected Tile: Col <strong id="selTileCol" style="color: var(--gold);">0</strong>, Row <strong id="selTileRow" style="color: var(--gold);">0</strong></span>
+                  <div style="display: flex; gap: 4px;">
+                    <button type="button" id="setSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px;">Set as Idle Tile</button>
+                    <button type="button" id="clearSpecificTileBtn" class="btn-secondary" style="font-size: 10px; padding: 2px 6px;">Use CharIndex</button>
+                  </div>
                 </div>
                 <div class="anim-frames-list" id="animFramesList">
                   <span style="font-size: 11px; color: var(--text-muted);">Default charIndex animation</span>
@@ -146,6 +167,7 @@
             </div>
           </div>
 
+          <!-- Dialogue Lines Repeater -->
           <div style="border-top: 1px solid var(--border); padding-top: 10px;">
             <div class="section-title">
               <span>Dialogue Lines Script</span>
@@ -165,9 +187,9 @@
           <div class="section-title">
             <span>NPC Quiz Editor & Generator</span>
             <div style="display: flex; gap: 4px;">
-              <button type="button" id="addQuizQuestionBtn" class="btn-primary" style="font-size: 11px; padding: 4px 8px;">➕ Add Question</button>
-              <button type="button" id="generateAiQuizBtn" class="btn-gold" style="font-size: 11px; padding: 4px 8px;">🤖 AI Quiz</button>
-              <button type="button" id="generateDefaultQuizBtn" class="btn-secondary" style="font-size: 11px; padding: 4px 8px;">⚡ Default Quiz</button>
+              <button type="button" id="addQuizQuestionBtn" class="btn-primary" style="font-size: 11px; padding: 4px 8px;"><i data-lucide="plus" style="width: 13px; height: 13px;"></i> Add Question</button>
+              <button type="button" id="generateAiQuizBtn" class="btn-gold" style="font-size: 11px; padding: 4px 8px;"><i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> AI Quiz</button>
+              <button type="button" id="generateDefaultQuizBtn" class="btn-secondary" style="font-size: 11px; padding: 4px 8px;"><i data-lucide="zap" style="width: 13px; height: 13px;"></i> Default Quiz</button>
             </div>
           </div>
 
@@ -175,7 +197,7 @@
             <div id="quizStatusBadge" style="color: var(--text-muted);">
               Status: <span id="quizStatusText" style="color: var(--gold); font-weight: 600;">Custom Quiz Editor Ready</span>
             </div>
-            <button type="button" id="saveQuizBtn" class="btn-gold" style="font-size: 11px; padding: 3px 10px;">💾 Save Quiz</button>
+            <button type="button" id="saveQuizBtn" class="btn-gold" style="font-size: 11px; padding: 3px 10px;"><i data-lucide="save" style="width: 13px; height: 13px;"></i> Save Quiz</button>
           </div>
 
           <div id="quizEditorContainer" class="lines-container" style="max-height: 480px; overflow-y: auto; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border); border-radius: 6px; padding: 10px;">
@@ -212,12 +234,12 @@
       </div>
       <div class="modal-footer" style="display: flex; gap: 8px; justify-content: space-between; align-items: center;">
         <div style="display: flex; gap: 6px;">
-          <button id="downloadJsonFileBtn" class="btn btn-secondary">💾 Download File</button>
-          <button id="uploadJsonFileBtn" class="btn btn-secondary">📁 Upload File</button>
+          <button id="downloadJsonFileBtn" class="btn btn-secondary"><i data-lucide="download" style="width: 13px; height: 13px;"></i> Download File</button>
+          <button id="uploadJsonFileBtn" class="btn btn-secondary"><i data-lucide="upload" style="width: 13px; height: 13px;"></i> Upload File</button>
           <input type="file" id="importJsonFileInput" accept=".json" style="display: none;">
         </div>
         <div style="display: flex; gap: 8px;">
-          <button id="copyJsonBtn" class="btn btn-gold">📋 Copy</button>
+          <button id="copyJsonBtn" class="btn btn-gold"><i data-lucide="copy" style="width: 13px; height: 13px;"></i> Copy</button>
           <button id="applyImportJsonBtn" class="btn btn-primary hidden">Import & Apply</button>
           <button class="modal-close btn">Tutup</button>
         </div>
@@ -470,53 +492,74 @@
       });
     });
 
-    document.getElementById('setSpecificTileBtn').addEventListener('click', () => {
-      customCol = selectedCol;
-      customRow = selectedRow;
-      updateAnimPreview();
-    });
-
-    document.getElementById('clearSpecificTileBtn').addEventListener('click', () => {
-      customCol = null;
-      customRow = null;
-      selectedCol = (parseInt(npcCharIndex.value, 10) || 0) * 3 + 1;
-      selectedRow = 0;
-      document.getElementById('selTileCol').textContent = selectedCol;
-      document.getElementById('selTileRow').textContent = selectedRow;
-      renderCharGrid();
-      updateAnimPreview();
-    });
-
-    npcCharIndex.addEventListener('input', () => {
-      if (customCol === null && customRow === null) {
-        selectedCol = (parseInt(npcCharIndex.value, 10) || 0) * 3 + 1;
-        document.getElementById('selTileCol').textContent = selectedCol;
-        renderCharGrid();
-      }
-      updateAnimPreview();
-    });
-
-    npcDir.addEventListener('change', () => {
-      const dir = parseInt(npcDir.value, 10) || 0;
-      if (customCol !== null && customRow !== null) {
-        const baseRow = Math.floor(customRow / 4) * 4;
-        selectedRow = baseRow + dir;
+    const setSpecificTileBtn = document.getElementById('setSpecificTileBtn');
+    if (setSpecificTileBtn) {
+      setSpecificTileBtn.addEventListener('click', () => {
+        customCol = selectedCol;
         customRow = selectedRow;
-      } else {
-        const cIdx = parseInt(npcCharIndex.value, 10) || 0;
-        const baseRow = Math.floor(cIdx / 4) * 4;
-        selectedRow = baseRow + dir;
-      }
-      document.getElementById('selTileRow').textContent = selectedRow;
-      renderCharGrid();
-      updateAnimPreview();
-    });
+        if (npcCol) npcCol.value = customCol;
+        if (npcRow) npcRow.value = customRow;
+        updateAnimPreview();
+      });
+    }
 
-    document.getElementById('addAnimFrameBtn').addEventListener('click', () => {
-      animSequence.push({ col: selectedCol, row: selectedRow });
-      renderAnimChips();
-      updateAnimPreview();
-    });
+    const clearSpecificTileBtn = document.getElementById('clearSpecificTileBtn');
+    if (clearSpecificTileBtn) {
+      clearSpecificTileBtn.addEventListener('click', () => {
+        customCol = null;
+        customRow = null;
+        if (npcCol) npcCol.value = '';
+        if (npcRow) npcRow.value = '';
+        selectedCol = (parseInt(npcCharIndex.value, 10) || 0) * 3 + 1;
+        selectedRow = 0;
+        const selColEl = document.getElementById('selTileCol');
+        const selRowEl = document.getElementById('selTileRow');
+        if (selColEl) selColEl.textContent = selectedCol;
+        if (selRowEl) selRowEl.textContent = selectedRow;
+        renderCharGrid();
+        updateAnimPreview();
+      });
+    }
+
+    if (npcCharIndex) {
+      npcCharIndex.addEventListener('input', () => {
+        if (customCol === null && customRow === null) {
+          selectedCol = (parseInt(npcCharIndex.value, 10) || 0) * 3 + 1;
+          const selColEl = document.getElementById('selTileCol');
+          if (selColEl) selColEl.textContent = selectedCol;
+          renderCharGrid();
+        }
+        updateAnimPreview();
+      });
+    }
+
+    if (npcDir) {
+      npcDir.addEventListener('change', () => {
+        const dir = parseInt(npcDir.value, 10) || 0;
+        if (customCol !== null && customRow !== null) {
+          const baseRow = Math.floor(customRow / 4) * 4;
+          selectedRow = baseRow + dir;
+          customRow = selectedRow;
+        } else {
+          const cIdx = parseInt(npcCharIndex.value, 10) || 0;
+          const baseRow = Math.floor(cIdx / 4) * 4;
+          selectedRow = baseRow + dir;
+        }
+        const selRowEl = document.getElementById('selTileRow');
+        if (selRowEl) selRowEl.textContent = selectedRow;
+        renderCharGrid();
+        updateAnimPreview();
+      });
+    }
+
+    const addAnimFrameBtn = document.getElementById('addAnimFrameBtn');
+    if (addAnimFrameBtn) {
+      addAnimFrameBtn.addEventListener('click', () => {
+        animSequence.push({ col: selectedCol, row: selectedRow });
+        renderAnimChips();
+        updateAnimPreview();
+      });
+    }
 
     function renderAnimChips() {
       animFramesList.innerHTML = '';
@@ -528,7 +571,7 @@
       animSequence.forEach((frame, idx) => {
         const chip = document.createElement('span');
         chip.className = 'anim-chip';
-        chip.innerHTML = `[${frame.col},${frame.row}] <span class="anim-chip-del">✖</span>`;
+        chip.innerHTML = `[${frame.col},${frame.row}] <span class="anim-chip-del">&times;</span>`;
         chip.querySelector('.anim-chip-del').addEventListener('click', () => {
           animSequence.splice(idx, 1);
           renderAnimChips();
@@ -556,13 +599,13 @@
           r = current.row;
           animStep++;
         } else if (customCol !== null && customRow !== null) {
-          const dir = parseInt(npcDir.value, 10) || 0;
+          const dir = npcDir ? (parseInt(npcDir.value, 10) || 0) : 0;
           const baseRow = Math.floor(customRow / 4) * 4;
           c = customCol;
           r = baseRow + dir;
         } else {
-          const cIdx = parseInt(npcCharIndex.value, 10) || 0;
-          const dir = parseInt(npcDir.value, 10) || 0;
+          const cIdx = npcCharIndex ? (parseInt(npcCharIndex.value, 10) || 0) : 0;
+          const dir = npcDir ? (parseInt(npcDir.value, 10) || 0) : 0;
           const baseRow = Math.floor(cIdx / 4) * 4;
           c = (cIdx % 4) * 3 + 1;
           r = baseRow + dir;
@@ -611,9 +654,48 @@
 
     function populateNpcSelect() {
       npcSelect.innerHTML = '';
-      const keys = Object.keys(dialogues);
+      const seen = new Set();
+      const allNpcIds = [];
 
-      if (keys.length === 0) {
+      // 1. From dialogues
+      if (dialogues) {
+        Object.keys(dialogues).forEach(id => {
+          if (!seen.has(id)) {
+            seen.add(id);
+            allNpcIds.push(id);
+          }
+        });
+      }
+
+      // 2. From npcPlacements (placed on maps)
+      if (npcPlacements) {
+        Object.values(npcPlacements).forEach(list => {
+          if (Array.isArray(list)) {
+            list.forEach(item => {
+              if (item && item.id && !seen.has(item.id)) {
+                seen.add(item.id);
+                allNpcIds.push(item.id);
+              }
+            });
+          }
+        });
+      }
+
+      // 3. From MAPS
+      if (typeof MAPS !== 'undefined') {
+        Object.values(MAPS).forEach(m => {
+          if (Array.isArray(m.npcs)) {
+            m.npcs.forEach(n => {
+              if (n && n.id && !seen.has(n.id)) {
+                seen.add(n.id);
+                allNpcIds.push(n.id);
+              }
+            });
+          }
+        });
+      }
+
+      if (allNpcIds.length === 0) {
         const opt = document.createElement('option');
         opt.value = '';
         opt.textContent = '-- No NPCs Defined --';
@@ -621,17 +703,32 @@
         return;
       }
 
-      keys.forEach(id => {
+      allNpcIds.forEach(id => {
         const opt = document.createElement('option');
         opt.value = id;
-        opt.textContent = `${dialogues[id].name || id} (${id})`;
+        const name = (dialogues[id] && dialogues[id].name) ? dialogues[id].name : id.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        opt.textContent = `${name} (${id})`;
         if (id === currentNpcId) opt.selected = true;
         npcSelect.appendChild(opt);
       });
     }
 
     function loadNpcIntoForm(id) {
-      if (!id || !dialogues[id]) return;
+      if (!id) return;
+
+      // Auto-initialize stub dialogue if NPC was placed on a map but has no dialogue entry yet
+      if (!dialogues[id]) {
+        const formatName = id.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        dialogues[id] = {
+          id: id,
+          name: formatName,
+          role: 'Warga Desa',
+          charIndex: 2,
+          lines: [
+            { javanese: 'Sugeng enjing!', indonesian: 'Selamat pagi!' }
+          ]
+        };
+      }
 
       currentNpcId = id;
       editingOriginalId = id;
@@ -644,6 +741,8 @@
 
       customCol = npc.col !== undefined ? npc.col : null;
       customRow = npc.row !== undefined ? npc.row : null;
+      if (npcCol) npcCol.value = customCol !== null ? customCol : '';
+      if (npcRow) npcRow.value = customRow !== null ? customRow : '';
       animSequence = npc.animList ? JSON.parse(JSON.stringify(npc.animList)) : [];
 
       let foundMap = 'village';
@@ -657,17 +756,19 @@
           foundX = ref.tileX;
           foundY = ref.tileY;
           if (ref.dir !== undefined) foundDir = ref.dir;
+          if (ref.col !== undefined && customCol === null) customCol = ref.col;
+          if (ref.row !== undefined && customRow === null) customRow = ref.row;
           break;
         }
       }
 
       populateMapSelect();
-      if (npcMapId.querySelector(`option[value="${foundMap}"]`)) {
+      if (npcMapId && npcMapId.querySelector(`option[value="${foundMap}"]`)) {
         npcMapId.value = foundMap;
       }
-      npcTileX.value = foundX;
-      npcTileY.value = foundY;
-      npcDir.value = foundDir;
+      if (npcTileX) npcTileX.value = foundX;
+      if (npcTileY) npcTileY.value = foundY;
+      if (npcDir) npcDir.value = foundDir;
 
       if (customCol !== null && customRow !== null) {
         selectedCol = customCol;
@@ -679,8 +780,10 @@
         selectedRow = Math.floor(cIdx / 4) * 4 + foundDir;
       }
 
-      document.getElementById('selTileCol').textContent = selectedCol;
-      document.getElementById('selTileRow').textContent = selectedRow;
+      const selColEl = document.getElementById('selTileCol');
+      const selRowEl = document.getElementById('selTileRow');
+      if (selColEl) selColEl.textContent = selectedCol;
+      if (selRowEl) selRowEl.textContent = selectedRow;
 
       renderCharGrid();
       renderAnimChips();
@@ -706,9 +809,9 @@
           <div class="line-card-header">
             <span>Line #${idx + 1}</span>
             <div class="line-actions">
-              <button type="button" class="btn-secondary line-up-btn" title="Move Up">▲</button>
-              <button type="button" class="btn-secondary line-down-btn" title="Move Down">▼</button>
-              <button type="button" class="btn-danger line-del-btn" title="Delete">✖</button>
+              <button type="button" class="btn-secondary line-up-btn" title="Move Up">&uarr;</button>
+              <button type="button" class="btn-secondary line-down-btn" title="Move Down">&darr;</button>
+              <button type="button" class="btn-danger line-del-btn" title="Delete">&times;</button>
             </div>
           </div>
           <div class="form-field">
@@ -793,7 +896,7 @@
       if (!newId) return;
 
       if (editingOriginalId !== newId && dialogues[newId]) {
-        const confirmOverride = confirm(`⚠️ NPC with ID '${newId}' already exists!\nOverwriting will replace the existing NPC '${dialogues[newId].name || newId}'. Are you sure you want to proceed?`);
+        const confirmOverride = confirm(`NPC with ID '${newId}' already exists!\nOverwriting will replace the existing NPC '${dialogues[newId].name || newId}'. Are you sure you want to proceed?`);
         if (!confirmOverride) return;
       }
 
@@ -815,12 +918,15 @@
         lines
       };
 
-      if (customCol !== null && customRow !== null) {
+      if (npcCol && npcCol.value !== '' && npcRow && npcRow.value !== '') {
+        npcDef.col = parseInt(npcCol.value, 10);
+        npcDef.row = parseInt(npcRow.value, 10);
+      } else if (customCol !== null && customRow !== null) {
         npcDef.col = customCol;
         npcDef.row = customRow;
       }
       if (animSequence.length > 0) {
-        npcDef.animList = animSequence;
+        npcDef.animList = [...animSequence];
       }
 
       dialogues[newId] = npcDef;
@@ -967,14 +1073,19 @@
         const word = card.querySelector('.quiz-word-text').value.trim();
         const meaning = card.querySelector('.quiz-meaning-text').value.trim();
 
-        questions.push({
-          id: idx + 1,
-          question: qText || `Pertanyaan #${idx + 1}`,
-          options: [opt0 || 'Pilihan A', opt1 || 'Pilihan B', opt2 || 'Pilihan C', opt3 || 'Pilihan D'],
-          answer: ans,
-          explanation: exp || '',
-          teaches: word || meaning ? { word: word || '', meaning: meaning || '' } : undefined
-        });
+        if (qText) {
+          const qObj = {
+            id: idx + 1,
+            question: qText,
+            options: [opt0 || 'Option A', opt1 || 'Option B', opt2 || 'Option C', opt3 || 'Option D'],
+            answer: ans,
+            explanation: exp || undefined
+          };
+          if (word || meaning) {
+            qObj.teaches = { word: word || '', meaning: meaning || '' };
+          }
+          questions.push(qObj);
+        }
       });
 
       return questions;
@@ -990,7 +1101,7 @@
       quizEditorContainer.innerHTML = '';
 
       if (currentQuizState.questions.length === 0) {
-        quizEditorContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 12px;">No quiz questions configured. Click "➕ Add Question", "🤖 AI Quiz", or "⚡ Default Quiz" to generate questions.</div>';
+        quizEditorContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 12px;">No quiz questions configured. Click "Add Question", "AI Quiz", or "Default Quiz" to generate questions.</div>';
         return;
       }
 
@@ -1009,9 +1120,9 @@
           <div class="line-card-header" style="margin-bottom: 6px;">
             <span style="font-weight: 700; color: var(--gold);">Question #${idx + 1}</span>
             <div class="line-actions">
-              <button type="button" class="btn-secondary q-up-btn" title="Move Up">▲</button>
-              <button type="button" class="btn-secondary q-down-btn" title="Move Down">▼</button>
-              <button type="button" class="btn-danger q-del-btn" title="Delete Question">✖</button>
+              <button type="button" class="btn-secondary q-up-btn" title="Move Up">&uarr;</button>
+              <button type="button" class="btn-secondary q-down-btn" title="Move Down">&darr;</button>
+              <button type="button" class="btn-danger q-del-btn" title="Delete Question">&times;</button>
             </div>
           </div>
           
@@ -1022,19 +1133,19 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px;">
             <div class="form-field">
-              <label style="font-size: 10px; color: ${ansVal === 0 ? '#4ade80' : 'var(--text-muted)'};">Option A ${ansVal === 0 ? '✓ (Correct)' : ''}:</label>
+              <label style="font-size: 10px; color: ${ansVal === 0 ? '#4ade80' : 'var(--text-muted)'};">Option A ${ansVal === 0 ? '(Correct)' : ''}:</label>
               <input type="text" class="quiz-opt-0" value="${opts[0] || ''}" required placeholder="Option A" style="font-size: 11px; padding: 4px 6px;">
             </div>
             <div class="form-field">
-              <label style="font-size: 10px; color: ${ansVal === 1 ? '#4ade80' : 'var(--text-muted)'};">Option B ${ansVal === 1 ? '✓ (Correct)' : ''}:</label>
+              <label style="font-size: 10px; color: ${ansVal === 1 ? '#4ade80' : 'var(--text-muted)'};">Option B ${ansVal === 1 ? '(Correct)' : ''}:</label>
               <input type="text" class="quiz-opt-1" value="${opts[1] || ''}" required placeholder="Option B" style="font-size: 11px; padding: 4px 6px;">
             </div>
             <div class="form-field">
-              <label style="font-size: 10px; color: ${ansVal === 2 ? '#4ade80' : 'var(--text-muted)'};">Option C ${ansVal === 2 ? '✓ (Correct)' : ''}:</label>
+              <label style="font-size: 10px; color: ${ansVal === 2 ? '#4ade80' : 'var(--text-muted)'};">Option C ${ansVal === 2 ? '(Correct)' : ''}:</label>
               <input type="text" class="quiz-opt-2" value="${opts[2] || ''}" required placeholder="Option C" style="font-size: 11px; padding: 4px 6px;">
             </div>
             <div class="form-field">
-              <label style="font-size: 10px; color: ${ansVal === 3 ? '#4ade80' : 'var(--text-muted)'};">Option D ${ansVal === 3 ? '✓ (Correct)' : ''}:</label>
+              <label style="font-size: 10px; color: ${ansVal === 3 ? '#4ade80' : 'var(--text-muted)'};">Option D ${ansVal === 3 ? '(Correct)' : ''}:</label>
               <input type="text" class="quiz-opt-3" value="${opts[3] || ''}" required placeholder="Option D" style="font-size: 11px; padding: 4px 6px;">
             </div>
           </div>
@@ -1100,6 +1211,10 @@
 
         quizEditorContainer.appendChild(card);
       });
+
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
     }
 
     async function loadNpcQuiz(npcIdToLoad) {
@@ -1131,7 +1246,7 @@
       const activeId = npcId.value.trim() || currentNpcId;
       const questions = extractQuizFromEditor();
       if (questions.length === 0) {
-        alert('⚠️ Please add at least one question before saving the quiz.');
+        alert('Please add at least one question before saving the quiz.');
         return;
       }
 
@@ -1491,12 +1606,23 @@
             }
           }
         }).catch(() => {});
+
+      fetch('/api/maps')
+        .then(res => res.json())
+        .then(mapsData => {
+          if (mapsData && typeof mapsData === 'object' && Object.keys(mapsData).length > 0) {
+            window.MAPS = mapsData;
+            populateMapSelect();
+            populateNpcSelect();
+          }
+        }).catch(() => {});
     }
 
     populateMapSelect();
     populateNpcSelect();
     loadNpcIntoForm(currentNpcId);
     loadServerJsonData();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
   </script>
 </body>
 </html>

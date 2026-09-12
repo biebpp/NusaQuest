@@ -1,0 +1,170 @@
+[
+  {
+    "id": "quiz_1788490005814",
+    "npcId": "pak_joko",
+    "title": "Kuis Tembung Pak Joko",
+    "generatedAt": "2026-09-04T02:46:45.814Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Menurut Pak Joko, apa fungsi utama 'toya' di sawah?",
+        "options": [
+          "Untuk menyirami tanaman padi",
+          "Untuk memandikan ternak",
+          "Untuk memasak nasi",
+          "Untuk membersihkan parit"
+        ],
+        "answer": 0,
+        "explanation": "'Toya' artinya air, yang sangat penting untuk mengairi sawah agar padi tumbuh.",
+        "teaches": {
+          "word": "toya",
+          "meaning": "air"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung 'panen' dalam bahasa Indonesia memiliki arti apa?",
+        "options": [
+          "Menanam benih",
+          "Membajak tanah",
+          "Memanen hasil pertanian",
+          "Membangun rumah"
+        ],
+        "answer": 2,
+        "explanation": "'Panen' sama artinya dengan memanen, yaitu mengambil hasil pertanian ketika sudah matang.",
+        "teaches": {
+          "word": "panen",
+          "meaning": "memanen"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Jika Pak Joko berkata 'Sawahku subur', apa maksudnya?",
+        "options": [
+          "Sawahnya kering dan tandus",
+          "Tanah sawahnya gembur dan tanaman tumbuh baik",
+          "Sawahnya sedang banjir",
+          "Sawahnya tidak ada pemiliknya"
+        ],
+        "answer": 1,
+        "explanation": "'Subur' berarti tanah yang kaya nutrisi sehingga tanaman (seperti padi) dapat tumbuh dengan baik.",
+        "teaches": {
+          "word": "subur",
+          "meaning": "subur"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788502932235",
+    "npcId": "pak_joko",
+    "title": "Kuis Tembung Pak Joko",
+    "generatedAt": "2026-09-04T06:22:12.235Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing basa Jawa, pira wadhah kanggo nyimpen 'toya' ing omah disebatake apa?",
+        "options": [
+          "Geni",
+          "Gamelan",
+          "Geni",
+          "Geni"
+        ],
+        "answer": 0,
+        "explanation": "Pitakonan iki ora trep amarga opsi ora valid. Ayo kita gawe pitakonan anyar.",
+        "teaches": {
+          "word": "toya",
+          "meaning": "air"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Menurut Pak Joko, 'pari' yaiku hasil tani kanggedhe ing sawah. Ing basa Indonesia, 'pari' tegese apa?",
+        "options": [
+          "Jagung",
+          "Padi",
+          "Kacang",
+          "Tembe"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'pari' ing basa Jawa tegese 'padi' ing basa Indonesia. Padi yaiku wit kang diolah dadi beras.",
+        "teaches": {
+          "word": "pari",
+          "meaning": "padi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Pak Joko ngomong, 'Sawahku iki subur banget'. Tembung 'subur' ing kahanan iki nuduhake apa?",
+        "options": [
+          "Garing lan ora ana udan",
+          "Tanaman gedhe lan sehat",
+          "Akeh wong sing gawen",
+          "Bumi rasayang panas"
+        ],
+        "answer": 1,
+        "explanation": "'Subur' tegese lemah lan tanamane kesuburan, dadi tanamane (pari) bisa tuwuh gedhe lan sehat.",
+        "teaches": {
+          "word": "subur",
+          "meaning": "subur"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_fallback_1788830569700",
+    "npcId": "pak_joko",
+    "title": "Kuis Tembung — Pak Joko (Kuis #3)",
+    "generatedAt": "2026-09-08T01:22:49.700Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung \"sawah\" ing basa Indonesia?",
+        "options": [
+          "Teman",
+          "sawah / ladang",
+          "Harganya",
+          "Sepuluh (10)"
+        ],
+        "answer": 1,
+        "explanation": "\"sawah\" tegese sawah / ladang.",
+        "teaches": {
+          "word": "sawah",
+          "meaning": "sawah / ladang"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung \"pari\" ing basa Indonesia?",
+        "options": [
+          "Baik / Sehat",
+          "padi",
+          "Berapa",
+          "Selamat"
+        ],
+        "answer": 1,
+        "explanation": "\"pari\" tegese padi.",
+        "teaches": {
+          "word": "pari",
+          "meaning": "padi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"toya\" ing basa Indonesia?",
+        "options": [
+          "air",
+          "Tenteram",
+          "Main bola",
+          "Terima kasih"
+        ],
+        "answer": 0,
+        "explanation": "\"toya\" tegese air.",
+        "teaches": {
+          "word": "toya",
+          "meaning": "air"
+        }
+      }
+    ]
+  }
+]

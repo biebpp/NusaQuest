@@ -1,0 +1,57 @@
+[
+  {
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #1)",
+    "generatedAt": "2026-09-08T01:51:36.009Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+        "options": [
+          "Sepuluh (10)",
+          "Lima (5)",
+          "Satu (1)",
+          "Dua puluh (20)"
+        ],
+        "answer": 0,
+        "explanation": "\"Sedasa\" tegese sepuluh (10).",
+        "teaches": {
+          "word": "sedasa",
+          "meaning": "sepuluh (10)"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+        "options": [
+          "Waktu (Kapan)",
+          "Jumlah / Harga (Berapa)",
+          "Tempat (Di mana)",
+          "Nama orang (Siapa)"
+        ],
+        "answer": 1,
+        "explanation": "\"Pinten\" artine berapa.",
+        "teaches": {
+          "word": "pinten",
+          "meaning": "berapa"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+        "options": [
+          "Sugeng enjing",
+          "Matur nuwun",
+          "Pripun kabare",
+          "Sae-sae mawon"
+        ],
+        "answer": 1,
+        "explanation": "\"Matur nuwun\" tegese terima kasih.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "id": "quiz_1788829302311",
+    "npcId": "warga_baru_6",
+    "title": "Kuis Tembung Mbok Sari",
+    "generatedAt": "2026-09-08T01:01:42.311Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen Mbok Sari takon 'Pinten regine?', apa tegese tembung 'pinten'?",
+        "options": [
+          "Berapa",
+          "Di mana",
+          "Kapan",
+          "Siapa"
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'pinten' tegese 'berapa' ing basa Indonesia, digunakake kanggo takon babagan jumlah utawa rega.",
+        "teaches": {
+          "word": "pinten",
+          "meaning": "berapa"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Sampeyan pengin tuku tomat sing regane sedasa ewu. Kalimat ing ngisor iki sing bener yaiku?",
+        "options": [
+          "Aku mundhut tomat sedasa ewu.",
+          "Aku matur nuwun tomat sedasa ewu.",
+          "Aku pinten tomat sedasa ewu.",
+          "Aku regine tomat sedasa ewu."
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'mundhut' tegese 'membeli'. Dadi, 'Aku mundhut tomat sedasa ewu' tegese 'Saya membeli tomat sepuluh ribu'.",
+        "teaches": {
+          "word": "mundhut",
+          "meaning": "membeli"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Sawise mbayar tomat, Mbok Sari nyengir lan mbaleni pesane. Sampeyan kudu ngucapake tembung apa supaya sopan?",
+        "options": [
+          "Pinten",
+          "Sedasa",
+          "Matur nuwun",
+          "Regine"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'matur nuwun' tegese 'terima kasih'. Iki tegese sopan kanggo diucapake sawise tuku utawa nampa bantuan.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      }
+    ]
+  }
+]

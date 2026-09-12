@@ -1,0 +1,481 @@
+[
+  {
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #1)",
+    "generatedAt": "2026-09-02T06:17:01.423Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+        "options": [
+          "Sepuluh (10)",
+          "Lima (5)",
+          "Satu (1)",
+          "Dua puluh (20)"
+        ],
+        "answer": 0,
+        "explanation": "\"Sedasa\" tegese sepuluh (10)."
+      },
+      {
+        "id": 2,
+        "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+        "options": [
+          "Waktu (Kapan)",
+          "Jumlah / Harga (Berapa)",
+          "Tempat (Di mana)",
+          "Nama orang (Siapa)"
+        ],
+        "answer": 1,
+        "explanation": "\"Pinten\" artine berapa (nuntun rega utawa cacah)."
+      },
+      {
+        "id": 3,
+        "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+        "options": [
+          "Sugeng enjing",
+          "Matur nuwun",
+          "Pripun kabare",
+          "Sae-sae mawon"
+        ],
+        "answer": 1,
+        "explanation": "\"Matur nuwun\" tegese terima kasih."
+      }
+    ]
+  },
+  {
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #2)",
+    "generatedAt": "2026-09-02T06:17:35.150Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+        "options": [
+          "Waktu (Kapan)",
+          "Jumlah / Harga (Berapa)",
+          "Tempat (Di mana)",
+          "Nama orang (Siapa)"
+        ],
+        "answer": 1,
+        "explanation": "\"Pinten\" artine berapa (nuntun rega utawa cacah)."
+      },
+      {
+        "id": 2,
+        "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+        "options": [
+          "Sugeng enjing",
+          "Matur nuwun",
+          "Pripun kabare",
+          "Sae-sae mawon"
+        ],
+        "answer": 1,
+        "explanation": "\"Matur nuwun\" tegese terima kasih."
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+        "options": [
+          "Membeli / Beli",
+          "Menjual",
+          "Melihat",
+          "Membuang"
+        ],
+        "answer": 0,
+        "explanation": "\"Mundhut\" tegese tuku utawa membeli."
+      }
+    ]
+  },
+  {
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #3)",
+    "generatedAt": "2026-09-02T06:18:13.330Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+        "options": [
+          "Sugeng enjing",
+          "Matur nuwun",
+          "Pripun kabare",
+          "Sae-sae mawon"
+        ],
+        "answer": 1,
+        "explanation": "\"Matur nuwun\" tegese terima kasih."
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+        "options": [
+          "Membeli / Beli",
+          "Menjual",
+          "Melihat",
+          "Membuang"
+        ],
+        "answer": 0,
+        "explanation": "\"Mundhut\" tegese tuku utawa membeli."
+      },
+      {
+        "id": 3,
+        "question": "Yen sampeyan takon \"Regine pinten?\", apa tegese ukara iku?",
+        "options": [
+          "Harganya berapa?",
+          "Siapa namamu?",
+          "Di mana pasarnya?",
+          "Kapan bukanya?"
+        ],
+        "answer": 0,
+        "explanation": "\"Regine pinten\" tegese harganya berapa."
+      }
+    ]
+  },
+  {
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #4)",
+    "generatedAt": "2026-09-02T06:21:05.119Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+        "options": [
+          "Membeli / Beli",
+          "Menjual",
+          "Melihat",
+          "Membuang"
+        ],
+        "answer": 0,
+        "explanation": "\"Mundhut\" tegese tuku utawa membeli."
+      },
+      {
+        "id": 2,
+        "question": "Yen sampeyan takon \"Regine pinten?\", apa tegese ukara iku?",
+        "options": [
+          "Harganya berapa?",
+          "Siapa namamu?",
+          "Di mana pasarnya?",
+          "Kapan bukanya?"
+        ],
+        "answer": 0,
+        "explanation": "\"Regine pinten\" tegese harganya berapa."
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+        "options": [
+          "Sepuluh (10)",
+          "Lima (5)",
+          "Satu (1)",
+          "Dua puluh (20)"
+        ],
+        "answer": 0,
+        "explanation": "\"Sedasa\" tegese sepuluh (10)."
+      }
+    ]
+  },
+  {
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #5)",
+    "generatedAt": "2026-09-02T06:22:56.847Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen sampeyan takon \"Regine pinten?\", apa tegese ukara iku?",
+        "options": [
+          "Harganya berapa?",
+          "Siapa namamu?",
+          "Di mana pasarnya?",
+          "Kapan bukanya?"
+        ],
+        "answer": 0,
+        "explanation": "\"Regine pinten\" tegese harganya berapa."
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+        "options": [
+          "Sepuluh (10)",
+          "Lima (5)",
+          "Satu (1)",
+          "Dua puluh (20)"
+        ],
+        "answer": 0,
+        "explanation": "\"Sedasa\" tegese sepuluh (10)."
+      },
+      {
+        "id": 3,
+        "question": "Tembung \"pinten\" digunakake kanggo takon babagan apa?",
+        "options": [
+          "Waktu (Kapan)",
+          "Jumlah / Harga (Berapa)",
+          "Tempat (Di mana)",
+          "Nama orang (Siapa)"
+        ],
+        "answer": 1,
+        "explanation": "\"Pinten\" artine berapa (nuntun rega utawa cacah)."
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788829485219",
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung Mbok Sari",
+    "generatedAt": "2026-09-08T01:04:45.219Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen sampeyan arep tuku tomat, tembung endi sing bener digunakake kanggo ngucapake yèn sampeyan wis mbayar utawa mbales matur nuwun?",
+        "options": [
+          "Matur nuwun",
+          "Pinten",
+          "Sedasa",
+          "Regine"
+        ],
+        "answer": 0,
+        "explanation": "Setelah membeli atau bertransaksi, penjual dan pembeli biasanya saling mengucapkan 'matur nuwun' yang artinya terima kasih.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Ukara 'Pinten sedasa?' ing pasar biasane digunakake kanggo nglakoni apa?",
+        "options": [
+          "Nanya jeneng pedagang",
+          "Nanya jumlah utawa harga",
+          "Nanya wektu pasar tutup",
+          "Nanya asal barang"
+        ],
+        "answer": 1,
+        "explanation": "'Pinten' tegese berapa, lan 'sedasa' tegese sepuluh. Ukara iki biasane digunakake kanggo nanya jumlah utawa harga barang (contone: Berapa sepuluh? Atau Berapa harganya?).",
+        "teaches": {
+          "word": "pinten",
+          "meaning": "berapa"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen Mbok Sari ngandika 'Regine sedasa', tegese regane barang kasebut ana ing sangisore utawa ana ing ndhuwur nomer pira?",
+        "options": [
+          "Lima (5)",
+          "Sepuluh (10)",
+          "Rangkep (1)",
+          "Rangkep (100)"
+        ],
+        "answer": 1,
+        "explanation": "'Regine' tegese harga, lan 'sedasa' tegese sepuluh. Dadi, 'Regine sedasa' tegese harganya sepuluh.",
+        "teaches": {
+          "word": "sedasa",
+          "meaning": "sepuluh (10)"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #7)",
+    "generatedAt": "2026-09-08T01:43:35.550Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Kepriye ngandhakake \"Terima kasih\" ing basa Jawa ngoko/krama?",
+        "options": [
+          "Sugeng enjing",
+          "Matur nuwun",
+          "Pripun kabare",
+          "Sae-sae mawon"
+        ],
+        "answer": 1,
+        "explanation": "\"Matur nuwun\" tegese terima kasih.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung \"mundhut\" ing pasar?",
+        "options": [
+          "Membeli / Beli",
+          "Menjual",
+          "Melihat",
+          "Membuang"
+        ],
+        "answer": 0,
+        "explanation": "\"Mundhut\" tegese tuku utawa membeli.",
+        "teaches": {
+          "word": "mundhut",
+          "meaning": "membeli"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"sedasa\" ing basa Indonesia?",
+        "options": [
+          "Sepuluh (10)",
+          "Lima (5)",
+          "Satu (1)",
+          "Dua puluh (20)"
+        ],
+        "answer": 0,
+        "explanation": "\"Sedasa\" tegese sepuluh (10).",
+        "teaches": {
+          "word": "sedasa",
+          "meaning": "sepuluh (10)"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_custom_1788832381445",
+    "npcId": "mbok_sari",
+    "title": "Kuis Edit Custom Mbok Sari",
+    "generatedAt": "2026-09-08T01:53:01.445Z",
+    "isCustom": true,
+    "questions": [
+      {
+        "id": 1,
+        "question": "Berapa harga 10 sayur bayam?",
+        "options": [
+          "Rp 10.000",
+          "Rp 5.000",
+          "Rp 2.000",
+          "Gratis"
+        ],
+        "answer": 0,
+        "explanation": "Reginipun sedasa ewu.",
+        "teaches": {
+          "word": "sedasa ewu",
+          "meaning": "sepuluh ribu"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung mundhut?",
+        "options": [
+          "Membeli",
+          "Menjual",
+          "Memasak",
+          "Mencuci"
+        ],
+        "answer": 0,
+        "explanation": "Mundhut tegese tuku/membeli.",
+        "teaches": {
+          "word": "mundhut",
+          "meaning": "membeli"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_fallback_1789092697503",
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung — Mbok Sari (Kuis #9)",
+    "generatedAt": "2026-09-11T02:11:37.503Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese ukara \"Sugeng enjing, Nak!\" ing basa Indonesia?",
+        "options": [
+          "Selamat pagi, Nak!",
+          "Terima kasih",
+          "Sepuluh (10)",
+          "Air"
+        ],
+        "answer": 0,
+        "explanation": "\"Sugeng enjing, Nak!\" artine \"Selamat pagi, Nak!\".",
+        "teaches": {
+          "word": "Sugeng enjing, Nak!",
+          "meaning": "Selamat pagi, Nak!"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese ukara \"Mundhut sayur mboten?\" ing basa Indonesia?",
+        "options": [
+          "Padi",
+          "Teman",
+          "Mau beli sayur tidak?",
+          "Air"
+        ],
+        "answer": 2,
+        "explanation": "\"Mundhut sayur mboten?\" artine \"Mau beli sayur tidak?\".",
+        "teaches": {
+          "word": "Mundhut sayur mboten?",
+          "meaning": "Mau beli sayur tidak?"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"regine\" ing basa Indonesia?",
+        "options": [
+          "harganya",
+          "Baik / Sehat",
+          "Keluarga",
+          "Teman"
+        ],
+        "answer": 0,
+        "explanation": "\"regine\" tegese harganya.",
+        "teaches": {
+          "word": "regine",
+          "meaning": "harganya"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789227702374",
+    "npcId": "mbok_sari",
+    "title": "Kuis Tembung Mbok Sari",
+    "generatedAt": "2026-09-12T15:41:42.374Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Menurut penjelasan Mbok Sari, apa padanan kata dari 'pinten' dalam bahasa Indonesia?",
+        "options": [
+          "Harga",
+          "Beli",
+          "Berapa",
+          "Sepuluh"
+        ],
+        "answer": 2,
+        "explanation": "Mbok Sari menjelaskan bahwa 'pinten' artinya 'berapa'.",
+        "teaches": {
+          "word": "pinten",
+          "meaning": "berapa"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Jika Mbok Sari berkata 'Reginipun sedasa ewu', berapa jumlah uang yang harus kamu siapkan dalam Rupiah?",
+        "options": [
+          "Rp 5.000",
+          "Rp 10.000",
+          "Rp 15.000",
+          "Rp 100.000"
+        ],
+        "answer": 1,
+        "explanation": "'Sedasa' artinya sepuluh, jadi 'sedasa ewu' adalah sepuluh ribu rupiah (Rp 10.000).",
+        "teaches": {
+          "word": "sedasa ewu",
+          "meaning": "sepuluh ribu (Rp 10.000)"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Ungkapan mana yang tepat digunakan untuk mengucapkan terima kasih setelah berbelanja dari Mbok Sari?",
+        "options": [
+          "Sugeng enjing",
+          "Matur nuwun",
+          "Mundhut sayur",
+          "Regine pinten"
+        ],
+        "answer": 1,
+        "explanation": "'Matur nuwun' adalah ungkapan terima kasih dalam bahasa Jawa.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      }
+    ]
+  }
+]

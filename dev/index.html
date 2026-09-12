@@ -9,6 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/dev/dev.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -33,7 +35,7 @@
           </select>
         </div>
         <span><span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku &nbsp;•&nbsp; <span class="key">Q</span> Misi</span>
-        <button id="questHudBtn" title="Buka Quest Log (Q)" style="padding: 3px 10px; font-size: 11px; background: #78350f; color: #fef08a; border: 1px solid #fbbf24; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 4px;">📜 Misi (Q)</button>
+        <button id="questHudBtn" title="Buka Quest Log (Q)" style="padding: 3px 10px; font-size: 11px; background: #78350f; color: #fef08a; border: 1px solid #fbbf24; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 4px;"><i data-lucide="scroll" style="width: 14px; height: 14px;"></i> Misi (Q)</button>
       </div>
     </header>
 
@@ -43,15 +45,15 @@
       <!-- Mini Quest Tracker Widget (Top Left HUD Overlay) -->
       <div id="questTracker" class="rpg-box mini-tracker">
         <div class="tracker-header">
-          <span class="tracker-icon">📜</span>
-          <span id="questTrackerText" class="tracker-text">📌 Misi: Bicara dengan Mbok Sari di Pasar</span>
+          <span class="tracker-icon"><i data-lucide="compass" style="width: 14px; height: 14px;"></i></span>
+          <span id="questTrackerText" class="tracker-text">Misi: Bicara dengan Mbok Sari di Pasar</span>
         </div>
       </div>
 
       <aside id="vocabNotebook" class="rpg-box">
         <div class="notebook-header">
           <div class="notebook-title">
-            <span class="icon"></span> Buku Tembung
+            <span class="icon"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i></span> Buku Tembung
           </div>
           <div class="notebook-controls">
             <span id="vocabCounter" class="counter">0 kata</span>
@@ -80,7 +82,7 @@
           </div>
         </div>
         <div class="dialogue-footer">
-          <button id="nextBtn" class="rpg-btn">Lanjut <span class="key-badge">E</span> ▶</button>
+          <button id="nextBtn" class="rpg-btn">Lanjut <span class="key-badge">E</span> <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
         </div>
       </div>
 
@@ -88,7 +90,7 @@
         <div class="quiz-box rpg-box">
           <div class="quiz-header">
             <div class="quiz-npc-badge">
-              <span id="quizNpcIcon"></span>
+              <span id="quizNpcIcon"><i data-lucide="help-circle" style="width: 16px; height: 16px;"></i></span>
               <span id="quizTitle">Kuis Tembung NPC</span>
             </div>
             <button id="closeQuizBtn" class="quiz-close-btn">&times;</button>
@@ -102,7 +104,7 @@
           </div>
 
           <div class="quiz-footer">
-            <button id="nextQuizBtn" class="rpg-btn quiz-btn hidden">Lanjut ▶</button>
+            <button id="nextQuizBtn" class="rpg-btn quiz-btn hidden">Lanjut <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
           </div>
         </div>
       </div>
@@ -112,11 +114,11 @@
         <div class="quest-box rpg-box">
           <div class="quest-header">
             <div class="quest-title-area">
-              <span class="quest-icon">📜</span>
+              <span class="quest-icon"><i data-lucide="scroll" style="width: 18px; height: 18px;"></i></span>
               <h2>Skenario Misi Budaya</h2>
             </div>
             <div class="quest-header-stats">
-              <span id="questPlayerXp" class="xp-badge">⭐ 0 XP</span>
+              <span id="questPlayerXp" class="xp-badge"><i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> 0 XP</span>
               <button id="closeQuestBtn" class="quiz-close-btn">&times;</button>
             </div>
           </div>
@@ -126,7 +128,7 @@
               <!-- Rendered dynamically -->
             </div>
             <div class="badge-rewards-section">
-              <h3>🏆 Hadiah & Lencana Budaya</h3>
+              <h3><i data-lucide="trophy" style="width: 16px; height: 16px;"></i> Hadiah & Lencana Budaya</h3>
               <div id="badgeContainer" class="badge-grid">
                 <!-- Rendered dynamically -->
               </div>

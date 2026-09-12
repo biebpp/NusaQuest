@@ -946,6 +946,132 @@
       "col": 15,
       "row": 2,
       "color": "#c66527"
+    },
+    "RBL": {
+      "sheet": "roguelike",
+      "col": 46,
+      "row": 14,
+      "color": "#ab8b4c"
+    },
+    "RBC": {
+      "sheet": "roguelike",
+      "col": 48,
+      "row": 14,
+      "color": "#8b9a68"
+    },
+    "RBR": {
+      "sheet": "roguelike",
+      "col": 49,
+      "row": 14,
+      "color": "#a28155"
+    },
+    "RBRS": {
+      "sheet": "roguelike",
+      "col": 24,
+      "row": 1,
+      "color": "#b5906a"
+    },
+    "RBLS": {
+      "sheet": "roguelike",
+      "col": 23,
+      "row": 1,
+      "color": "#ac8660"
+    },
+    "CLB": {
+      "sheet": "roguelike",
+      "col": 21,
+      "row": 2,
+      "color": "#b47b4d"
+    },
+    "CRB": {
+      "sheet": "roguelike",
+      "col": 22,
+      "row": 2,
+      "color": "#b47b4d"
+    },
+    "BBC": {
+      "sheet": "roguelike",
+      "col": 27,
+      "row": 1,
+      "color": "#b98b5e"
+    },
+    "FW": {
+      "sheet": "roguelike",
+      "col": 31,
+      "row": 9,
+      "color": "#a5a5a5"
+    },
+    "TSC": {
+      "sheet": "roguelike",
+      "col": 18,
+      "row": 6,
+      "color": "#ac8660"
+    },
+    "OBL": {
+      "sheet": "roguelike",
+      "col": 39,
+      "row": 11,
+      "color": "#a68e74"
+    },
+    "OBR": {
+      "sheet": "roguelike",
+      "col": 40,
+      "row": 11,
+      "color": "#a49e91"
+    },
+    "BLC": {
+      "sheet": "roguelike",
+      "col": 17,
+      "row": 0,
+      "color": "#b98b5e"
+    },
+    "BCC": {
+      "sheet": "roguelike",
+      "col": 16,
+      "row": 0,
+      "color": "#b98b5e"
+    },
+    "BRC": {
+      "sheet": "roguelike",
+      "col": 18,
+      "row": 0,
+      "color": "#b98b5e"
+    },
+    "BLL": {
+      "sheet": "roguelike",
+      "col": 26,
+      "row": 4,
+      "color": "#b5906a"
+    },
+    "BCL": {
+      "sheet": "roguelike",
+      "col": 27,
+      "row": 4,
+      "color": "#b5906a"
+    },
+    "BRL": {
+      "sheet": "roguelike",
+      "col": 27,
+      "row": 6,
+      "color": "#b5906a"
+    },
+    "CG": {
+      "sheet": "urban",
+      "col": 25,
+      "row": 0,
+      "color": "#e59b6a"
+    },
+    "CRR": {
+      "sheet": "urban",
+      "col": 26,
+      "row": 3,
+      "color": "#d6a27d"
+    },
+    "CBL": {
+      "sheet": "urban",
+      "col": 23,
+      "row": 15,
+      "color": "#b19376"
     }
   }
 }

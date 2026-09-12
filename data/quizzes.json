@@ -805,6 +805,62 @@
           }
         }
       ]
+    },
+    {
+      "id": "quiz_fallback_1789093475789",
+      "npcId": "dimas",
+      "title": "Kuis Tembung — Dimas (Kuis #16)",
+      "generatedAt": "2026-09-11T02:24:35.789Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese tembung \"pripun kabare\" ing basa Indonesia?",
+          "options": [
+            "Keluarga",
+            "Teman",
+            "apa kabar",
+            "Padi"
+          ],
+          "answer": 2,
+          "explanation": "\"pripun kabare\" tegese apa kabar.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "apa kabar"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Apa tegese tembung \"sae\" ing basa Indonesia?",
+          "options": [
+            "baik / sehat",
+            "Air",
+            "Membeli",
+            "Teman"
+          ],
+          "answer": 0,
+          "explanation": "\"sae\" tegese baik / sehat.",
+          "teaches": {
+            "word": "sae",
+            "meaning": "baik / sehat"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Apa tegese tembung \"bal-balan\" ing basa Indonesia?",
+          "options": [
+            "Sepuluh (10)",
+            "Membeli",
+            "main bola",
+            "Padi"
+          ],
+          "answer": 2,
+          "explanation": "\"bal-balan\" tegese main bola.",
+          "teaches": {
+            "word": "bal-balan",
+            "meaning": "main bola"
+          }
+        }
+      ]
     }
   ],
   "mbok_sari": [
@@ -1171,6 +1227,62 @@
           "teaches": {
             "word": "mundhut",
             "meaning": "membeli"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_fallback_1789092697503",
+      "npcId": "mbok_sari",
+      "title": "Kuis Tembung — Mbok Sari (Kuis #9)",
+      "generatedAt": "2026-09-11T02:11:37.503Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese ukara \"Sugeng enjing, Nak!\" ing basa Indonesia?",
+          "options": [
+            "Selamat pagi, Nak!",
+            "Terima kasih",
+            "Sepuluh (10)",
+            "Air"
+          ],
+          "answer": 0,
+          "explanation": "\"Sugeng enjing, Nak!\" artine \"Selamat pagi, Nak!\".",
+          "teaches": {
+            "word": "Sugeng enjing, Nak!",
+            "meaning": "Selamat pagi, Nak!"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Apa tegese ukara \"Mundhut sayur mboten?\" ing basa Indonesia?",
+          "options": [
+            "Padi",
+            "Teman",
+            "Mau beli sayur tidak?",
+            "Air"
+          ],
+          "answer": 2,
+          "explanation": "\"Mundhut sayur mboten?\" artine \"Mau beli sayur tidak?\".",
+          "teaches": {
+            "word": "Mundhut sayur mboten?",
+            "meaning": "Mau beli sayur tidak?"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Apa tegese tembung \"regine\" ing basa Indonesia?",
+          "options": [
+            "harganya",
+            "Baik / Sehat",
+            "Keluarga",
+            "Teman"
+          ],
+          "answer": 0,
+          "explanation": "\"regine\" tegese harganya.",
+          "teaches": {
+            "word": "regine",
+            "meaning": "harganya"
           }
         }
       ]
@@ -2285,6 +2397,118 @@
           "teaches": {
             "word": "sedasa",
             "meaning": "sepuluh (10)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_1789089611673",
+      "npcId": "warga_baru_7",
+      "title": "Kuis Tembung Warga Baru 7",
+      "generatedAt": "2026-09-11T01:20:11.673Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Yen sampeyan ketemu karo Warga Desa ing esuk, tembung apa sing paling cocok kanggo ngucapake 'selamat'?",
+          "options": [
+            "Matur nuwun",
+            "Sugeng",
+            "Pinten",
+            "Regine"
+          ],
+          "answer": 1,
+          "explanation": "Tembung 'Sugeng' digunakake kanggo ngucapake 'selamat', contone 'Sugeng enjing' (Selamat pagi).",
+          "teaches": {
+            "word": "sugeng",
+            "meaning": "selamat"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Warga Desa ngucapake 'Matur nuwun' sawise nampa bantune. Ing basa Indonesia, tembung kasebut tegese apa?",
+          "options": [
+            "Maaf",
+            "Selamat",
+            "Terima kasih",
+            "Halo"
+          ],
+          "answer": 2,
+          "explanation": "'Matur nuwun' minangka basa Jawa sing sopan lan tegese 'Terima kasih' ing basa Indonesia.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Sampeyan arep pamit. Warga Desa kaget lan takon 'Ora arep tuku apa?'. Yen sampeyan kepengin nyebutake yen sampeyan wis sawise tuku lan ngucapake sopan, kombinasi tembung endi sing bener?",
+          "options": [
+            "Sugeng - Pinten",
+            "Matur nuwun - Sugeng",
+            "Regine - Sedasa",
+            "Mundhut - Nggih"
+          ],
+          "answer": 1,
+          "explanation": "Kombinasi sing bener yaiku 'Matur nuwun' (Terima kasih) lan 'Sugeng' (Selamat, contone Sugeng rawuh/Sugeng ambegan utawa pamit). Opsi liyane ora cocog karo konteks sopan santun pamit.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quiz_fallback_1789092754638",
+      "npcId": "warga_baru_7",
+      "title": "Kuis Tembung — Warga Baru 7 (Kuis #5)",
+      "generatedAt": "2026-09-11T02:12:34.638Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Apa tegese tembung \"sugeng\"?",
+          "options": [
+            "Sepuluh (10)",
+            "selamat",
+            "Sawah / Ladang",
+            "Membeli"
+          ],
+          "answer": 1,
+          "explanation": "\"sugeng\" tegese selamat.",
+          "teaches": {
+            "word": "sugeng",
+            "meaning": "selamat"
+          }
+        },
+        {
+          "id": 2,
+          "question": "Apa tegese tembung \"matur nuwun\"?",
+          "options": [
+            "Keluarga",
+            "Air",
+            "Tenteram",
+            "terima kasih"
+          ],
+          "answer": 3,
+          "explanation": "\"matur nuwun\" tegese terima kasih.",
+          "teaches": {
+            "word": "matur nuwun",
+            "meaning": "terima kasih"
+          }
+        },
+        {
+          "id": 3,
+          "question": "Unen-unen \"pripun kabare\" tegese apa?",
+          "options": [
+            "Air",
+            "Berapa",
+            "Apa kabar",
+            "Main bola"
+          ],
+          "answer": 2,
+          "explanation": "\"Pripun kabare\" artine apa kabar.",
+          "teaches": {
+            "word": "pripun kabare",
+            "meaning": "Apa kabar"
           }
         }
       ]

@@ -1,60 +1,129 @@
 [
   {
     "id": "quest_1",
-    "title": "Misi Belanja ing Pasar Gede",
-    "description": "Bantu Mbok Sari ing pasar lan sinau basa Jawa seputar angka & harga.",
-    "npcId": "mbok_sari",
-    "npcName": "Mbok Sari",
+    "title": "Bab I: Pitepangan ing Tengah Desa",
+    "description": "Miwiti lakumu ing Desa NusaQuest kanthi nyapa Dimas lan nyinaoni unggah-ungguh takon kabar.",
+    "npcId": "dimas",
+    "npcName": "Dimas",
     "reward": {
-      "xp": 100,
-      "badge": "Lencana Pasar Gede",
-      "icon": "🛍️"
+      "xp": 75,
+      "badge": "Lencana Pitepangan",
+      "icon": "compass"
     },
     "steps": [
       {
         "id": "step_1",
-        "description": "Bicara dengan Mbok Sari di pasar.",
+        "description": "Sapa Dimas sing lagi dolanan ing tengah desa.",
+        "type": "TALK_NPC",
+        "targetNpc": "dimas"
+      },
+      {
+        "id": "step_2",
+        "description": "Cathet tembung pitepangan ('pripun kabare' & 'sae') ing buku tembung.",
+        "type": "LEARN_VOCAB",
+        "targetWords": ["pripun kabare", "sae"]
+      },
+      {
+        "id": "step_3",
+        "description": "Bales pitakon Dimas kanthi ngrampungake Kuis Pitepangan.",
+        "type": "PERFECT_QUIZ",
+        "targetNpc": "dimas"
+      }
+    ]
+  },
+  {
+    "id": "quest_2",
+    "title": "Bab II: Blanja ing Pasar Gede",
+    "description": "Mbok Sari ing pasar butuh bantuan kanggo ngitung pesenan sayur lan sinau basa Jawa seputar angka & rega.",
+    "npcId": "mbok_sari",
+    "npcName": "Mbok Sari",
+    "reward": {
+      "xp": 125,
+      "badge": "Lencana Pasar Gede",
+      "icon": "shopping-bag"
+    },
+    "steps": [
+      {
+        "id": "step_1",
+        "description": "Temoni Mbok Sari ing kios pasar sisih wetan.",
         "type": "TALK_NPC",
         "targetNpc": "mbok_sari"
       },
       {
         "id": "step_2",
-        "description": "Pelajari 3 kata seputar angka & harga (sedasa, pinten, regine).",
+        "description": "Kuasai tembung angka lan rega ('sedasa', 'pinten', 'regine').",
         "type": "LEARN_VOCAB",
         "targetWords": ["sedasa", "pinten", "regine"]
       },
       {
         "id": "step_3",
-        "description": "Selesaikan Kuis Pasar dengan skor sempurna.",
+        "description": "Rampungake Kuis Pasar Gede kanthi sampurna.",
         "type": "PERFECT_QUIZ",
         "targetNpc": "mbok_sari"
       }
     ]
   },
   {
-    "id": "quest_2",
-    "title": "Misi Sowan marang Omah Pak RT",
-    "description": "Sowan marang Omah Pak RT / Balai Desa lan sinau basa Krama kanggo bertamu.",
-    "npcId": "mbah_kakung",
-    "npcName": "Pak RT / Mbah Kakung",
+    "id": "quest_3",
+    "title": "Bab III: Subure Sawah Kidul",
+    "description": "Parani Pak Joko ing sawah sisih kidul kanggo nyinaoni kawruh tetanen, toya irigasi, lan wiji pari pinilih.",
+    "npcId": "pak_joko",
+    "npcName": "Pak Joko",
     "reward": {
-      "xp": 150,
-      "badge": "Lencana Tata Krama",
-      "icon": "🏛️"
+      "xp": 175,
+      "badge": "Lencana Tani Makmur",
+      "icon": "sprout"
     },
     "steps": [
       {
         "id": "step_1",
-        "description": "Cari rumah Pak RT di peta.",
+        "description": "Parani Pak Joko sing lagi nggarap sawah ing kidul.",
+        "type": "TALK_NPC",
+        "targetNpc": "pak_joko"
+      },
+      {
+        "id": "step_2",
+        "description": "Sinau istilah tetanen ('sawah', 'pari', 'toya') saka Pak Joko.",
+        "type": "LEARN_VOCAB",
+        "targetWords": ["sawah", "pari", "toya"]
+      },
+      {
+        "id": "step_3",
+        "description": "Buktikake kawruh tetanenmu ing Kuis Pak Joko.",
+        "type": "PERFECT_QUIZ",
+        "targetNpc": "pak_joko"
+      }
+    ]
+  },
+  {
+    "id": "quest_4",
+    "title": "Bab IV: Sowan marang Sesepuh Joglo",
+    "description": "Sawise ngerti kahanan desa, sowan marang Mbah Kakung ing Balai Joglo kanggo nyinaoni tata krama Krama Alus.",
+    "npcId": "mbah_kakung",
+    "npcName": "Mbah Kakung",
+    "reward": {
+      "xp": 225,
+      "badge": "Lencana Tata Krama",
+      "icon": "landmark"
+    },
+    "steps": [
+      {
+        "id": "step_1",
+        "description": "Mlebu menyang njero Balai Desa Joglo.",
         "type": "VISIT_MAP",
         "targetMap": "balai_indoor"
       },
       {
         "id": "step_2",
-        "description": "Lakukan peragaan bertamu menggunakan bahasa Krama (sugeng rawuh, kulawarga).",
-        "type": "TALK_OR_VOCAB",
-        "targetNpc": "mbah_kakung",
-        "targetWords": ["sugeng rawuh", "kulawarga"]
+        "description": "Sowan marang Mbah Kakung lan sinau tembung Krama ('sugeng rawuh', 'kulawarga', 'tentrem').",
+        "type": "LEARN_VOCAB",
+        "targetWords": ["sugeng rawuh", "kulawarga", "tentrem"]
+      },
+      {
+        "id": "step_3",
+        "description": "Rampungake Ujian Basa Krama marang Mbah Kakung kanthi skor sampurna.",
+        "type": "PERFECT_QUIZ",
+        "targetNpc": "mbah_kakung"
       }
     ]
   }

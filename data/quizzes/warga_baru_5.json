@@ -1,0 +1,58 @@
+[
+  {
+    "id": "quiz_1788335409534",
+    "npcId": "warga_baru_5",
+    "title": "Kuis Tembung Mbok Sari",
+    "generatedAt": "2026-09-02T07:50:09.534Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Wong iki arek mundhut tempe saka pasar. Apa tegese tembung 'mundhut' in basa Indonesia?",
+        "options": [
+          "Membeli",
+          "Menjual",
+          "Memasak",
+          "Meminjam"
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'mundhut' tegese membeli. Ing pasar, kita mundhut barang kaya tempe utawa sayur.",
+        "teaches": {
+          "word": "mundhut",
+          "meaning": "membeli"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Nalika wong tuku, dheweke nanya: 'Pinten regine?' Apa tegese tembung 'pinten' in basa Indonesia?",
+        "options": [
+          "Kapan",
+          "Dimana",
+          "Berapa",
+          "Siapa"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'pinten' tegese berapa. Digunakake kanggo nanya cacahan utawa harga.",
+        "teaches": {
+          "word": "pinten",
+          "meaning": "berapa"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Saben wong kudu ngucapake tembung iki yen wis rampung tuku lan arek padomane. Apa tegese tembung 'matur nuwun' in basa Indonesia?",
+        "options": [
+          "Maaf",
+          "Terima kasih",
+          "Selamat pagi",
+          "Sampai jumpa"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'matur nuwun' tegese terima kasih. Iku tembung sopan sing kudu diucapake yen wis nampa pitulungan utawa barang.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      }
+    ]
+  }
+]

@@ -36,7 +36,8 @@ app.get('/dev/:page', (req, res, next) => {
 // Serve main game and static files
 app.use(express.static(__dirname));
 
-const QUIZZES_FILE = path.join(__dirname, 'data', 'quizzes.json');
+const QUIZZES_DIR = path.join(__dirname, 'data', 'quizzes');
+const LEGACY_QUIZZES_FILE = path.join(__dirname, 'data', 'quizzes.json');
 const TILE_MAP_FILE = path.join(__dirname, 'data', 'tile_map.json');
 const TILESHEETS_FILE = path.join(__dirname, 'assets', 'tiles', 'tilesheets.json');
 const DIALOGUES_FILE = path.join(__dirname, 'data', 'dialogues.json');
@@ -51,11 +52,103 @@ function ensureDirForFile(filePath) {
   }
 }
 
+function ensureQuizDir() {
+  if (!fs.existsSync(QUIZZES_DIR)) {
+    fs.mkdirSync(QUIZZES_DIR, { recursive: true });
+  }
+}
+
+function getQuizFilePath(npcId) {
+  const sanitizedId = String(npcId || 'default').replace(/[^a-zA-Z0-9_-]/g, '_');
+  return path.join(QUIZZES_DIR, `${sanitizedId}.json`);
+}
+
+function readNpcQuiz(npcId) {
+  ensureQuizDir();
+  const filePath = getQuizFilePath(npcId);
+  if (!fs.existsSync(filePath)) {
+    return ensureNpcQuizFile(npcId);
+  }
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const parsed = JSON.parse(raw || '[]');
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed && typeof parsed === 'object') {
+      if (Array.isArray(parsed.questions)) return [parsed];
+      return Object.values(parsed).flatMap(val => Array.isArray(val) ? val : (val && val.questions ? [val] : []));
+    }
+    return [];
+  } catch (err) {
+    console.error(`Error reading quiz file for NPC ${npcId}:`, err.message);
+    return [];
+  }
+}
+
+function writeNpcQuiz(npcId, quizHistory) {
+  ensureQuizDir();
+  const filePath = getQuizFilePath(npcId);
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(quizHistory, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.error(`Error writing quiz file for NPC ${npcId}:`, err.message);
+    return false;
+  }
+}
+
+function ensureNpcQuizFile(npcId) {
+  ensureQuizDir();
+  const filePath = getQuizFilePath(npcId);
+  if (fs.existsSync(filePath)) {
+    return readNpcQuiz(npcId);
+  }
+
+  const initialQuiz = generateFallbackQuiz(npcId, 1, []);
+  const quizHistory = [initialQuiz];
+  writeNpcQuiz(npcId, quizHistory);
+  console.log(`[QUIZ FILE] Auto-created individual quiz file: data/quizzes/${npcId}.json`);
+  return quizHistory;
+}
 
 function ensureDataFiles() {
-  ensureDirForFile(QUIZZES_FILE);
-  if (!fs.existsSync(QUIZZES_FILE)) {
-    fs.writeFileSync(QUIZZES_FILE, JSON.stringify({}, null, 2));
+  ensureQuizDir();
+
+  // Migrate legacy monolithic quizzes.json to individual data/quizzes/{npcId}.json files
+  if (fs.existsSync(LEGACY_QUIZZES_FILE)) {
+    try {
+      const raw = fs.readFileSync(LEGACY_QUIZZES_FILE, 'utf8');
+      const legacyDb = JSON.parse(raw || '{}');
+      for (const [npcId, quizData] of Object.entries(legacyDb)) {
+        const filePath = getQuizFilePath(npcId);
+        if (!fs.existsSync(filePath)) {
+          let history = [];
+          if (Array.isArray(quizData)) {
+            history = quizData;
+          } else if (quizData && typeof quizData === 'object' && Array.isArray(quizData.questions)) {
+            history = [quizData];
+          }
+          if (history.length > 0) {
+            writeNpcQuiz(npcId, history);
+            console.log(`[MIGRATION] Migrated quizzes for NPC ${npcId} to data/quizzes/${npcId}.json`);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Error migrating legacy quizzes.json:', err.message);
+    }
+  }
+
+  // Ensure all NPCs defined in dialogues.json have a quiz file created
+  try {
+    if (fs.existsSync(DIALOGUES_FILE)) {
+      const raw = fs.readFileSync(DIALOGUES_FILE, 'utf8');
+      const dialogues = JSON.parse(raw || '{}');
+      for (const npcId of Object.keys(dialogues)) {
+        ensureNpcQuizFile(npcId);
+      }
+    }
+  } catch (err) {
+    console.error('Error auto-creating quiz files for dialogues:', err.message);
   }
 }
 
@@ -81,6 +174,8 @@ function writeDb(filePath, data) {
     return false;
   }
 }
+
+ensureDataFiles();
 
 
 const NPC_INFO = {
@@ -438,22 +533,7 @@ app.get('/api/status', (req, res) => {
 app.post('/api/npc/quiz', async (req, res) => {
   try {
     const { npcId = 'mbok_sari' } = req.body;
-    const db = readDb(QUIZZES_FILE);
-
-    let rawHistory = db[npcId];
-    let previousQuizHistory = [];
-
-    if (Array.isArray(rawHistory)) {
-      previousQuizHistory = rawHistory;
-    } else if (rawHistory && typeof rawHistory === 'object') {
-      if (Array.isArray(rawHistory.questions)) {
-        previousQuizHistory = [rawHistory];
-      } else {
-        previousQuizHistory = Object.values(rawHistory).flatMap(val => 
-          Array.isArray(val) ? val : (val && val.questions ? [val] : [])
-        );
-      }
-    }
+    let previousQuizHistory = readNpcQuiz(npcId);
 
     const previousQuestions = [];
     previousQuizHistory.forEach(qSet => {
@@ -464,7 +544,7 @@ app.post('/api/npc/quiz', async (req, res) => {
       }
     });
 
-    console.log(`[QUIZ REQ] NPC: ${npcId} | Prev Quizzes: ${previousQuizHistory.length} | Prev Questions Count: ${previousQuestions.length}`);
+    console.log(`[QUIZ REQ] NPC: ${npcId} (Loaded data/quizzes/${npcId}.json) | Prev Quizzes: ${previousQuizHistory.length} | Prev Questions Count: ${previousQuestions.length}`);
 
     let generatedQuiz = null;
 
@@ -487,10 +567,10 @@ app.post('/api/npc/quiz', async (req, res) => {
 
         let prevQuizzesText = '(No previous quizzes generated yet.)';
         if (previousQuizHistory.length > 0) {
-          const recentHistory = previousQuizHistory.slice(-5);
+          const recentHistory = previousQuizHistory.slice(-3);
           prevQuizzesText = recentHistory.map((qSet, idx) => {
-            const qList = (qSet.questions || []).map(q => `   - Question: "${q.question}" (Correct Answer: ${q.options ? q.options[q.answer] : ''})`).join('\n');
-            return `Quiz Set #${idx + 1} (${qSet.title || 'Quiz'}):\n${qList}`;
+            const qList = (qSet.questions || []).map(q => `   - Question: "${q.question}"`).join('\n');
+            return `Quiz Set #${idx + 1}:\n${qList}`;
           }).join('\n');
         }
 
@@ -537,6 +617,7 @@ INSTRUCTIONS:
             { role: 'user', content: prompt }
           ],
           response_format: { type: 'json_object' },
+          max_tokens: 600,
           temperature: 0.8
         });
 
@@ -563,9 +644,8 @@ INSTRUCTIONS:
     }
 
     previousQuizHistory.push(generatedQuiz);
-    db[npcId] = previousQuizHistory;
-    writeDb(QUIZZES_FILE, db);
-    console.log(`Saved newly generated quiz to data/quizzes.json (Total quizzes for ${npcId} = ${previousQuizHistory.length})`);
+    writeNpcQuiz(npcId, previousQuizHistory);
+    console.log(`Saved newly generated quiz to data/quizzes/${npcId}.json (Total quizzes for ${npcId} = ${previousQuizHistory.length})`);
 
     return res.json({
       source: groqClient && generatedQuiz && !generatedQuiz.id.startsWith('quiz_fallback_') ? 'groq_ai' : 'fallback_generator',
@@ -581,25 +661,13 @@ INSTRUCTIONS:
 app.get('/api/npc/quiz/get', (req, res) => {
   try {
     const npcId = req.query.npcId || 'mbok_sari';
-    const db = readDb(QUIZZES_FILE);
-    const rawHistory = db[npcId];
-    let quizList = [];
-
-    if (Array.isArray(rawHistory)) {
-      quizList = rawHistory;
-    } else if (rawHistory && typeof rawHistory === 'object') {
-      if (Array.isArray(rawHistory.questions)) {
-        quizList = [rawHistory];
-      } else {
-        quizList = Object.values(rawHistory).flatMap(val => 
-          Array.isArray(val) ? val : (val && val.questions ? [val] : [])
-        );
-      }
-    }
+    let quizList = readNpcQuiz(npcId);
 
     let latestQuiz = quizList.length > 0 ? quizList[quizList.length - 1] : null;
     if (!latestQuiz) {
       latestQuiz = generateFallbackQuiz(npcId, 1, []);
+      quizList = [latestQuiz];
+      writeNpcQuiz(npcId, quizList);
     }
 
     return res.json({
@@ -622,21 +690,7 @@ app.post('/api/npc/quiz/save', (req, res) => {
       return res.status(400).json({ error: 'Invalid quiz payload' });
     }
 
-    const db = readDb(QUIZZES_FILE);
-    let rawHistory = db[npcId];
-    let previousQuizHistory = [];
-
-    if (Array.isArray(rawHistory)) {
-      previousQuizHistory = rawHistory;
-    } else if (rawHistory && typeof rawHistory === 'object') {
-      if (Array.isArray(rawHistory.questions)) {
-        previousQuizHistory = [rawHistory];
-      } else {
-        previousQuizHistory = Object.values(rawHistory).flatMap(val => 
-          Array.isArray(val) ? val : (val && val.questions ? [val] : [])
-        );
-      }
-    }
+    let previousQuizHistory = readNpcQuiz(npcId);
 
     const savedQuiz = {
       id: quiz.id || `quiz_custom_${Date.now()}`,
@@ -648,9 +702,8 @@ app.post('/api/npc/quiz/save', (req, res) => {
     };
 
     previousQuizHistory.push(savedQuiz);
-    db[npcId] = previousQuizHistory;
-    writeDb(QUIZZES_FILE, db);
-    console.log(`Saved custom/edited quiz for NPC ${npcId} to data/quizzes.json!`);
+    writeNpcQuiz(npcId, previousQuizHistory);
+    console.log(`Saved custom/edited quiz for NPC ${npcId} to data/quizzes/${npcId}.json!`);
 
     return res.json({
       status: 'ok',
@@ -667,12 +720,17 @@ app.post('/api/npc/quiz/save', (req, res) => {
 
 
 app.get('/api/database/view', (req, res) => {
-  const quizzes = readDb(QUIZZES_FILE);
+  ensureQuizDir();
+  const quizFiles = fs.readdirSync(QUIZZES_DIR).filter(f => f.endsWith('.json'));
+  const quizzes = {};
+  quizFiles.forEach(file => {
+    const npcId = path.basename(file, '.json');
+    quizzes[npcId] = readNpcQuiz(npcId);
+  });
   res.json({
-    quizzesFile: QUIZZES_FILE,
+    quizzesDir: QUIZZES_DIR,
     npcsCount: Object.keys(quizzes).length,
     quizzes
-
   });
 });
 
@@ -727,7 +785,10 @@ app.post('/api/dialogues', (req, res) => {
   }
   const ok = writeDb(DIALOGUES_FILE, data);
   if (ok) {
-    console.log('Auto-saved data/dialogues.json');
+    for (const npcId of Object.keys(data)) {
+      ensureNpcQuizFile(npcId);
+    }
+    console.log('Auto-saved data/dialogues.json & ensured individual NPC quiz files');
     res.json({ status: 'ok', file: 'data/dialogues.json' });
   } else {
     res.status(500).json({ error: 'Failed to write data/dialogues.json' });
@@ -836,7 +897,10 @@ app.post('/api/npc-config', (req, res) => {
   let ok = true;
   if (dialogues) {
     ok = writeDb(DIALOGUES_FILE, dialogues) && ok;
-    console.log('Auto-saved data/dialogues.json');
+    for (const npcId of Object.keys(dialogues)) {
+      ensureNpcQuizFile(npcId);
+    }
+    console.log('Auto-saved data/dialogues.json & ensured individual NPC quiz files');
   }
   if (npcPlacements) {
     ok = writeDb(NPC_PLACEMENTS_FILE, npcPlacements) && ok;
@@ -844,7 +908,7 @@ app.post('/api/npc-config', (req, res) => {
     console.log('Auto-saved data/npc_placements.json');
   }
   if (ok) {
-    res.json({ status: 'ok', message: 'Saved NPC dialogues and placements to JSON' });
+    res.json({ status: 'ok', message: 'Saved NPC dialogues, quiz files, and placements to JSON' });
   } else {
     res.status(500).json({ error: 'Failed to save NPC configuration' });
   }
@@ -857,4 +921,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { app, getNpcMeta, generateFallbackQuiz };
+module.exports = { app, getNpcMeta, generateFallbackQuiz, readNpcQuiz, writeNpcQuiz, ensureNpcQuizFile };

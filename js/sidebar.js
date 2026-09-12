@@ -15,28 +15,28 @@
             <span class="nq-subtitle">Dev Suite</span>
           </div>
         </div>
-        <button id="nqToggleSidebarBtn" class="nq-toggle-btn" title="Toggle Sidebar">◀</button>
+        <button id="nqToggleSidebarBtn" class="nq-toggle-btn" title="Toggle Sidebar"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
       </div>
 
       <nav class="nq-nav-menu">
         <a href="/dev/" class="nq-nav-item ${isDevHub ? 'active' : ''}">
-          <span class="nq-icon">🎮</span>
+          <span class="nq-icon"><i data-lucide="gamepad-2" style="width: 16px; height: 16px;"></i></span>
           <span class="nq-label">Game Preview</span>
         </a>
         <a href="/dev/map_maker.html" class="nq-nav-item ${isMapMaker ? 'active' : ''}">
-          <span class="nq-icon">🗺️</span>
+          <span class="nq-icon"><i data-lucide="map" style="width: 16px; height: 16px;"></i></span>
           <span class="nq-label">Map Maker</span>
         </a>
         <a href="/dev/tile_viewer.html" class="nq-nav-item ${isTileViewer ? 'active' : ''}">
-          <span class="nq-icon">🎨</span>
+          <span class="nq-icon"><i data-lucide="grid" style="width: 16px; height: 16px;"></i></span>
           <span class="nq-label">Tile Viewer & Tagger</span>
         </a>
         <a href="/dev/npc_config.html" class="nq-nav-item ${isNpcConfig ? 'active' : ''}">
-          <span class="nq-icon">👥</span>
+          <span class="nq-icon"><i data-lucide="users" style="width: 16px; height: 16px;"></i></span>
           <span class="nq-label">NPC Configurator</span>
         </a>
         <a href="/" class="nq-nav-item" style="margin-top: 8px; border-top: 1px solid #1e293b; padding-top: 10px;">
-          <span class="nq-icon">🚀</span>
+          <span class="nq-icon"><i data-lucide="log-out" style="width: 16px; height: 16px;"></i></span>
           <span class="nq-label">Exit Dev Suite</span>
         </a>
       </nav>
@@ -218,16 +218,25 @@
     if (isCollapsed) {
       sidebarEl.classList.add('collapsed');
       const toggleBtn = sidebarEl.querySelector('#nqToggleSidebarBtn');
-      if (toggleBtn) toggleBtn.textContent = '▶';
+      if (toggleBtn) toggleBtn.innerHTML = '<i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>';
     }
     applyLayoutClass(isCollapsed);
+
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    }
 
     sidebarEl.querySelector('#nqToggleSidebarBtn').addEventListener('click', () => {
       sidebarEl.classList.toggle('collapsed');
       const collapsedNow = sidebarEl.classList.contains('collapsed');
-      sidebarEl.querySelector('#nqToggleSidebarBtn').textContent = collapsedNow ? '▶' : '◀';
+      sidebarEl.querySelector('#nqToggleSidebarBtn').innerHTML = collapsedNow
+        ? '<i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>'
+        : '<i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i>';
       localStorage.setItem('NQ_SIDEBAR_COLLAPSED', collapsedNow);
       applyLayoutClass(collapsedNow);
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
     });
   }
 

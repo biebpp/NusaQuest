@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/dev/dev.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
@@ -20,14 +22,14 @@
 
       <div class="header-controls">
         <select id="mapSelect" class="select-input" title="Select Map to Edit"></select>
-        <button id="newMapBtn" class="btn" title="Create New Map">➕ Map Baru</button>
-        <button id="mapSettingsBtn" class="btn" title="Edit Map Dimensions & Metadata">⚙️ Pengaturan Map</button>
+        <button id="newMapBtn" class="btn" title="Create New Map"><i data-lucide="plus" style="width: 14px; height: 14px;"></i> Map Baru</button>
+        <button id="mapSettingsBtn" class="btn" title="Edit Map Dimensions & Metadata"><i data-lucide="settings" style="width: 14px; height: 14px;"></i> Pengaturan Map</button>
 
         <div style="height: 20px; width: 1px; background: var(--border); margin: 0 4px;"></div>
 
-        <button id="saveServerBtn" class="btn btn-primary" title="Save Map & NPC Placements to Server (data/maps.json)">💾 Simpan ke Server</button>
-        <button id="exportJsonBtn" class="btn btn-gold" title="Export Map JSON">📥 Export JSON</button>
-        <button id="importJsonBtn" class="btn" title="Import Map JSON">📤 Import JSON</button>
+        <button id="saveServerBtn" class="btn btn-primary" title="Save Map & NPC Placements to Server (data/maps.json)"><i data-lucide="save" style="width: 14px; height: 14px;"></i> Simpan ke Server</button>
+        <button id="exportJsonBtn" class="btn btn-gold" title="Export Map JSON"><i data-lucide="download" style="width: 14px; height: 14px;"></i> Export JSON</button>
+        <button id="importJsonBtn" class="btn" title="Import Map JSON"><i data-lucide="upload" style="width: 14px; height: 14px;"></i> Import JSON</button>
 
         <div class="sync-status">
           <span class="dot"></span>
@@ -39,12 +41,12 @@
     <div class="workspace">
       <aside class="tools-panel">
         <div class="tool-tabs">
-          <div class="tool-tab active" data-tab="ground">🌱 Ground</div>
-          <div class="tool-tab" data-tab="objects">🏘️ Objects</div>
-          <div class="tool-tab" data-tab="stack">🥞 Z-Stack</div>
-          <div class="tool-tab" data-tab="collision">🧱 Collision</div>
-          <div class="tool-tab" data-tab="npcs">👤 NPCs</div>
-          <div class="tool-tab" data-tab="warps">🌀 Warps</div>
+          <div class="tool-tab active" data-tab="ground"><i data-lucide="mountain" style="width: 14px; height: 14px;"></i> Ground</div>
+          <div class="tool-tab" data-tab="objects"><i data-lucide="box" style="width: 14px; height: 14px;"></i> Objects</div>
+          <div class="tool-tab" data-tab="stack"><i data-lucide="layers" style="width: 14px; height: 14px;"></i> Z-Stack</div>
+          <div class="tool-tab" data-tab="collision"><i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i> Collision</div>
+          <div class="tool-tab" data-tab="npcs"><i data-lucide="users" style="width: 14px; height: 14px;"></i> NPCs</div>
+          <div class="tool-tab" data-tab="warps"><i data-lucide="door-open" style="width: 14px; height: 14px;"></i> Warps</div>
         </div>
 
         <div id="tab-ground" class="tab-content active">
@@ -60,7 +62,7 @@
           <div style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; background: #0b1324; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border);">
             <span style="font-size: 12px; font-weight: bold; color: var(--gold);">Mode Placement:</span>
             <label class="toggle-check" style="font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-              <input type="checkbox" id="chkStackObjects" checked> 📚 Stack / Layer
+              <input type="checkbox" id="chkStackObjects" checked> Stack / Layer
             </label>
           </div>
           <div style="margin-bottom: 10px; background: #0b1324; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;">
@@ -69,10 +71,10 @@
               <span id="objectTransformStatus" style="font-size: 11px; color: #60a5fa; font-weight: bold;">0° | Normal</span>
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button id="btnRotateObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Rotate 90° clockwise (Hotkey: R)">🔄 Rotate (R)</button>
-              <button id="btnFlipXObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Flip horizontally (Hotkey: F)">↔️ Flip X (F)</button>
-              <button id="btnFlipYObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Flip vertically (Hotkey: V)">↕️ Flip Y (V)</button>
-              <button id="btnResetTransformObj" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" title="Reset rotation & flip">🧹 Reset</button>
+              <button id="btnRotateObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Rotate 90° clockwise (Hotkey: R)"><i data-lucide="rotate-cw" style="width: 13px; height: 13px;"></i> Rotate (R)</button>
+              <button id="btnFlipXObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Flip horizontally (Hotkey: F)"><i data-lucide="flip-horizontal" style="width: 13px; height: 13px;"></i> Flip X (F)</button>
+              <button id="btnFlipYObj" class="btn" style="flex: 1; justify-content: center; padding: 4px 6px; font-size: 11px;" title="Flip vertically (Hotkey: V)"><i data-lucide="flip-vertical" style="width: 13px; height: 13px;"></i> Flip Y (V)</button>
+              <button id="btnResetTransformObj" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" title="Reset rotation & flip"><i data-lucide="rotate-ccw" style="width: 13px; height: 13px;"></i> Reset</button>
             </div>
           </div>
           <div id="objectPalette" class="palette-grid"></div>
@@ -84,10 +86,10 @@
             <label>Mode Tabrakan (Solid / Walkable / Overhead)</label>
             <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
               <div style="display: flex; gap: 8px;">
-                <button id="colSolidBtn" class="btn btn-primary" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5;">🧱 Blocked (1)</button>
-                <button id="colWalkBtn" class="btn" style="flex: 1; justify-content: center; background: rgba(34, 197, 94, 0.2); border-color: var(--accent); color: #4ade80;">🚶 Walkable (0)</button>
+                <button id="colSolidBtn" class="btn btn-primary" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5;"><i data-lucide="ban" style="width: 14px; height: 14px;"></i> Blocked (1)</button>
+                <button id="colWalkBtn" class="btn" style="flex: 1; justify-content: center; background: rgba(34, 197, 94, 0.2); border-color: var(--accent); color: #4ade80;"><i data-lucide="footprints" style="width: 14px; height: 14px;"></i> Walkable (0)</button>
               </div>
-              <button id="colCoverBtn" class="btn" style="justify-content: center; background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #c084fc;">🧥 Overhead / Covering (2)</button>
+              <button id="colCoverBtn" class="btn" style="justify-content: center; background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #c084fc;"><i data-lucide="umbrella" style="width: 14px; height: 14px;"></i> Overhead / Covering (2)</button>
             </div>
           </div>
           <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-top: 10px;">
@@ -105,10 +107,10 @@
           <div class="form-group">
             <label>Arah Hadap NPC</label>
             <select id="npcDirSelect" class="select-input">
-              <option value="0">⬇️ Depan / Bawah (0)</option>
-              <option value="1">⬅️ Kiri (1)</option>
-              <option value="2">➡️ Kanan (2)</option>
-              <option value="3">⬆️ Belakang / Atas (3)</option>
+              <option value="0">Depan / Bawah (0)</option>
+              <option value="1">Kiri (1)</option>
+              <option value="2">Kanan (2)</option>
+              <option value="3">Belakang / Atas (3)</option>
             </select>
           </div>
 
@@ -155,13 +157,13 @@
           <div class="form-group">
             <label>Target Arah Hadap</label>
             <select id="warpTargetDirSelect" class="select-input">
-              <option value="0">⬇️ Depan / Bawah (0)</option>
-              <option value="1">⬅️ Kiri (1)</option>
-              <option value="2">➡️ Kanan (2)</option>
-              <option value="3">⬆️ Belakang / Atas (3)</option>
+              <option value="0">Depan / Bawah (0)</option>
+              <option value="1">Kiri (1)</option>
+              <option value="2">Kanan (2)</option>
+              <option value="3">Belakang / Atas (3)</option>
             </select>
           </div>
-          <button id="addOrUpdateWarpBtn" class="btn btn-primary" style="width: 100%; margin-top: 4px;">💾 Save / Apply Warp Point</button>
+          <button id="addOrUpdateWarpBtn" class="btn btn-primary" style="width: 100%; margin-top: 4px;"><i data-lucide="save" class="icon-inline"></i> Save / Apply Warp Point</button>
 
           <div class="panel-section-title" style="margin-top: 20px;">Active Warps in Map</div>
           <div id="activeWarpsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;"></div>
@@ -184,8 +186,8 @@
           <div class="form-group">
             <label>Mode Operasi Z-Stack</label>
             <div style="display: flex; gap: 8px; margin-top: 6px;">
-              <button id="stackModeSetBtn" class="btn btn-primary" style="flex: 1; justify-content: center;">✏️ Set / Replace</button>
-              <button id="stackModeDeleteBtn" class="btn" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5;">🗑️ Hapus Z-Index</button>
+              <button id="stackModeSetBtn" class="btn btn-primary" style="flex: 1; justify-content: center;"><i data-lucide="edit-3" class="icon-inline"></i> Set / Replace</button>
+              <button id="stackModeDeleteBtn" class="btn" style="flex: 1; justify-content: center; background: rgba(239, 68, 68, 0.2); border-color: var(--red); color: #fca5a5;"><i data-lucide="trash-2" class="icon-inline"></i> Hapus Z-Index</button>
             </div>
           </div>
 
@@ -205,7 +207,7 @@
             <div class="inspector-row"><span class="inspector-key">Solid/Blocked:</span><span id="inspectCollision" class="inspector-val">Walkable (0)</span></div>
             <div class="inspector-row"><span class="inspector-key">NPC:</span><span id="inspectNpc" class="inspector-val">-</span></div>
             <div class="inspector-row"><span class="inspector-key">Warp:</span><span id="inspectWarp" class="inspector-val">-</span></div>
-            <button id="openTileEditorBtn" class="btn btn-gold" style="width: 100%; margin-top: 10px; font-size: 11px; justify-content: center;" title="Edit ground, objects, rotation, flip, and collision for this tile">🛠️ Open Tile Property Editor</button>
+            <button id="openTileEditorBtn" class="btn btn-gold" style="width: 100%; margin-top: 10px; font-size: 11px; justify-content: center;" title="Edit ground, objects, rotation, flip, and collision for this tile"><i data-lucide="sliders" class="icon-inline"></i> Open Tile Property Editor</button>
           </div>
         </div>
       </aside>
@@ -332,7 +334,7 @@
         </div>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <button id="deleteMapBtn" class="btn btn-danger" type="button">🗑️ Hapus Map</button>
+        <button id="deleteMapBtn" class="btn btn-danger" type="button"><i data-lucide="trash-2" class="icon-inline"></i> Hapus Map</button>
         <div style="display: flex; gap: 8px;">
           <button class="btn modal-close">Batal</button>
           <button id="confirmSaveSettingsBtn" class="btn btn-primary">Simpan Perubahan</button>
@@ -351,7 +353,7 @@
         <textarea id="jsonArea" style="width: 100%; height: 260px; background: #0b1324; color: #4ade80; border: 1px solid var(--border); font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 10px; border-radius: 6px; resize: vertical;"></textarea>
       </div>
       <div class="modal-footer">
-        <button id="copyJsonBtn" class="btn btn-gold">📋 Copy to Clipboard</button>
+        <button id="copyJsonBtn" class="btn btn-gold"><i data-lucide="copy" class="icon-inline"></i> Copy to Clipboard</button>
         <button id="applyImportJsonBtn" class="btn btn-primary hidden">Import & Apply</button>
         <button class="modal-close btn">Tutup</button>
       </div>
@@ -362,7 +364,7 @@
   <div id="tilePropertyModal" class="modal-overlay">
     <div class="modal-card" style="width: 540px; max-height: 85vh; display: flex; flex-direction: column;">
       <div class="modal-header">
-        <h3 id="tilePropertyModalTitle">🛠️ Tile Property Editor</h3>
+        <h3 id="tilePropertyModalTitle"><i data-lucide="sliders" class="icon-inline"></i> Tile Property Editor</h3>
         <button class="modal-close">&times;</button>
       </div>
       <div id="tilePropertyModalBody" style="overflow-y: auto; flex: 1; padding: 4px 4px 10px 4px; display: flex; flex-direction: column; gap: 14px;">
@@ -739,7 +741,7 @@
 
         const eraseItem = document.createElement('div');
         eraseItem.className = 'palette-item';
-        eraseItem.innerHTML = `<div style="font-size: 24px;">🧽</div><div class="palette-label">Hapus '.'</div>`;
+        eraseItem.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;height:28px;"><i data-lucide="eraser" style="width:22px;height:22px;"></i></div><div class="palette-label">Hapus '.'</div>`;
         eraseItem.addEventListener('click', () => {
           document.querySelectorAll('#objectPalette .palette-item, #stackObjectPalette .palette-item').forEach(el => el.classList.remove('active'));
           eraseItem.classList.add('active');
@@ -854,9 +856,9 @@
                 ctx.strokeRect(c * tileSize + 2, r * tileSize + 2, tileSize - 4, tileSize - 4);
 
                 ctx.fillStyle = '#f3e8ff';
-                ctx.font = '14px sans-serif';
+                ctx.font = 'bold 9px sans-serif';
                 ctx.textAlign = 'center';
-                ctx.fillText('☂️', c * tileSize + tileSize / 2, r * tileSize + tileSize / 2 + 5);
+                ctx.fillText('OVERHEAD', c * tileSize + tileSize / 2, r * tileSize + tileSize / 2 + 3);
               }
             }
           }
@@ -878,9 +880,9 @@
             ctx.strokeRect(px + 3, py + 3, pw - 6, ph - 6);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 14px sans-serif';
+            ctx.font = 'bold 12px sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(`🌀 ${width}x${height}`, px + pw / 2, py + ph / 2 + 5);
+            ctx.fillText(`WARP ${width}x${height}`, px + pw / 2, py + ph / 2 + 4);
           });
         }
 
@@ -985,9 +987,9 @@
           const itemFlipY = typeof item === 'object' ? !!item.flipY : false;
           const objDef = (TILE_MAP.objects && TILE_MAP.objects[code]) || {};
 
-          const badgeRot = itemRot ? `<span style="background: rgba(59, 130, 246, 0.25); border: 1px solid #3b82f6; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #93c5fd;">🔄 ${itemRot}°</span>` : '';
-          const badgeFlipX = itemFlipX ? `<span style="background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #e9d5ff;">↔️ FlipX</span>` : '';
-          const badgeFlipY = itemFlipY ? `<span style="background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #e9d5ff;">↕️ FlipY</span>` : '';
+          const badgeRot = itemRot ? `<span style="background: rgba(59, 130, 246, 0.25); border: 1px solid #3b82f6; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #93c5fd;">${itemRot}°</span>` : '';
+          const badgeFlipX = itemFlipX ? `<span style="background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #e9d5ff;">FlipX</span>` : '';
+          const badgeFlipY = itemFlipY ? `<span style="background: rgba(168, 85, 247, 0.25); border: 1px solid #a855f7; padding: 1px 4px; border-radius: 4px; font-size: 10px; color: #e9d5ff;">FlipY</span>` : '';
 
           const itemEl = document.createElement('div');
           itemEl.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; gap: 6px;';
@@ -999,10 +1001,10 @@
               ${badgeRot} ${badgeFlipX} ${badgeFlipY}
             </div>
             <div style="display: flex; gap: 3px; align-items: center;">
-              <button class="btn btn-rot btn-secondary" style="padding: 2px 5px; font-size: 10px;" title="Rotate +90°">↻</button>
-              <button class="btn btn-flipx btn-secondary" style="padding: 2px 5px; font-size: 10px;" title="Toggle Flip X">↔️</button>
-              <button class="btn btn-flipy btn-secondary" style="padding: 2px 5px; font-size: 10px;" title="Toggle Flip Y">↕️</button>
-              <button class="btn btn-danger" style="padding: 2px 5px; font-size: 10px;" title="Hapus Z-Index ini">🗑️</button>
+              <button class="btn btn-rot btn-secondary" style="padding: 3px 6px; font-size: 10px;" title="Rotate +90°"><i data-lucide="rotate-cw" style="width:12px;height:12px;"></i></button>
+              <button class="btn btn-flipx btn-secondary" style="padding: 3px 6px; font-size: 10px;" title="Toggle Flip X"><i data-lucide="flip-horizontal" style="width:12px;height:12px;"></i></button>
+              <button class="btn btn-flipy btn-secondary" style="padding: 3px 6px; font-size: 10px;" title="Toggle Flip Y"><i data-lucide="flip-vertical" style="width:12px;height:12px;"></i></button>
+              <button class="btn btn-danger" style="padding: 3px 6px; font-size: 10px;" title="Hapus Z-Index ini"><i data-lucide="trash-2" style="width:12px;height:12px;"></i></button>
             </div>
           `;
 
@@ -1047,6 +1049,10 @@
 
           list.appendChild(itemEl);
         });
+
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
+        }
       }
 
       function updateInspector(tx, ty) {
@@ -1097,12 +1103,15 @@
         activeModalTy = ty;
 
         const modalTitle = document.getElementById('tilePropertyModalTitle');
-        if (modalTitle) modalTitle.textContent = `🛠️ Tile Properties at (${tx}, ${ty})`;
+        if (modalTitle) modalTitle.textContent = `Tile Properties at (${tx}, ${ty})`;
 
         renderTilePropertyModal();
 
         const modalEl = document.getElementById('tilePropertyModal');
         if (modalEl) modalEl.classList.add('active');
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
+        }
       }
 
       function renderTilePropertyModal() {
@@ -1122,7 +1131,8 @@
         groundSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px;';
         groundSec.innerHTML = `
           <div style="font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <span>🌱 Ground Tile:</span>
+            <i data-lucide="mountain" style="width: 14px; height: 14px;"></i>
+            <span>Ground Tile:</span>
             <span style="color: var(--text-bright);">${currentGroundId} (${groundDef.desc || groundDef.name || 'Tile'})</span>
           </div>
           <div class="form-group" style="margin-bottom: 0;">
@@ -1163,8 +1173,11 @@
         objSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 10px;';
         objSec.innerHTML = `
           <div style="font-size: 13px; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: space-between;">
-            <span>🏘️ Object Stack (${stack.length} Layer${stack.length === 1 ? '' : 's'})</span>
-            <button id="modalAddObjBtn" class="btn btn-primary" style="padding: 2px 8px; font-size: 11px;">➕ Add Object</button>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <i data-lucide="box" style="width: 14px; height: 14px;"></i>
+              <span>Object Stack (${stack.length} Layer${stack.length === 1 ? '' : 's'})</span>
+            </div>
+            <button id="modalAddObjBtn" class="btn btn-primary" style="padding: 2px 8px; font-size: 11px;"><i data-lucide="plus" style="width: 12px; height: 12px;"></i> Add Object</button>
           </div>
           <div id="modalStackList" style="display: flex; flex-direction: column; gap: 8px;"></div>
         `;
@@ -1190,9 +1203,9 @@
                 <select class="select-input modal-obj-code-select" style="font-size: 11px; padding: 2px 6px; flex: 1;"></select>
               </div>
               <div style="display: flex; gap: 3px; align-items: center;">
-                <button class="btn btn-secondary btn-move-up" style="padding: 2px 5px; font-size: 10px;" ${index === 0 ? 'disabled style="opacity:0.4;cursor:default;"' : ''} title="Move Layer Up">⬆️</button>
-                <button class="btn btn-secondary btn-move-down" style="padding: 2px 5px; font-size: 10px;" ${index === stack.length - 1 ? 'disabled style="opacity:0.4;cursor:default;"' : ''} title="Move Layer Down">⬇️</button>
-                <button class="btn btn-danger btn-remove-layer" style="padding: 2px 5px; font-size: 10px;" title="Remove Layer">🗑️</button>
+                <button class="btn btn-secondary btn-move-up" style="padding: 2px 5px; font-size: 10px;" ${index === 0 ? 'disabled style="opacity:0.4;cursor:default;"' : ''} title="Move Layer Up"><i data-lucide="arrow-up" style="width: 11px; height: 11px;"></i></button>
+                <button class="btn btn-secondary btn-move-down" style="padding: 2px 5px; font-size: 10px;" ${index === stack.length - 1 ? 'disabled style="opacity:0.4;cursor:default;"' : ''} title="Move Layer Down"><i data-lucide="arrow-down" style="width: 11px; height: 11px;"></i></button>
+                <button class="btn btn-danger btn-remove-layer" style="padding: 2px 5px; font-size: 10px;" title="Remove Layer"><i data-lucide="trash-2" style="width: 11px; height: 11px;"></i></button>
               </div>
             `;
 
@@ -1208,115 +1221,116 @@
             }
 
             codeSel.addEventListener('change', (e) => {
-              const newCode = e.target.value;
-              const newItem = (itemRot || itemFlipX || itemFlipY)
-                ? { code: newCode, rot: itemRot, flipX: itemFlipX, flipY: itemFlipY }
-                : newCode;
               pushState();
-              setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
+              if (typeof item === 'object') {
+                item.code = e.target.value;
+              } else {
+                stack[index] = e.target.value;
+              }
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
               renderMap();
               updateInspector(tx, ty);
               triggerAutoSave();
               renderTilePropertyModal();
             });
 
-            if (index > 0) {
-              topRow.querySelector('.btn-move-up').addEventListener('click', () => {
-                pushState();
-                const tmp = stack[index];
-                stack[index] = stack[index - 1];
-                stack[index - 1] = tmp;
-                setTileObjectStack(currentMap.objects, ty, tx, stack);
-                renderMap();
-                updateInspector(tx, ty);
-                triggerAutoSave();
-                renderTilePropertyModal();
-              });
-            }
+            topRow.querySelector('.btn-move-up').addEventListener('click', () => {
+              if (index <= 0) return;
+              pushState();
+              const temp = stack[index - 1];
+              stack[index - 1] = stack[index];
+              stack[index] = temp;
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
 
-            if (index < stack.length - 1) {
-              topRow.querySelector('.btn-move-down').addEventListener('click', () => {
-                pushState();
-                const tmp = stack[index];
-                stack[index] = stack[index + 1];
-                stack[index + 1] = tmp;
-                setTileObjectStack(currentMap.objects, ty, tx, stack);
-                renderMap();
-                updateInspector(tx, ty);
-                triggerAutoSave();
-                renderTilePropertyModal();
-              });
-            }
+            topRow.querySelector('.btn-move-down').addEventListener('click', () => {
+              if (index >= stack.length - 1) return;
+              pushState();
+              const temp = stack[index + 1];
+              stack[index + 1] = stack[index];
+              stack[index] = temp;
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
 
             topRow.querySelector('.btn-remove-layer').addEventListener('click', () => {
               pushState();
-              deleteTileObjectAtZIndex(currentMap.objects, ty, tx, index);
+              stack.splice(index, 1);
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
               renderMap();
               updateInspector(tx, ty);
               triggerAutoSave();
               renderTilePropertyModal();
-            });
-
-            const botRow = document.createElement('div');
-            botRow.style.cssText = 'display: flex; align-items: center; justify-content: space-between; gap: 6px; background: rgba(0,0,0,0.2); padding: 4px 6px; border-radius: 4px;';
-            botRow.innerHTML = `
-              <div style="display: flex; align-items: center; gap: 4px;">
-                <span style="font-size: 10px; color: var(--text-muted);">Rot:</span>
-                <button class="btn btn-rot-val ${itemRot === 0 ? 'btn-primary' : 'btn-secondary'}" data-rot="0" style="padding: 1px 5px; font-size: 10px;">0°</button>
-                <button class="btn btn-rot-val ${itemRot === 90 ? 'btn-primary' : 'btn-secondary'}" data-rot="90" style="padding: 1px 5px; font-size: 10px;">90°</button>
-                <button class="btn btn-rot-val ${itemRot === 180 ? 'btn-primary' : 'btn-secondary'}" data-rot="180" style="padding: 1px 5px; font-size: 10px;">180°</button>
-                <button class="btn btn-rot-val ${itemRot === 270 ? 'btn-primary' : 'btn-secondary'}" data-rot="270" style="padding: 1px 5px; font-size: 10px;">270°</button>
-              </div>
-              <div style="display: flex; align-items: center; gap: 4px;">
-                <button class="btn btn-flip-x ${itemFlipX ? 'btn-gold' : 'btn-secondary'}" style="padding: 1px 5px; font-size: 10px;" title="Toggle Flip Horizontal">↔️ FX</button>
-                <button class="btn btn-flip-y ${itemFlipY ? 'btn-gold' : 'btn-secondary'}" style="padding: 1px 5px; font-size: 10px;" title="Toggle Flip Vertical">↕️ FY</button>
-              </div>
-            `;
-
-            botRow.querySelectorAll('.btn-rot-val').forEach(rBtn => {
-              rBtn.addEventListener('click', () => {
-                const targetRot = parseInt(rBtn.dataset.rot, 10);
-                const newItem = { code, rot: targetRot, flipX: itemFlipX, flipY: itemFlipY };
-                pushState();
-                setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
-                renderMap();
-                updateInspector(tx, ty);
-                triggerAutoSave();
-                renderTilePropertyModal();
-              });
-            });
-
-            botRow.querySelector('.btn-flip-x').addEventListener('click', () => {
-              const newItem = { code, rot: itemRot, flipX: !itemFlipX, flipY: itemFlipY };
-              pushState();
-              setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
-              renderMap();
-              updateInspector(tx, ty);
-              triggerAutoSave();
-              renderTilePropertyModal();
-            });
-
-            botRow.querySelector('.btn-flip-y').addEventListener('click', () => {
-              const newItem = { code, rot: itemRot, flipX: itemFlipX, flipY: !itemFlipY };
-              pushState();
-              setTileObjectAtZIndex(currentMap.objects, ty, tx, index, newItem);
-              renderMap();
-              updateInspector(tx, ty);
-              triggerAutoSave();
-              renderTilePropertyModal();
+              showToast(`Removed object layer at (${tx}, ${ty})`);
             });
 
             card.appendChild(topRow);
-            card.appendChild(botRow);
+
+            // Layer Transform Controls
+            const transformRow = document.createElement('div');
+            transformRow.style.cssText = 'display: flex; gap: 6px; align-items: center; justify-content: space-between; border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 6px;';
+            transformRow.innerHTML = `
+              <span style="font-size: 10px; color: #94a3b8;">Transform: ${itemRot}° ${itemFlipX ? '| FlipX' : ''} ${itemFlipY ? '| FlipY' : ''}</span>
+              <div style="display: flex; gap: 4px;">
+                <button class="btn btn-secondary btn-layer-rot" style="padding: 1px 5px; font-size: 10px;" title="Rotate layer 90°"><i data-lucide="rotate-cw" style="width: 10px; height: 10px;"></i> 90°</button>
+                <button class="btn btn-secondary btn-layer-flipx" style="padding: 1px 5px; font-size: 10px; ${itemFlipX ? 'background: rgba(59,130,246,0.25); border-color: #3b82f6; color: #93c5fd;' : ''}" title="Flip layer horizontally">FlipX</button>
+                <button class="btn btn-secondary btn-layer-flipy" style="padding: 1px 5px; font-size: 10px; ${itemFlipY ? 'background: rgba(59,130,246,0.25); border-color: #3b82f6; color: #93c5fd;' : ''}" title="Flip layer vertically">FlipY</button>
+              </div>
+            `;
+
+            transformRow.querySelector('.btn-layer-rot').addEventListener('click', () => {
+              pushState();
+              let curObj = typeof stack[index] === 'object' ? stack[index] : { code: stack[index] };
+              curObj.rot = ((curObj.rot || 0) + 90) % 360;
+              stack[index] = curObj;
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            transformRow.querySelector('.btn-layer-flipx').addEventListener('click', () => {
+              pushState();
+              let curObj = typeof stack[index] === 'object' ? stack[index] : { code: stack[index] };
+              curObj.flipX = !curObj.flipX;
+              stack[index] = curObj;
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            transformRow.querySelector('.btn-layer-flipy').addEventListener('click', () => {
+              pushState();
+              let curObj = typeof stack[index] === 'object' ? stack[index] : { code: stack[index] };
+              curObj.flipY = !curObj.flipY;
+              stack[index] = curObj;
+              setTileObjectStack(currentMap.objects, ty, tx, stack);
+              renderMap();
+              updateInspector(tx, ty);
+              triggerAutoSave();
+              renderTilePropertyModal();
+            });
+
+            card.appendChild(transformRow);
             stackListEl.appendChild(card);
           });
         }
 
         objSec.querySelector('#modalAddObjBtn').addEventListener('click', () => {
-          const activeItem = getActiveObjItem();
           const currentStack = getObjectStack(currentMap.objects[ty][tx]);
-          currentStack.push(activeItem);
+          const defaultCode = selectedObject || Object.keys(TILE_MAP.objects || {})[0] || 'T';
           pushState();
+          currentStack.push(defaultCode);
           setTileObjectStack(currentMap.objects, ty, tx, currentStack);
           renderMap();
           updateInspector(tx, ty);
@@ -1331,11 +1345,14 @@
         const colSec = document.createElement('div');
         colSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px;';
         colSec.innerHTML = `
-          <div style="font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 8px;">🧱 Collision Mode:</div>
+          <div style="font-size: 13px; font-weight: bold; color: var(--gold); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="shield-alert" style="width: 14px; height: 14px;"></i>
+            <span>Collision Mode:</span>
+          </div>
           <div style="display: flex; gap: 6px;">
-            <button class="btn btn-col-opt ${curCol === 0 ? 'btn-primary' : 'btn-secondary'}" data-col="0" style="flex: 1; justify-content: center; font-size: 11px;">🚶 Walkable (0)</button>
-            <button class="btn btn-col-opt ${curCol === 1 ? 'btn-danger' : 'btn-secondary'}" data-col="1" style="flex: 1; justify-content: center; font-size: 11px;">🧱 Blocked (1)</button>
-            <button class="btn btn-col-opt ${curCol === 2 ? 'btn-gold' : 'btn-secondary'}" data-col="2" style="flex: 1; justify-content: center; font-size: 11px;">☂️ Overhead (2)</button>
+            <button class="btn btn-col-opt ${curCol === 0 ? 'btn-primary' : 'btn-secondary'}" data-col="0" style="flex: 1; justify-content: center; font-size: 11px;"><i data-lucide="footprints" style="width: 13px; height: 13px;"></i> Walkable (0)</button>
+            <button class="btn btn-col-opt ${curCol === 1 ? 'btn-danger' : 'btn-secondary'}" data-col="1" style="flex: 1; justify-content: center; font-size: 11px;"><i data-lucide="ban" style="width: 13px; height: 13px;"></i> Blocked (1)</button>
+            <button class="btn btn-col-opt ${curCol === 2 ? 'btn-gold' : 'btn-secondary'}" data-col="2" style="flex: 1; justify-content: center; font-size: 11px;"><i data-lucide="umbrella" style="width: 13px; height: 13px;"></i> Overhead (2)</button>
           </div>
         `;
 
@@ -1360,16 +1377,19 @@
           npcSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;';
           npcSec.innerHTML = `
             <div style="font-size: 13px; font-weight: bold; color: var(--gold); display: flex; justify-content: space-between; align-items: center;">
-              <span>👤 Placed NPC: ${npcAtTile.id}</span>
-              <button id="modalRemoveNpcBtn" class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;">🗑️ Remove NPC</button>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="users" style="width: 14px; height: 14px;"></i>
+                <span>Placed NPC: ${npcAtTile.id}</span>
+              </div>
+              <button id="modalRemoveNpcBtn" class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;"><i data-lucide="trash-2" style="width: 11px; height: 11px;"></i> Remove NPC</button>
             </div>
             <div class="form-group" style="margin-bottom: 0;">
               <label style="font-size: 11px;">Facing Direction:</label>
               <select id="modalNpcDirSelect" class="select-input" style="font-size: 12px; margin-top: 4px;">
-                <option value="0" ${npcAtTile.dir === 0 ? 'selected' : ''}>⬇️ Down / Front (0)</option>
-                <option value="1" ${npcAtTile.dir === 1 ? 'selected' : ''}>⬅️ Left (1)</option>
-                <option value="2" ${npcAtTile.dir === 2 ? 'selected' : ''}>➡️ Right (2)</option>
-                <option value="3" ${npcAtTile.dir === 3 ? 'selected' : ''}>⬆️ Up / Back (3)</option>
+                <option value="0" ${npcAtTile.dir === 0 ? 'selected' : ''}>Down / Front (0)</option>
+                <option value="1" ${npcAtTile.dir === 1 ? 'selected' : ''}>Left (1)</option>
+                <option value="2" ${npcAtTile.dir === 2 ? 'selected' : ''}>Right (2)</option>
+                <option value="3" ${npcAtTile.dir === 3 ? 'selected' : ''}>Up / Back (3)</option>
               </select>
             </div>
           `;
@@ -1407,8 +1427,11 @@
           warpSec.style.cssText = 'background: #0b1324; border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;';
           warpSec.innerHTML = `
             <div style="font-size: 13px; font-weight: bold; color: var(--gold); display: flex; justify-content: space-between; align-items: center;">
-              <span>🌀 Warp Point: → ${warpAtTile.targetMap} (${warpAtTile.targetX}, ${warpAtTile.targetY})</span>
-              <button id="modalRemoveWarpBtn" class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;">🗑️ Remove Warp</button>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="door-open" style="width: 14px; height: 14px;"></i>
+                <span>Warp Point: → ${warpAtTile.targetMap} (${warpAtTile.targetX}, ${warpAtTile.targetY})</span>
+              </div>
+              <button id="modalRemoveWarpBtn" class="btn btn-danger" style="padding: 2px 6px; font-size: 10px;"><i data-lucide="trash-2" style="width: 11px; height: 11px;"></i> Remove Warp</button>
             </div>
           `;
 
@@ -1423,6 +1446,10 @@
           });
 
           bodyEl.appendChild(warpSec);
+        }
+
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
         }
       }
 
@@ -1594,10 +1621,10 @@
             </div>
             <div style="display: flex; align-items: center; gap: 4px;">
               <select class="npc-dir-select select-input" style="padding: 2px 4px; font-size: 11px;">
-                <option value="0" ${dir0}>⬇️ Down</option>
-                <option value="1" ${dir1}>⬅️ Left</option>
-                <option value="2" ${dir2}>➡️ Right</option>
-                <option value="3" ${dir3}>⬆️ Up</option>
+                <option value="0" ${dir0}>Down (0)</option>
+                <option value="1" ${dir1}>Left (1)</option>
+                <option value="2" ${dir2}>Right (2)</option>
+                <option value="3" ${dir3}>Up (3)</option>
               </select>
               <button class="btn btn-danger remove-npc-btn" style="padding: 2px 6px; font-size: 10px;">Remove</button>
             </div>
@@ -1654,7 +1681,7 @@
 
           item.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: space-between;">
-              <span style="color: #60a5fa; font-weight: bold;">🌀 Warp #${index + 1}</span>
+              <span style="color: #60a5fa; font-weight: bold;">Warp #${index + 1}</span>
               <div style="display: flex; gap: 4px;">
                 <button class="btn btn-secondary load-warp-btn" style="padding: 2px 6px; font-size: 10px;" title="Load into Editor Form">Load Form</button>
                 <button class="btn btn-danger remove-warp-btn" style="padding: 2px 6px; font-size: 10px;">Remove</button>
@@ -1691,10 +1718,10 @@
                 <div style="display: flex; align-items: center; gap: 3px;">
                   <span>Dir:</span>
                   <select class="warp-dir-select select-input" style="padding: 2px 4px; font-size: 11px;">
-                    <option value="0" ${dir0}>⬇️ 0</option>
-                    <option value="1" ${dir1}>⬅️ 1</option>
-                    <option value="2" ${dir2}>➡️ 2</option>
-                    <option value="3" ${dir3}>⬆️ 3</option>
+                    <option value="0" ${dir0}>Down (0)</option>
+                    <option value="1" ${dir1}>Left (1)</option>
+                    <option value="2" ${dir2}>Right (2)</option>
+                    <option value="3" ${dir3}>Up (3)</option>
                   </select>
                 </div>
               </div>
@@ -1774,11 +1801,11 @@
         Promise.all([p1, p2])
           .then(() => {
             if (syncText) syncText.textContent = 'Auto-Sync Active';
-            if (!isAuto) showToast('✅ Saved maps & NPC placements to data/maps.json!');
+            if (!isAuto) showToast('Saved maps & NPC placements to data/maps.json!');
           })
           .catch(err => {
             if (syncText) syncText.textContent = 'Offline';
-            if (!isAuto) showToast('⚠️ Could not save map. Is node server.js running?', true);
+            if (!isAuto) showToast('Could not save map. Is node server.js running?', true);
           });
       }
 
@@ -2038,7 +2065,7 @@
           }
 
           if (MAPS[id]) {
-            const confirmOverride = confirm(`⚠️ Map dengan ID '${id}' sudah ada!\nMembuat map baru ini akan menimpa seluruh data map '${MAPS[id].name || id}'. Lanjutkan?`);
+            const confirmOverride = confirm(`Map dengan ID '${id}' sudah ada!\nMembuat map baru ini akan menimpa seluruh data map '${MAPS[id].name || id}'. Lanjutkan?`);
             if (!confirmOverride) return;
           }
 
@@ -2101,7 +2128,7 @@
           const oldId = currentMapId;
 
           if (newId !== oldId) {
-            const confirmChange = confirm(`⚠️ Mengubah ID Map dari '${oldId}' ke '${newId}' akan mengupdate referensi warp pada seluruh map. Lanjutkan?`);
+            const confirmChange = confirm(`Mengubah ID Map dari '${oldId}' ke '${newId}' akan mengupdate referensi warp pada seluruh map. Lanjutkan?`);
             if (!confirmChange) return;
           }
 
@@ -2188,7 +2215,7 @@
           const area = document.getElementById('jsonArea');
           area.select();
           document.execCommand('copy');
-          showToast('📋 Copied JSON to clipboard!');
+          showToast('Copied JSON to clipboard!');
         });
 
         document.getElementById('applyImportJsonBtn').addEventListener('click', () => {
@@ -2196,7 +2223,7 @@
             const parsed = JSON.parse(document.getElementById('jsonArea').value);
             if (parsed && parsed.id && parsed.ground && parsed.objects && parsed.collision) {
               if (MAPS[parsed.id]) {
-                const confirmOverride = confirm(`⚠️ Map dengan ID '${parsed.id}' sudah ada!\nImport JSON ini akan menimpa data map '${MAPS[parsed.id].name || parsed.id}'. Lanjutkan?`);
+                const confirmOverride = confirm(`Map dengan ID '${parsed.id}' sudah ada!\nImport JSON ini akan menimpa data map '${MAPS[parsed.id].name || parsed.id}'. Lanjutkan?`);
                 if (!confirmOverride) return;
               }
               MAPS[parsed.id] = parsed;
@@ -2223,6 +2250,9 @@
             initPalettes();
             bindEvents();
             loadMap('village');
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+              lucide.createIcons();
+            }
           });
         });
       }

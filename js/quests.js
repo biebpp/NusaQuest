@@ -1,3 +1,157 @@
+/**
+ * NusaQuest — Quest Engine
+ * Handles RPG storyline chapters, step tracking, rewards, and state persistence.
+ */
+
+const QUEST_STATE_VERSION = 3;
+
+const DEFAULT_QUESTS = [
+  {
+    id: "quest_1",
+    title: "Bab I: Pitepangan ing Tengah Desa",
+    description: "Miwiti lakumu ing Desa NusaQuest kanthi nyapa Dimas lan nyinaoni unggah-ungguh takon kabar.",
+    npcId: "dimas",
+    npcName: "Dimas",
+    status: "IN_PROGRESS",
+    reward: {
+      xp: 75,
+      badge: "Lencana Pitepangan",
+      icon: "compass"
+    },
+    steps: [
+      {
+        id: "step_1",
+        description: "Sapa Dimas sing lagi dolanan ing tengah desa.",
+        type: "TALK_NPC",
+        targetNpc: "dimas",
+        completed: false
+      },
+      {
+        id: "step_2",
+        description: "Cathet tembung pitepangan ('pripun kabare' & 'sae') ing buku tembung.",
+        type: "LEARN_VOCAB",
+        targetWords: ["pripun kabare", "sae"],
+        completed: false
+      },
+      {
+        id: "step_3",
+        description: "Bales pitakon Dimas kanthi ngrampungake Kuis Pitepangan.",
+        type: "PERFECT_QUIZ",
+        targetNpc: "dimas",
+        completed: false
+      }
+    ]
+  },
+  {
+    id: "quest_2",
+    title: "Bab II: Blanja ing Pasar Gede",
+    description: "Mbok Sari ing pasar butuh bantuan kanggo ngitung pesenan sayur lan sinau basa Jawa seputar angka & rega.",
+    npcId: "mbok_sari",
+    npcName: "Mbok Sari",
+    status: "UNSTARTED",
+    reward: {
+      xp: 125,
+      badge: "Lencana Pasar Gede",
+      icon: "shopping-bag"
+    },
+    steps: [
+      {
+        id: "step_1",
+        description: "Temoni Mbok Sari ing kios pasar sisih wetan.",
+        type: "TALK_NPC",
+        targetNpc: "mbok_sari",
+        completed: false
+      },
+      {
+        id: "step_2",
+        description: "Kuasai tembung angka lan rega ('sedasa', 'pinten', 'regine').",
+        type: "LEARN_VOCAB",
+        targetWords: ["sedasa", "pinten", "regine"],
+        completed: false
+      },
+      {
+        id: "step_3",
+        description: "Rampungake Kuis Pasar Gede kanthi sampurna.",
+        type: "PERFECT_QUIZ",
+        targetNpc: "mbok_sari",
+        completed: false
+      }
+    ]
+  },
+  {
+    id: "quest_3",
+    title: "Bab III: Subure Sawah Kidul",
+    description: "Parani Pak Joko ing sawah sisih kidul kanggo nyinaoni kawruh tetanen, toya irigasi, lan wiji pari pinilih.",
+    npcId: "pak_joko",
+    npcName: "Pak Joko",
+    status: "UNSTARTED",
+    reward: {
+      xp: 175,
+      badge: "Lencana Tani Makmur",
+      icon: "sprout"
+    },
+    steps: [
+      {
+        id: "step_1",
+        description: "Parani Pak Joko sing lagi nggarap sawah ing kidul.",
+        type: "TALK_NPC",
+        targetNpc: "pak_joko",
+        completed: false
+      },
+      {
+        id: "step_2",
+        description: "Sinau istilah tetanen ('sawah', 'pari', 'toya') saka Pak Joko.",
+        type: "LEARN_VOCAB",
+        targetWords: ["sawah", "pari", "toya"],
+        completed: false
+      },
+      {
+        id: "step_3",
+        description: "Buktikake kawruh tetanenmu ing Kuis Pak Joko.",
+        type: "PERFECT_QUIZ",
+        targetNpc: "pak_joko",
+        completed: false
+      }
+    ]
+  },
+  {
+    id: "quest_4",
+    title: "Bab IV: Sowan marang Sesepuh Joglo",
+    description: "Sawise ngerti kahanan desa, sowan marang Mbah Kakung ing Balai Joglo kanggo nyinaoni tata krama Krama Alus.",
+    npcId: "mbah_kakung",
+    npcName: "Mbah Kakung",
+    status: "UNSTARTED",
+    reward: {
+      xp: 225,
+      badge: "Lencana Tata Krama",
+      icon: "landmark"
+    },
+    steps: [
+      {
+        id: "step_1",
+        description: "Mlebu menyang njero Balai Desa Joglo.",
+        type: "VISIT_MAP",
+        targetMap: "balai_indoor",
+        completed: false
+      },
+      {
+        id: "step_2",
+        description: "Sowan marang Mbah Kakung lan sinau tembung Krama ('sugeng rawuh', 'kulawarga', 'tentrem').",
+        type: "LEARN_VOCAB",
+        targetWords: ["sugeng rawuh", "kulawarga", "tentrem"],
+        completed: false
+      },
+      {
+        id: "step_3",
+        description: "Rampungake Ujian Basa Krama marang Mbah Kakung kanthi skor sampurna.",
+        type: "PERFECT_QUIZ",
+        targetNpc: "mbah_kakung",
+        completed: false
+      }
+    ]
+  }
+];
+
 class QuestEngine {
   constructor(uiManager = null) {
     this.uiManager = uiManager;
@@ -5,75 +159,6 @@ class QuestEngine {
     this.playerXP = 0;
     this.badges = [];
     this.isLoaded = false;
-
-    this.defaultQuests = [
-      {
-        id: "quest_1",
-        title: "Misi Belanja ing Pasar Gede",
-        description: "Bantu Mbok Sari ing pasar lan sinau basa Jawa seputar angka & harga.",
-        npcId: "mbok_sari",
-        npcName: "Mbok Sari",
-        status: "IN_PROGRESS",
-        reward: {
-          xp: 100,
-          badge: "Lencana Pasar Gede",
-          icon: "🛍️"
-        },
-        steps: [
-          {
-            id: "step_1",
-            description: "Bicara dengan Mbok Sari di pasar.",
-            type: "TALK_NPC",
-            targetNpc: "mbok_sari",
-            completed: false
-          },
-          {
-            id: "step_2",
-            description: "Pelajari 3 kata seputar angka & harga (sedasa, pinten, regine).",
-            type: "LEARN_VOCAB",
-            targetWords: ["sedasa", "pinten", "regine"],
-            completed: false
-          },
-          {
-            id: "step_3",
-            description: "Selesaikan Kuis Pasar dengan skor sempurna.",
-            type: "PERFECT_QUIZ",
-            targetNpc: "mbok_sari",
-            completed: false
-          }
-        ]
-      },
-      {
-        id: "quest_2",
-        title: "Misi Sowan marang Omah Pak RT",
-        description: "Sowan marang Omah Pak RT / Balai Desa lan sinau basa Krama kanggo bertamu.",
-        npcId: "mbah_kakung",
-        npcName: "Pak RT / Mbah Kakung",
-        status: "UNSTARTED",
-        reward: {
-          xp: 150,
-          badge: "Lencana Tata Krama",
-          icon: "🏛️"
-        },
-        steps: [
-          {
-            id: "step_1",
-            description: "Cari rumah Pak RT di peta.",
-            type: "VISIT_MAP",
-            targetMap: "balai_indoor",
-            completed: false
-          },
-          {
-            id: "step_2",
-            description: "Lakukan peragaan bertamu menggunakan bahasa Krama (sugeng rawuh, kulawarga).",
-            type: "TALK_OR_VOCAB",
-            targetNpc: "mbah_kakung",
-            targetWords: ["sugeng rawuh", "kulawarga"],
-            completed: false
-          }
-        ]
-      }
-    ];
 
     this.init();
   }
@@ -83,7 +168,7 @@ class QuestEngine {
   }
 
   async init() {
-    this.quests = JSON.parse(JSON.stringify(this.defaultQuests));
+    this.quests = JSON.parse(JSON.stringify(DEFAULT_QUESTS));
 
     try {
       if (typeof fetch !== 'undefined') {
@@ -94,7 +179,7 @@ class QuestEngine {
             this.quests = data.map(q => ({
               ...q,
               status: q.status || 'UNSTARTED',
-              steps: q.steps.map(s => ({ ...s, completed: false }))
+              steps: (q.steps || []).map(s => ({ ...s, completed: false }))
             }));
           }
         }
@@ -116,21 +201,30 @@ class QuestEngine {
       const saved = localStorage.getItem('NUSAQUEST_QUESTS_STATE');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.playerXP !== undefined) this.playerXP = parsed.playerXP;
-        if (Array.isArray(parsed.badges)) this.badges = parsed.badges;
 
-        if (parsed.questsState && typeof parsed.questsState === 'object') {
-          this.quests.forEach(q => {
-            const state = parsed.questsState[q.id];
-            if (state) {
-              q.status = state.status || q.status;
-              if (Array.isArray(state.stepsCompleted)) {
-                q.steps.forEach((step, idx) => {
-                  step.completed = !!state.stepsCompleted[idx];
-                });
+        // Version migration: if save is from older quest structure, start fresh with current quests
+        if (parsed.version === QUEST_STATE_VERSION) {
+          if (typeof parsed.playerXP === 'number') this.playerXP = parsed.playerXP;
+          if (Array.isArray(parsed.badges)) this.badges = parsed.badges;
+
+          if (parsed.questsState && typeof parsed.questsState === 'object') {
+            this.quests.forEach(q => {
+              const state = parsed.questsState[q.id];
+              if (state) {
+                if (state.status) q.status = state.status;
+                if (Array.isArray(state.stepsCompleted)) {
+                  q.steps.forEach((step, idx) => {
+                    if (idx < state.stepsCompleted.length) {
+                      step.completed = !!state.stepsCompleted[idx];
+                    }
+                  });
+                }
               }
-            }
-          });
+            });
+          }
+        } else {
+          console.log('[QuestEngine] Migrating to quest version', QUEST_STATE_VERSION);
+          this.saveState();
         }
       }
     } catch (e) {
@@ -138,6 +232,11 @@ class QuestEngine {
     }
 
     this.ensureActiveQuestExists();
+
+    const activeQuest = this.getActiveQuest();
+    if (activeQuest) {
+      this.checkAutoProgress(activeQuest);
+    }
   }
 
   saveState() {
@@ -151,6 +250,7 @@ class QuestEngine {
       });
 
       const dataToSave = {
+        version: QUEST_STATE_VERSION,
         playerXP: this.playerXP,
         badges: this.badges,
         questsState
@@ -165,9 +265,9 @@ class QuestEngine {
   ensureActiveQuestExists() {
     const hasActive = this.quests.some(q => q.status === 'IN_PROGRESS');
     if (!hasActive) {
-      const firstUncompleted = this.quests.find(q => q.status === 'UNSTARTED');
-      if (firstUncompleted) {
-        firstUncompleted.status = 'IN_PROGRESS';
+      const firstUnstarted = this.quests.find(q => q.status === 'UNSTARTED');
+      if (firstUnstarted) {
+        firstUnstarted.status = 'IN_PROGRESS';
       }
     }
   }
@@ -176,25 +276,21 @@ class QuestEngine {
     return this.quests.find(q => q.status === 'IN_PROGRESS') || null;
   }
 
-  getActiveStep(quest) {
-    if (!quest || quest.status !== 'IN_PROGRESS') return null;
-    return quest.steps.find(s => !s.completed) || null;
+  getActiveStep(quest = null) {
+    const activeQuest = quest || this.getActiveQuest();
+    if (!activeQuest || activeQuest.status !== 'IN_PROGRESS') return null;
+    return activeQuest.steps.find(s => !s.completed) || null;
   }
 
   getActiveStepInstruction() {
     const activeQuest = this.getActiveQuest();
     if (!activeQuest) {
       const allCompleted = this.quests.every(q => q.status === 'COMPLETED');
-      if (allCompleted) return "🎉 Semua Misi Budaya Selesai!";
-      return "Belum ada misi aktif";
+      return allCompleted ? "Sedaya Misi Budaya Sampun Rampung!" : "Durung ana misi aktif";
     }
 
     const activeStep = this.getActiveStep(activeQuest);
-    if (activeStep) {
-      return `📌 Misi: ${activeStep.description}`;
-    }
-
-    return `📌 Misi: ${activeQuest.title}`;
+    return activeStep ? `Misi: ${activeStep.description}` : `Misi: ${activeQuest.title}`;
   }
 
   onTalkNpc(npcId) {
@@ -206,7 +302,7 @@ class QuestEngine {
 
     if (activeStep.type === 'TALK_NPC' && activeStep.targetNpc === npcId) {
       this.completeStep(activeQuest, activeStep);
-    } else if (activeStep.type === 'TALK_OR_VOCAB' && activeStep.targetNpc === npcId) {
+    } else if (activeStep.type === 'LEARN_VOCAB' && (activeQuest.npcId === npcId || activeStep.targetNpc === npcId)) {
       if (this.checkTargetWordsLearned(activeStep.targetWords)) {
         this.completeStep(activeQuest, activeStep);
       }
@@ -220,10 +316,8 @@ class QuestEngine {
     const activeStep = this.getActiveStep(activeQuest);
     if (!activeStep) return;
 
-    if (activeStep.type === 'LEARN_VOCAB' || activeStep.type === 'TALK_OR_VOCAB') {
-      if (this.checkTargetWordsLearned(activeStep.targetWords, learnedWordsMap)) {
-        this.completeStep(activeQuest, activeStep);
-      }
+    if (activeStep.type === 'LEARN_VOCAB' && this.checkTargetWordsLearned(activeStep.targetWords, learnedWordsMap)) {
+      this.completeStep(activeQuest, activeStep);
     }
   }
 
@@ -236,10 +330,11 @@ class QuestEngine {
     }
     if (!learnedMap) return false;
 
-    return targetWords.every(word => {
-      const targetClean = word.trim().toLowerCase();
-      for (const [w] of learnedMap.entries()) {
-        if (w.trim().toLowerCase().includes(targetClean) || targetClean.includes(w.trim().toLowerCase())) {
+    return targetWords.every(target => {
+      const cleanTarget = target.trim().toLowerCase();
+      for (const [word] of learnedMap.entries()) {
+        const cleanWord = word.trim().toLowerCase();
+        if (cleanWord === cleanTarget || cleanWord.includes(cleanTarget) || cleanTarget.includes(cleanWord)) {
           return true;
         }
       }
@@ -254,13 +349,13 @@ class QuestEngine {
     const activeStep = this.getActiveStep(activeQuest);
     if (!activeStep) return;
 
-    if (activeStep.type === 'PERFECT_QUIZ' && activeStep.targetNpc === npcId) {
-      if (score === totalQuestions && totalQuestions > 0) {
+    const isTargetNpc = (activeStep.targetNpc === npcId || activeQuest.npcId === npcId);
+    if (isTargetNpc && (activeStep.type === 'PERFECT_QUIZ' || activeStep.type === 'QUIZ_PASS')) {
+      const passingScore = Math.max(1, Math.floor(totalQuestions * 0.5));
+      if (score >= passingScore || score === totalQuestions) {
         this.completeStep(activeQuest, activeStep);
-      } else {
-        if (this.uiManager) {
-          this.uiManager.showToast(`Kuis butuh skor sempurna (3/3) kanggo nyelesaike langkah misi!`);
-        }
+      } else if (this.uiManager) {
+        this.uiManager.showToast(`Coba maneh kuis kanggo ngrampungake langkah misi! (Skor: ${score}/${totalQuestions})`);
       }
     }
   }
@@ -282,7 +377,7 @@ class QuestEngine {
     step.completed = true;
 
     if (this.uiManager) {
-      this.uiManager.showToast(`✅ Langkah Selesai: ${step.description}`);
+      this.uiManager.showToast(`Langkah Rampung: ${step.description}`);
     }
 
     const allStepsDone = quest.steps.every(s => s.completed);
@@ -290,6 +385,8 @@ class QuestEngine {
       this.completeQuest(quest);
     } else {
       this.saveState();
+      this.checkAutoProgress(quest);
+
       if (this.uiManager) {
         this.uiManager.updateQuestTracker();
         this.uiManager.renderQuestLog();
@@ -297,12 +394,20 @@ class QuestEngine {
     }
   }
 
+  checkAutoProgress(quest) {
+    const nextStep = this.getActiveStep(quest);
+    if (!nextStep) return;
+
+    if (nextStep.type === 'LEARN_VOCAB' && this.checkTargetWordsLearned(nextStep.targetWords)) {
+      this.completeStep(quest, nextStep);
+    }
+  }
+
   completeQuest(quest) {
     quest.status = 'COMPLETED';
 
-    const xpEarned = (quest.reward && quest.reward.xp) ? quest.reward.xp : 100;
-    const badgeEarned = (quest.reward && quest.reward.badge) ? quest.reward.badge : 'Lencana Budaya';
-    const icon = (quest.reward && quest.reward.icon) ? quest.reward.icon : '🏅';
+    const xpEarned = (quest.reward && quest.reward.xp) || 100;
+    const badgeEarned = (quest.reward && quest.reward.badge) || 'Lencana Budaya';
 
     this.playerXP += xpEarned;
     if (!this.badges.includes(badgeEarned)) {
@@ -310,15 +415,15 @@ class QuestEngine {
     }
 
     if (this.uiManager) {
-      this.uiManager.showToast(`🎉 QUEST SELESAI: ${quest.title}!`);
-      this.uiManager.showToast(`🏆 +${xpEarned} XP | Hadiah: ${icon} ${badgeEarned}`);
+      this.uiManager.showToast(`Misi Rampung: ${quest.title}!`);
+      this.uiManager.showToast(`+${xpEarned} XP | Hadiah: ${badgeEarned}`);
     }
 
     const nextQuest = this.quests.find(q => q.status === 'UNSTARTED');
     if (nextQuest) {
       nextQuest.status = 'IN_PROGRESS';
       if (this.uiManager) {
-        this.uiManager.showToast(`📌 Misi Baru Terbuka: ${nextQuest.title}`);
+        this.uiManager.showToast(`Misi Anyar Dibukak: ${nextQuest.title}`);
       }
     }
 
@@ -340,5 +445,34 @@ class QuestEngine {
 
   getPlayerBadges() {
     return this.badges;
+  }
+
+  getAllBadges() {
+    const badges = [];
+    const seen = new Set();
+    this.quests.forEach(q => {
+      if (q.reward && q.reward.badge && !seen.has(q.reward.badge)) {
+        seen.add(q.reward.badge);
+        badges.push({
+          name: q.reward.badge,
+          icon: q.reward.icon || 'award',
+          questId: q.id
+        });
+      }
+    });
+    return badges;
+  }
+
+  resetProgress() {
+    localStorage.removeItem('NUSAQUEST_QUESTS_STATE');
+    this.playerXP = 0;
+    this.badges = [];
+    this.quests = JSON.parse(JSON.stringify(DEFAULT_QUESTS));
+    this.saveState();
+
+    if (this.uiManager) {
+      this.uiManager.updateQuestTracker();
+      this.uiManager.renderQuestLog();
+    }
   }
 }

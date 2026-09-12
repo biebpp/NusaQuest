@@ -1,0 +1,920 @@
+[
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #1)",
+    "generatedAt": "2026-09-02T06:15:07.549Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar."
+      },
+      {
+        "id": 2,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja."
+      },
+      {
+        "id": 3,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola."
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #2)",
+    "generatedAt": "2026-09-02T06:15:37.365Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja."
+      },
+      {
+        "id": 2,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola."
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"kanca\"?",
+        "options": [
+          "Musuh",
+          "Teman / Sahabat",
+          "Guru",
+          "Adik"
+        ],
+        "answer": 1,
+        "explanation": "\"Kanca\" tegese teman."
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788330599517",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-02T06:29:59.517Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen Dimas ngomong 'Aku remen bal-balan', tegese apa?",
+        "options": [
+          "Aku sedih main bola",
+          "Aku suka main bola",
+          "Aku takut main bola",
+          "Aku malas main bola"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'remen' tegese suka, dadi 'Aku remen bal-balan' tegese 'Aku suka main bola'.",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung Javanese apa sing tegese 'teman' utawa 'kawan'?",
+        "options": [
+          "Bal-balan",
+          "Sae",
+          "Kanca",
+          "Pripun"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'kanca' ing basa Javanese tegese teman utawa kawan.",
+        "teaches": {
+          "word": "kanca",
+          "meaning": "teman"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Pilihan jawaban manawa ditakoni 'Pripun kabare?' lan kabare apik?",
+        "options": [
+          "Pripun",
+          "Bal-balan",
+          "Sae",
+          "Remen"
+        ],
+        "answer": 2,
+        "explanation": "Yen ditakoni kabar lan kadhaharane apik, biasane dijawab 'Sae' (baik/sehat).",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788330640946",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-02T06:30:40.946Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Tembung Javanese apa sing tegese 'suka' utawa 'senang'?",
+        "options": [
+          "remen",
+          "kanca",
+          "sae",
+          "pripun"
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'remen' ing basa Javanese tegese suka utawa senang.",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka / senang"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Kanggo ngucapake 'apa kabar' ing basa Javanese krama alus, tembung pundi sing didedonga?",
+        "options": [
+          "Pripun kabare",
+          "Bagaimana kabarmu",
+          "Apa kabar",
+          "Kanca kabare"
+        ],
+        "answer": 0,
+        "explanation": "'Pripun kabare' iku tembung krama alus kanggo nuduhake kepoan babagan kabar utawa kondisi.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Uga 'bal-balan' iku aktivitas olahraga apa ing tembung Indonésia?",
+        "options": [
+          "Main sepak bola",
+          "Main basket",
+          "Main badminton",
+          "Main tenis meja"
+        ],
+        "answer": 0,
+        "explanation": "'Bal-balan' yaiku tembung umum ing Javanese kanggo main sepak bola (soccer).",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main sepak bola"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #5)",
+    "generatedAt": "2026-09-02T06:48:41.323Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #6)",
+    "generatedAt": "2026-09-02T12:16:48.835Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #7)",
+    "generatedAt": "2026-09-02T12:16:52.780Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #8)",
+    "generatedAt": "2026-09-02T12:17:24.110Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #9)",
+    "generatedAt": "2026-09-02T12:18:13.802Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #10)",
+    "generatedAt": "2026-09-02T13:17:30.396Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788436987927",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-03T12:03:07.927Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen Dimas ngomong 'Kancaku rumongso remen bal-balan', sapa sing ditunjukake ing tembung 'kanca'?",
+        "options": [
+          "Guru",
+          "Teman",
+          "Kakak",
+          "Eyang"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'kanca' tegese teman utawa kawan.",
+        "teaches": {
+          "word": "kanca",
+          "meaning": "teman"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Kanggo ngucapake 'aku suka' utawa 'aku senang' ing basa Javanese, tembung pundi sing trep?",
+        "options": [
+          "Sae",
+          "Pripun",
+          "Remen",
+          "Kanca"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'remen' digunakake kanggo ngucapake rasa suka utawa senang.",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen kahananmu ora kepenak utawa kasep, tembung pundi sing paling trep kanggo nggambarake status kasebut?",
+        "options": [
+          "Remen",
+          "Bal-balan",
+          "Kanca",
+          "Sae"
+        ],
+        "answer": 3,
+        "explanation": "Ing konteks kuis iki, 'sae' tegese apik/sehat. Nanging, menawa ditakoni status 'apik', kowe kudu pilih 'sae'. Menawa ditakoni status 'ora apik', ora ana pilihan. Dadi, soal iki mriksa tegese 'sae'. (Koreksi: Soal diuji ulang. Yen kahananmu apik, jawabane 'sae'.)",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #11)",
+    "generatedAt": "2026-09-03T23:54:42.496Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      }
+    ]
+  },
+  {
+    "npcId": "dimas",
+    "title": "Kuis Tembung — Dimas (Kuis #12)",
+    "generatedAt": "2026-09-03T23:55:03.307Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Olahraga apa sing dimaksud \"bal-balan\"?",
+        "options": [
+          "Bulu tangkis",
+          "Sepak bola",
+          "Bola voli",
+          "Renang"
+        ],
+        "answer": 1,
+        "explanation": "\"Bal-balan\" artinya bermain sepak bola.",
+        "teaches": {
+          "word": "bal-balan",
+          "meaning": "main bola"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Unen-unen \"pripun kabare\" tegese apa?",
+        "options": [
+          "Selamat tinggal",
+          "Apa kabar",
+          "Siapa namamu",
+          "Mau ke mana"
+        ],
+        "answer": 1,
+        "explanation": "\"Pripun kabare\" artinya apa kabar.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen ditakoni kabar lan kahananmu sehat, kepriye jawabane?",
+        "options": [
+          "Sae-sae mawon",
+          "Mboten ngertos",
+          "Sampun dhahar",
+          "Matur nuwun"
+        ],
+        "answer": 0,
+        "explanation": "\"Sae-sae mawon\" artine baik-baik saja.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788502045794",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-04T06:07:25.794Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Menapa tegese tembung 'remen' ing tembung Indonésia?",
+        "options": [
+          "Suka",
+          "Benci",
+          "Sedih",
+          "Marah"
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'remen' tegese suka utawa seneng.",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen Dimas ngomong 'Pripun kabare?' marang temenae, apa tegese ing basa Indonésia?",
+        "options": [
+          "Apa kabar?",
+          "Sapa jenengmu?",
+          "Ing ngendi sekolahmu?",
+          "Kepriye kahananmu? (Krama Alus)"
+        ],
+        "answer": 0,
+        "explanation": "'Pripun kabare?' iku tembung krama alus kanggo takon kabar, tegese 'Apa kabar?' utawa 'Bagaimana kabarmu?'.",
+        "teaches": {
+          "word": "pripun kabare",
+          "meaning": "apa kabar"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Tembung Javanese apa sing dianggo kanggo ngucapake jawaban 'baik' utawa 'sehat' nalika ditakoni kabar?",
+        "options": [
+          "Sae",
+          "Jelek",
+          "Wah",
+          "Ora"
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'sae' digunakake kanggo ngungkapkan yen kabare apik, sehat, utawa baiak.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788829431395",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-08T01:03:51.395Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Yen Dimas ngomong 'Aku remen bal-balan', tembung apa sing nuduhake rasa seneng utawa suka?",
+        "options": [
+          "Bal-balan",
+          "Remen",
+          "Kanca",
+          "Sae"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'remen' tegese suka utawa seneng.",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka / senang"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung Javanese pundi kanggo ngucapake 'teman' utawa 'kawan'?",
+        "options": [
+          "Kanca",
+          "Remen",
+          "Pripun",
+          "Sae"
+        ],
+        "answer": 0,
+        "explanation": "'Kanca' tegese teman utawa kawan.",
+        "teaches": {
+          "word": "kanca",
+          "meaning": "teman / kawan"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen kabare apik, tembung apa sing trep kanggo gumantemake 'baik' utawa 'sehat'?",
+        "options": [
+          "Remen",
+          "Kanca",
+          "Sae",
+          "Bal-balan"
+        ],
+        "answer": 2,
+        "explanation": "'Sae' tegese baik utawa sehat.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789227237501",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-12T15:33:57.501Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing dialog Dimas, 'Kula remen dolanan bal-balan ing kene' tegese apa ing basa Indonesia?",
+        "options": [
+          "Saya sedih main bola di sini.",
+          "Saya suka main bola di sini.",
+          "Saya takut main bola di sini.",
+          "Saya lelah main bola di sini."
+        ],
+        "answer": 1,
+        "explanation": "'Remen' tegese suka, lan 'bal-balan' tegese main bola. Dadi ukarane tegese 'Saya suka main bola di sini.'",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Menapa tegese tembung 'sae' ing konteks jawaban kabaran 'sae-sae mawon'?",
+        "options": [
+          "Gatal",
+          "Pahit",
+          "Baik / Sehat",
+          "Jelek"
+        ],
+        "answer": 2,
+        "explanation": "'Sae' tegese baik utawa sehat. 'Sae-sae mawon' dianggo kanggo ngucapake kabar apik.",
+        "teaches": {
+          "word": "sae",
+          "meaning": "baik / sehat"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen kowe wus rampung ngobrol karo Dimas, tembung Javanese pundi kang trep kanggo ngucapake 'Terima kasih'?",
+        "options": [
+          "Matur nuwun",
+          "Matur nuwun wis",
+          "Matur nuwun banget",
+          "Matur nuwun sanget"
+        ],
+        "answer": 0,
+        "explanation": "Tembung baku kanggo 'Terima kasih' ing basa Javanese iku 'Matur nuwun'.",
+        "teaches": {
+          "word": "matur nuwun",
+          "meaning": "terima kasih"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789227658980",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas #4",
+    "generatedAt": "2026-09-12T15:40:58.980Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing ngendi Dimas seneng dolanan bal-balan miturut dialoge?",
+        "options": [
+          "Ing omahé",
+          "Ing kene",
+          "Ing pasar",
+          "Ing sekolah"
+        ],
+        "answer": 1,
+        "explanation": "Dimas ngomong 'Kula remen dolanan bal-balan ing kene', tegese dheweke main bola di tempat ini.",
+        "teaches": {
+          "word": "ing kene",
+          "meaning": "di sini"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Menapa tegese tembung 'dolanan' ing tembung Indonésia?",
+        "options": [
+          "Belajar",
+          "Makan",
+          "Main/Bermain",
+          "Tidur"
+        ],
+        "answer": 2,
+        "explanation": "'Dolanan' tegese main utawa dolanan. Ing dialog Dimas, 'dolanan bal-balan' tegese main bola.",
+        "teaches": {
+          "word": "dolanan",
+          "meaning": "main/bermain"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen kowe takon kabar marang Dimas kanthi krama 'Pripun kabare?', saénaé wae gumantemaké yaiku...?",
+        "options": [
+          "Alon-alon mawon",
+          "Sae-sae mawon",
+          "Dadi-dadi mawon",
+          "Rame-rame mawon"
+        ],
+        "answer": 1,
+        "explanation": "Dimas ngajeni yen sehat, jawabé 'sae-sae mawon' (baik-baik saja).",
+        "teaches": {
+          "word": "sae-sae mawon",
+          "meaning": "baik-baik saja"
+        }
+      }
+    ]
+  }
+]

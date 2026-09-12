@@ -50,6 +50,10 @@ class UIManager {
     this.badgeContainer = document.getElementById('badgeContainer');
 
     this.questEngine = null;
+
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    }
   }
 
   bindEvents() {
@@ -132,6 +136,10 @@ class UIManager {
     this.npcName.innerText = `${npc.name} • ${npc.role}`;
     this.javaneseText.innerText = `"${line.javanese}"`;
     this.indonesianText.innerText = `(${line.indonesian})`;
+
+    if (line.teaches && line.teaches.word) {
+      this.addVocab(line.teaches.word, line.teaches.meaning || line.indonesian || '');
+    }
 
     this.renderPortrait(npc);
   }
@@ -306,9 +314,12 @@ class UIManager {
 
     this.nextQuizBtn.classList.remove('hidden');
     if (this.currentQuestionIdx === this.currentQuiz.questions.length - 1) {
-      this.nextQuizBtn.innerText = 'Selesai';
+      this.nextQuizBtn.innerHTML = 'Selesai <i data-lucide="check" style="width: 14px; height: 14px;"></i>';
     } else {
-      this.nextQuizBtn.innerText = 'Lanjut ▶';
+      this.nextQuizBtn.innerHTML = 'Lanjut <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>';
+    }
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
     }
   }
 
@@ -381,6 +392,9 @@ class UIManager {
     if (this.questEngine) {
       this.questTrackerText.innerText = this.questEngine.getActiveStepInstruction();
     }
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    }
   }
 
   toggleQuestModal() {
@@ -408,6 +422,16 @@ class UIManager {
     return this.questModal && !this.questModal.classList.contains('hidden');
   }
 
+  getLucideIconForBadge(icon) {
+    if (!icon) return 'award';
+    if (icon === '🛍️' || icon === 'shopping-bag') return 'shopping-bag';
+    if (icon === '🏛️' || icon === 'landmark') return 'landmark';
+    if (icon === '🏅' || icon === 'medal') return 'medal';
+    if (icon === '🏆' || icon === 'trophy') return 'trophy';
+    if (icon === 'compass' || icon === 'sprout' || icon === 'sparkles' || icon === 'book-open') return icon;
+    return icon;
+  }
+
   renderQuestLog() {
     if (!this.questEngine || !this.questList) return;
 
@@ -416,30 +440,39 @@ class UIManager {
     const playerBadges = this.questEngine.getPlayerBadges();
 
     if (this.questPlayerXp) {
-      this.questPlayerXp.innerText = `⭐ ${xp} XP`;
+      this.questPlayerXp.innerHTML = `<i data-lucide="sparkles" style="width: 13px; height: 13px;"></i> ${xp} XP`;
     }
 
     this.questList.innerHTML = '';
     quests.forEach(quest => {
       const card = document.createElement('div');
       const statusClass = quest.status.toLowerCase();
-      card.className = `quest-card ${statusClass}`;
+      const statusHyphen = statusClass.replace('_', '-');
+      card.className = `quest-card ${statusClass} ${statusHyphen}`;
 
-      let statusLabel = 'Belum Dimulai';
-      if (quest.status === 'IN_PROGRESS') statusLabel = 'Sedang Berjalan';
-      if (quest.status === 'COMPLETED') statusLabel = 'Selesai';
+      let statusLabel = 'Durung Diwiwiti';
+      if (quest.status === 'IN_PROGRESS') statusLabel = 'Lumaku';
+      if (quest.status === 'COMPLETED') statusLabel = 'Rampung';
 
       const stepsHtml = quest.steps.map((step, idx) => {
         let stepStatusClass = '';
+        let stepIconName = 'circle';
+        let stepIconClass = 'step-icon todo';
+
         if (step.completed) {
           stepStatusClass = 'completed';
+          stepIconName = 'check-circle-2';
+          stepIconClass = 'step-icon done';
         } else if (quest.status === 'IN_PROGRESS' && quest.steps.findIndex(s => !s.completed) === idx) {
           stepStatusClass = 'active';
+          stepIconName = 'arrow-right-circle';
+          stepIconClass = 'step-icon active';
         }
 
-        const icon = step.completed ? '✅' : (stepStatusClass === 'active' ? '👉' : '⚪');
-        return `<li class="quest-step-item ${stepStatusClass}"><span>${icon}</span> ${step.description}</li>`;
+        return `<li class="quest-step-item ${stepStatusClass}"><i data-lucide="${stepIconName}" class="${stepIconClass}"></i> <span>${step.description}</span></li>`;
       }).join('');
+
+      const rewardIcon = this.getLucideIconForBadge(quest.reward ? quest.reward.icon : null);
 
       card.innerHTML = `
         <div class="quest-card-header">
@@ -451,7 +484,7 @@ class UIManager {
           ${stepsHtml}
         </ul>
         <div class="quest-card-reward">
-          🎁 Hadiah: +${quest.reward.xp} XP | ${quest.reward.icon} ${quest.reward.badge}
+          <i data-lucide="gift" style="width: 13px; height: 13px;"></i> Ganjaran: +${quest.reward.xp} XP | <i data-lucide="${rewardIcon}" class="badge-icon"></i> ${quest.reward.badge}
         </div>
       `;
 
@@ -460,18 +493,27 @@ class UIManager {
 
     if (this.badgeContainer) {
       this.badgeContainer.innerHTML = '';
-      const allPossibleBadges = [
-        { name: 'Lencana Pasar Gede', icon: '🛍️' },
-        { name: 'Lencana Tata Krama', icon: '🏛️' }
-      ];
+      const allPossibleBadges = (typeof this.questEngine.getAllBadges === 'function')
+        ? this.questEngine.getAllBadges()
+        : [
+            { name: 'Lencana Pitepangan', icon: 'compass' },
+            { name: 'Lencana Pasar Gede', icon: 'shopping-bag' },
+            { name: 'Lencana Tani Makmur', icon: 'sprout' },
+            { name: 'Lencana Tata Krama', icon: 'landmark' }
+          ];
 
       allPossibleBadges.forEach(b => {
         const isUnlocked = playerBadges.includes(b.name);
         const item = document.createElement('div');
         item.className = `badge-item ${isUnlocked ? 'unlocked' : ''}`;
-        item.innerHTML = `<span>${b.icon}</span> <span>${b.name}</span>`;
+        const iconName = this.getLucideIconForBadge(b.icon);
+        item.innerHTML = `<i data-lucide="${iconName}" class="badge-icon"></i> <span>${b.name}</span>`;
         this.badgeContainer.appendChild(item);
       });
+    }
+
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
     }
   }
 }

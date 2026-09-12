@@ -1,0 +1,321 @@
+[
+  {
+    "npcId": "mbah_kakung",
+    "title": "Kuis Tembung — Mbah Kakung (Kuis #1)",
+    "generatedAt": "2026-09-02T06:48:25.259Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung \"kulawarga\"?",
+        "options": [
+          "Tetangga",
+          "Keluarga",
+          "Masyarakat",
+          "Teman"
+        ],
+        "answer": 1,
+        "explanation": "\"Kulawarga\" tegese keluarga.",
+        "teaches": {
+          "word": "kulawarga",
+          "meaning": "keluarga"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung \"tentrem\" tegese apa?",
+        "options": [
+          "Ramai",
+          "Tenteram / Damai",
+          "Sedih",
+          "Marah"
+        ],
+        "answer": 1,
+        "explanation": "\"Tentrem\" tegese tenteram dan damai.",
+        "teaches": {
+          "word": "tentrem",
+          "meaning": "tenteram"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788335796129",
+    "npcId": "mbah_kakung",
+    "title": "Kuis Tembung Mbah Kakung",
+    "generatedAt": "2026-09-02T07:56:36.129Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Tembung 'mugi-mugi' ing basa Jawa tegese apa?",
+        "options": [
+          "Sudah",
+          "Semoga",
+          "Tentu",
+          "Mungkin"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'mugi-mugi' iku tembung krama alus kanggo ngucapake harapan utawa doa, tegese 'semoga' ing basa Indonesia.",
+        "teaches": {
+          "word": "mugi-mugi",
+          "meaning": "semoga"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Kanggo ngomong 'balai desa' ing basa Jawa krama, tembung iki bisa diucapake apa?",
+        "options": [
+          "Balai désa",
+          "Gedhong désa",
+          "Omah désa",
+          "Luar désa"
+        ],
+        "answer": 1,
+        "explanation": "Ing budaya Jawa, balai desa sering disebat 'gedhong désa' utawa 'gedhong balai' amarga wujud fisik gedhongé kanggo papan kumpul warga.",
+        "teaches": {
+          "word": "balai desa",
+          "meaning": "balai desa (gedhong désa)"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Nalika Mbah Kakung ngucapke 'Semoga kulawarga dadi tentrem', cethakake tegese tembung 'tentrem' ing ukara kasebut!",
+        "options": [
+          "Ramai",
+          "Tenteram / Damai",
+          "Berisik",
+          "Sejuk"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'tentrem' tegese tenteram, damai, utawa tenang. Ukara kasebut minangka doa supasané kulawarga urip kanthi tentrem lan ora ana masalah.",
+        "teaches": {
+          "word": "tentrem",
+          "meaning": "tenteram / damai"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788335799179",
+    "npcId": "mbah_kakung",
+    "title": "Kuis Tembung Mbah Kakung",
+    "generatedAt": "2026-09-02T07:56:39.179Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Menapa tegese tembung 'mugi-mugi' ing basa Indonesia?",
+        "options": [
+          "Sebab",
+          "Semoga",
+          "Sudah",
+          "Besok"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'mugi-mugi' tegese 'semoga', biasane digunakake kanggo ngucapake urip utawa harapan.",
+        "teaches": {
+          "word": "mugi-mugi",
+          "meaning": "semoga"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen ana wong ngucapake 'Gumanteng pisan kulawarga', tegese apa ukara kasebut?",
+        "options": [
+          "Keluarga sedang pergi",
+          "Keluarga sangat ramai",
+          "Keluarga hidup tenteram/damai",
+          "Keluarga baru menikah"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'kulawarga' tegese keluarga, lan 'gumanteng' (padanane tentrem) tegese tenteram/damai. Dadi ukara kasebut tegese keluarga hidup tenteram.",
+        "teaches": {
+          "word": "kulawarga",
+          "meaning": "keluarga"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Ing mana biasane warga desa ngumpulake rapat resmi kanggo nyedhiyakake informasi desa?",
+        "options": [
+          "Ing omah desa",
+          "Ing balai desa",
+          "Ing pasar desa",
+          "Ing kuil desa"
+        ],
+        "answer": 1,
+        "explanation": "Balai desa yaiku papan kanggo ngumpul lan rapat warga desa. Tembung 'balai desa' asring digunakake ing basa Jawa krama utawa ngoko alus.",
+        "teaches": {
+          "word": "balai desa",
+          "meaning": "balai desa"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788335802611",
+    "npcId": "mbah_kakung",
+    "title": "Kuis Tembung Mbah Kakung",
+    "generatedAt": "2026-09-02T07:56:42.611Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing ukara 'Mugi-mugi awake dhewe tansah lestari', tembung 'mugi-mugi' nduweni fungsi apa ing basa Indonesia?",
+        "options": [
+          "Kewajiban (Wajib)",
+          "Harapan (Semoga)",
+          "Pertanyaan (Apakah)",
+          "Perintah (Harap)"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'mugi-mugi' ing basa Jawa krama lemes utawa halus tegese 'semoga' ing basa Indonesia, digunakake kanggo ngucapake harapan.",
+        "teaches": {
+          "word": "mugi-mugi",
+          "meaning": "semoga"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen Mbah Kakung ngandika 'Balai desa kasebut ana punggawahe', tembung 'balai desa' ing ukara kasebut nuduhake papan apa?",
+        "options": [
+          "Sekolah Dasar",
+          "Pusat Kegiatan Warga Desa",
+          "Masjid Desa",
+          "Pasar Desa"
+        ],
+        "answer": 1,
+        "explanation": "Balai desa yaiku papan utawa gedung kanggo kagiyatan resmi warga desa, kayata rapat, administrasi, utawa acara kewanitaan/kepriyayan.",
+        "teaches": {
+          "word": "balai desa",
+          "meaning": "balai desa"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Tembung 'tentrem' ing ukara 'Kulawarga kasebut urip tentrem' tegese paling pas kuwi apa?",
+        "options": [
+          "Makmur lan kayangan",
+          "Damai lan tenteram",
+          "Bersih lan rapi",
+          "Ramai lan riang gembira"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'tentrem' tegese tenteram, damai, utawa tenang tanpa ana gentayangan utawa masalah.",
+        "teaches": {
+          "word": "tentrem",
+          "meaning": "tenteram / damai"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1788508708798",
+    "npcId": "mbah_kakung",
+    "title": "Kuis Tembung Mbah Kakung",
+    "generatedAt": "2026-09-04T07:58:28.798Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung 'tentrem' ing konteks urip kulawarga?",
+        "options": [
+          "Resah lan ora tenteng",
+          "Damai lan tenteram",
+          "Sedhih lan kesedihan",
+          "Mbah lan sesepuh"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'tentrem' tegese tenteram utawa damai, biasane digunakake nyritakake kondisi ketenangan.",
+        "teaches": {
+          "word": "tentrem",
+          "meaning": "tenteram / damai"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen Mbah Kakung ngandika 'Mugi-mugi ana dina iki', apa tegese ukara kasebut ing basa Indonesia?",
+        "options": [
+          "Apakah ada hari ini?",
+          "Semoga ada hari ini",
+          "Sudah ada hari ini",
+          "Tidak ada hari ini"
+        ],
+        "answer": 1,
+        "explanation": "'Mugi-mugi' tegese 'semoga', dadi ukara kasebut tegese 'Semoga ada hari ini'.",
+        "teaches": {
+          "word": "mugi-mugi",
+          "meaning": "semoga"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Ing basa Jawa, tembung kanggo nyebutake 'keluarga' yaiku apa?",
+        "options": [
+          "Warga",
+          "Sasama",
+          "Kulawarga",
+          "Tetangga"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'kulawarga' ing basa Jawa tegese 'keluarga' ing basa Indonesia.",
+        "teaches": {
+          "word": "kulawarga",
+          "meaning": "keluarga"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_fallback_1788830575825",
+    "npcId": "mbah_kakung",
+    "title": "Kuis Tembung — Mbah Kakung (Kuis #6)",
+    "generatedAt": "2026-09-08T01:22:55.825Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Apa tegese tembung \"sugeng rawuh\" ing basa Indonesia?",
+        "options": [
+          "Sawah / Ladang",
+          "selamat datang",
+          "Apa kabar",
+          "Air"
+        ],
+        "answer": 1,
+        "explanation": "\"sugeng rawuh\" tegese selamat datang.",
+        "teaches": {
+          "word": "sugeng rawuh",
+          "meaning": "selamat datang"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung \"kulawarga\" ing basa Indonesia?",
+        "options": [
+          "Membeli",
+          "Main bola",
+          "Sawah / Ladang",
+          "keluarga"
+        ],
+        "answer": 3,
+        "explanation": "\"kulawarga\" tegese keluarga.",
+        "teaches": {
+          "word": "kulawarga",
+          "meaning": "keluarga"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Apa tegese tembung \"tentrem\" ing basa Indonesia?",
+        "options": [
+          "Sawah / Ladang",
+          "Terima kasih",
+          "Sepuluh (10)",
+          "tenteram"
+        ],
+        "answer": 3,
+        "explanation": "\"tentrem\" tegese tenteram.",
+        "teaches": {
+          "word": "tentrem",
+          "meaning": "tenteram"
+        }
+      }
+    ]
+  }
+]
