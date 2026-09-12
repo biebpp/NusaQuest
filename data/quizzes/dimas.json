@@ -916,5 +916,117 @@
         }
       }
     ]
+  },
+  {
+    "id": "quiz_1789229360721",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-12T16:09:20.721Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing dialog Dimas, menapa tegese tembung 'dolanan' ing tembung Indonésia?",
+        "options": [
+          "Mangan",
+          "Nulak",
+          "Main / Bermain",
+          "Tidur"
+        ],
+        "answer": 2,
+        "explanation": "'Dolanan' tegese main utawa dolanan.",
+        "teaches": {
+          "word": "dolanan",
+          "meaning": "main / bermain"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen kowe takon kabar marang Dimas, tembung 'mawon' ing ukara 'sae-sae mawon' duwe tegese apa?",
+        "options": [
+          "Sangat / Amat",
+          "Saja / Sahaja",
+          "Selalu",
+          "Sering"
+        ],
+        "answer": 1,
+        "explanation": "'Mawon' ing konteks iki tegese saja, nuduhake hal sing biasa-biasa wae.",
+        "teaches": {
+          "word": "mawon",
+          "meaning": "saja / sahaja"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Tembung pundi sing digunakake Dimas kanggo nuduhake rasa seneng utawa kesenengan ing ukara 'Kula remen dolanan bal-balan'?",
+        "options": [
+          "Remen",
+          "Bal-balan",
+          "Ing kene",
+          "Kula"
+        ],
+        "answer": 0,
+        "explanation": "'Remen' tegese suka utawa seneng.",
+        "teaches": {
+          "word": "remen",
+          "meaning": "suka"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789229488307",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas",
+    "generatedAt": "2026-09-12T16:11:28.307Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing ukara 'Kula remen dolanan bal-balan ing kene', menapa tegese tembung 'ing kene'?",
+        "options": [
+          "Ing njeruji",
+          "Ing ngono",
+          "Ing ngendi",
+          "Ing pundi"
+        ],
+        "answer": 0,
+        "explanation": "'Ing kene' tegese ing ngendi utawa ing kene samesta, nanging ing konteks iki tegese 'di sini' (basa Indonesia). Pilihan liyane salah: ing njeruji (di rumah), ing ngono (di sana), ing pundi (di mana). *Correction: Let's use clearer Indonesian options to avoid confusion with Javanese dialects.*",
+        "teaches": {
+          "word": "ing kene",
+          "meaning": "di sini"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Yen kowe kagungan kanca, menapa tembung Javanese kang trep kanggo nyebutake 'teman'?",
+        "options": [
+          "Bal-balan",
+          "Remen",
+          "Kanca",
+          "Sae"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'kanca' ing basa Jawa tegese teman utawa sahabat.",
+        "teaches": {
+          "word": "kanca",
+          "meaning": "teman"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Dimas ngucapake 'Matur nuwun wis diajak omong-omong'. Apa tegese 'omong-omong' ing ukara kasebut?",
+        "options": [
+          "Mangan-mangan",
+          "Dolanan-dolanan",
+          "Ngobrol-ngobrol",
+          "Turu-turu"
+        ],
+        "answer": 2,
+        "explanation": "'Omong-omong' tegese ngobrol utawa obrolan. Ukara lengkap tegese 'Terima kasih sudah diajak ngobrol'.",
+        "teaches": {
+          "word": "omong-omong",
+          "meaning": "ngobrol"
+        }
+      }
+    ]
   }
 ]

@@ -10,6 +10,11 @@ class UIManager {
     this.score = 0;
     this.onQuizComplete = null;
 
+    this.dialogueTyping = false;
+    this.typingTimer = null;
+    this.activeDialogueNpc = null;
+    this.activeDialogueLine = null;
+
     this.initElements();
     this.bindEvents();
   }
@@ -48,8 +53,13 @@ class UIManager {
     this.questList = document.getElementById('questList');
     this.questPlayerXp = document.getElementById('questPlayerXp');
     this.badgeContainer = document.getElementById('badgeContainer');
+    this.soundToggleBtn = document.getElementById('soundToggleBtn');
 
     this.questEngine = null;
+
+    if (window.SoundManager) {
+      window.SoundManager.updateMuteUI();
+    }
 
     if (typeof lucide !== 'undefined' && lucide.createIcons) {
       lucide.createIcons();
@@ -92,6 +102,16 @@ class UIManager {
         }
       });
     }
+
+    if (this.soundToggleBtn) {
+      this.soundToggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (window.SoundManager) {
+          window.SoundManager.toggleMute();
+        }
+      });
+    }
   }
 
   showDialogueLoading(npc) {
@@ -123,9 +143,24 @@ class UIManager {
     }
   }
 
+  isDialogueTyping() {
+    return this.dialogueTyping;
+  }
+
+  clearTypingTimer() {
+    if (this.typingTimer) {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = null;
+    }
+  }
+
   showDialogue(npc, lineIndex) {
     const line = npc.dialogue[lineIndex];
     if (!line) return;
+
+    this.clearTypingTimer();
+    this.activeDialogueNpc = npc;
+    this.activeDialogueLine = line;
 
     this.dialogueBox.classList.remove('hidden');
 
@@ -134,17 +169,88 @@ class UIManager {
     if (this.dialogueFooter) this.dialogueFooter.style.display = 'flex';
 
     this.npcName.innerText = `${npc.name} • ${npc.role}`;
-    this.javaneseText.innerText = `"${line.javanese}"`;
-    this.indonesianText.innerText = `(${line.indonesian})`;
+    this.renderPortrait(npc);
+
+    this.startTypewriter(npc, line);
+  }
+
+  startTypewriter(npc, line) {
+    this.clearTypingTimer();
+    this.dialogueTyping = true;
+
+    this.javaneseText.innerText = '"';
+    this.indonesianText.innerText = '';
+    this.indonesianText.style.opacity = '0';
+    this.indonesianText.style.transition = 'opacity 0.25s ease';
+
+    if (window.SoundManager) {
+      window.SoundManager.startDialogueSfx(npc);
+    }
+
+    const javText = line.javanese || '';
+    let charIdx = 0;
+
+    const typeNextChar = () => {
+      if (!this.dialogueTyping) return;
+
+      if (charIdx < javText.length) {
+        charIdx++;
+        this.javaneseText.innerText = `"${javText.substring(0, charIdx)}"`;
+        const char = javText[charIdx - 1];
+
+        let delay = 24;
+        if (char === '.' || char === '!' || char === '?') {
+          delay = 140;
+        } else if (char === ',' || char === ';') {
+          delay = 80;
+        }
+
+        this.typingTimer = setTimeout(typeNextChar, delay);
+      } else {
+        this.javaneseText.innerText = `"${javText}"`;
+        this.indonesianText.innerText = `(${line.indonesian || ''})`;
+        this.indonesianText.style.opacity = '1';
+
+        this.dialogueTyping = false;
+        if (window.SoundManager) {
+          window.SoundManager.stopDialogueSfx();
+        }
+
+        if (line.teaches && line.teaches.word) {
+          this.addVocab(line.teaches.word, line.teaches.meaning || line.indonesian || '');
+        }
+      }
+    };
+
+    typeNextChar();
+  }
+
+  completeDialogueTyping() {
+    if (!this.dialogueTyping || !this.activeDialogueLine) return;
+
+    this.clearTypingTimer();
+    this.dialogueTyping = false;
+
+    if (window.SoundManager) {
+      window.SoundManager.stopDialogueSfx();
+    }
+
+    const line = this.activeDialogueLine;
+    this.javaneseText.innerText = `"${line.javanese || ''}"`;
+    this.indonesianText.innerText = `(${line.indonesian || ''})`;
+    this.indonesianText.style.opacity = '1';
 
     if (line.teaches && line.teaches.word) {
       this.addVocab(line.teaches.word, line.teaches.meaning || line.indonesian || '');
     }
-
-    this.renderPortrait(npc);
   }
 
   hideDialogue() {
+    this.clearTypingTimer();
+    this.dialogueTyping = false;
+    if (window.SoundManager) {
+      window.SoundManager.stopDialogueSfx();
+    }
     this.dialogueBox.classList.add('hidden');
     if (this.aiLoadingIndicator) this.aiLoadingIndicator.classList.add('hidden');
   }
@@ -299,8 +405,17 @@ class UIManager {
     this.quizFeedback.classList.remove('hidden');
     if (isCorrect) {
       this.score++;
+      if (window.SoundManager) {
+        window.SoundManager.playCorrect();
+      }
+
+      const correctCard = this.quizOptions.querySelector(`.quiz-option-card[data-idx="${selectedIdx}"]`);
+      if (correctCard) {
+        correctCard.classList.add('correct-pulse');
+      }
+
       this.quizFeedback.className = 'quiz-feedback success';
-      this.quizFeedback.innerHTML = `<strong>Bener!</strong> ${q.explanation || ''}`;
+      this.quizFeedback.innerHTML = `<span class="feedback-badge"><i data-lucide="sparkles" style="width: 14px; height: 14px;"></i> Bener!</span> <span>${q.explanation || ''}</span>`;
 
       if (q.teaches && q.teaches.word) {
         this.addVocab(q.teaches.word, q.teaches.meaning);
@@ -308,8 +423,17 @@ class UIManager {
         this.extractAndAddVocabFromQuestion(q);
       }
     } else {
+      if (window.SoundManager) {
+        window.SoundManager.playIncorrect();
+      }
+
+      const wrongCard = this.quizOptions.querySelector(`.quiz-option-card[data-idx="${selectedIdx}"]`);
+      if (wrongCard) {
+        wrongCard.classList.add('shake-card');
+      }
+
       this.quizFeedback.className = 'quiz-feedback error';
-      this.quizFeedback.innerHTML = `<strong>Kurang tepat.</strong> ${q.explanation || ''}`;
+      this.quizFeedback.innerHTML = `<span class="feedback-badge"><i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i> Kurang tepat.</span> <span>${q.explanation || ''}</span>`;
     }
 
     this.nextQuizBtn.classList.remove('hidden');

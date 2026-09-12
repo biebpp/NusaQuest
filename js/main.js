@@ -83,6 +83,9 @@ class GameEngine {
         this.currentMap.spawnDir !== undefined ? this.currentMap.spawnDir : 0,
         this.getTileSize()
       );
+      if (window.SoundManager) {
+        window.SoundManager.updateAmbientForMap(this.currentMapId, this.currentMap ? this.currentMap.name : '');
+      }
     }
   }
 
@@ -98,6 +101,12 @@ class GameEngine {
       } else if (e.code === 'KeyQ') {
         e.preventDefault();
         this.uiManager.toggleQuestModal();
+      } else if (e.code === 'KeyM') {
+        e.preventDefault();
+        if (window.SoundManager) {
+          const isMuted = window.SoundManager.toggleMute();
+          this.uiManager.showToast(isMuted ? 'Suara Dipateni (Muted)' : 'Suara Diuripake (Unmuted)');
+        }
       }
 
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
@@ -215,6 +224,11 @@ class GameEngine {
   advanceDialogue() {
     if (!this.activeDialogueNpc || this.isGeneratingQuiz) return;
 
+    if (this.uiManager && this.uiManager.isDialogueTyping()) {
+      this.uiManager.completeDialogueTyping();
+      return;
+    }
+
     this.activeDialogueStep++;
     if (this.activeDialogueStep >= this.activeDialogueNpc.dialogue.length) {
       const finishedNpc = this.activeDialogueNpc;
@@ -304,6 +318,9 @@ class GameEngine {
     }
 
     this.uiManager.showToast(`Memasuki: ${this.currentMap.name}`);
+    if (window.SoundManager) {
+      window.SoundManager.updateAmbientForMap(this.currentMapId, this.currentMap ? this.currentMap.name : '');
+    }
     if (this.questEngine) {
       this.questEngine.onMapEnter(targetMapId);
     }

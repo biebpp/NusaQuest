@@ -53,5 +53,343 @@
         }
       }
     ]
+  },
+  {
+    "id": "quiz_1789229310067",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-12T16:08:30.067Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Menapa tegese tembung 'Sugeng enjing' ing basa Indonesia?",
+        "options": [
+          "Selamat sore",
+          "Selamat malam",
+          "Selamat pagi",
+          "Selamat siang"
+        ],
+        "answer": 2,
+        "explanation": "'Sugeng enjing' tegese 'Selamat pagi'.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Kepriye carane ngandhakake 'Selamat pagi' ing basa Jawa?",
+        "options": [
+          "Sugeng enjing",
+          "Sampun enjing",
+          "Sugeng dalu",
+          "Enjing banget"
+        ],
+        "answer": 0,
+        "explanation": "Tembung kanggo ngucapake 'Selamat pagi' ing basa Jawa yaiku 'Sugeng enjing'.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Raden Atif ngucapake 'Sugeng enjing' nalika wengi. Kepriye carane ngandhakake salam ing wektu wengi?",
+        "options": [
+          "Selamat sore",
+          "Selamat pagi",
+          "Selamat malam",
+          "Selamat jalan"
+        ],
+        "answer": 2,
+        "explanation": "Nalika wengi, salam sing tepat yaiku 'Selamat malam' (Sugeng dalu).",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789229438258",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-12T16:10:38.258Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Tembung 'Sugeng enjing' ing basa Indonesia tegese...",
+        "options": [
+          "Selamat siang",
+          "Selamat sore",
+          "Selamat pagi",
+          "Selamat malam"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'Sugeng enjing' tegese 'Selamat pagi' ing basa Indonesia.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Nalika nduweni obrolan karo Raden Atif ing subuh, tembung apa kang kudu diucapake?",
+        "options": [
+          "Sugeng rawuh",
+          "Sugeng enjing",
+          "Sugeng dalu",
+          "Matur nuwun"
+        ],
+        "answer": 1,
+        "explanation": "Nalika subuh utawa isih enjing, kita ngucapake 'Sugeng enjing' kanggo ngucapake salam.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Ing basa Jawa, lamun arep ngandhakake 'Selamat pagi', tembung sing bener yaiku...",
+        "options": [
+          "Sugeng enjing",
+          "Sugeng isuk",
+          "Enjing",
+          "Pagi"
+        ],
+        "answer": 0,
+        "explanation": "Tembung kanggo ngandhakake 'Selamat pagi' ing basa Jawa yaiku 'Sugeng enjing'.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789229438258",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-12T16:12:01.299Z",
+    "isCustom": true,
+    "questions": [
+      {
+        "id": 1,
+        "question": "Tembung 'Sugeng enjing' ing basa Indonesia tegese...",
+        "options": [
+          "Selamat siang",
+          "Selamat sore",
+          "Selamat pagi",
+          "Selamat malam"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'Sugeng enjing' tegese 'Selamat pagi' ing basa Indonesia.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Nalika nduweni obrolan karo Raden Atif ing subuh, tembung apa kang kudu diucapake?",
+        "options": [
+          "Sugeng rawuh",
+          "Sugeng enjing",
+          "Sugeng dalu",
+          "Matur nuwun"
+        ],
+        "answer": 1,
+        "explanation": "Nalika subuh utawa isih enjing, kita ngucapake 'Sugeng enjing' kanggo ngucapake salam.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Ing basa Jawa, lamun arep ngandhakake 'Selamat pagi', tembung sing bener yaiku...",
+        "options": [
+          "Sugeng enjing",
+          "Sugeng isuk",
+          "Enjing",
+          "Pagi"
+        ],
+        "answer": 0,
+        "explanation": "Tembung kanggo ngandhakake 'Selamat pagi' ing basa Jawa yaiku 'Sugeng enjing'.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789229626860",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-12T16:13:46.860Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing script obrolan, Raden Atif ngucapake 'woi woi woi woi'. Ing basa Indonesia, tegese carane manggil menawa ana wong sing kudu ati-ati utawa digati yaiku...",
+        "options": [
+          "Halo!",
+          "Woi!",
+          "Sugeng!",
+          "Pamit!"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'woi' ing basa Indonesia uga tegese 'woi' (untuk memanggil/mengagetkan).",
+        "teaches": {
+          "word": "woi",
+          "meaning": "woi (pemanggilan/pemanggilan perhatian)"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung 'enjing' sing ana ing salam 'Sugeng enjing' asring digunakake kanggo nggambarake wektu...?",
+        "options": [
+          "Wengi (Malam)",
+          "Sore (Sore)",
+          "Pagi (Pagi)",
+          "Tengah wengi (Tengah malam)"
+        ],
+        "answer": 2,
+        "explanation": "'Enjing' tegese pagi. Dadi 'Sugeng enjing' artinya Selamat pagi.",
+        "teaches": {
+          "word": "enjing",
+          "meaning": "pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Lamun Raden Atif ngucapake 'Sugeng enjing!', mangkene tegese salam kasebut ing basa Indonesia...",
+        "options": [
+          "Selamat siang!",
+          "Selamat malam!",
+          "Selamat pagi!",
+          "Selamat jalan!"
+        ],
+        "answer": 2,
+        "explanation": "'Sugeng enjing' dudu 'Selamat pagi'. Opsi liyane salah.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789229626860",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-12T16:14:15.591Z",
+    "isCustom": true,
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing script obrolan, Raden Atif ngucapake 'woi woi woi woi'. Ing basa Indonesia, tegese carane manggil menawa ana wong sing kudu ati-ati utawa digati yaiku...",
+        "options": [
+          "Halo!",
+          "Woi!",
+          "Sugeng!",
+          "Pamit!"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'woi' ing basa Indonesia uga tegese 'woi' (untuk memanggil/mengagetkan).",
+        "teaches": {
+          "word": "woi",
+          "meaning": "woi (pemanggilan/pemanggilan perhatian)"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung 'enjing' sing ana ing salam 'Sugeng enjing' asring digunakake kanggo nggambarake wektu...?",
+        "options": [
+          "Wengi (Malam)",
+          "Sore (Sore)",
+          "Pagi (Pagi)",
+          "Tengah wengi (Tengah malam)"
+        ],
+        "answer": 2,
+        "explanation": "'Enjing' tegese pagi. Dadi 'Sugeng enjing' artinya Selamat pagi.",
+        "teaches": {
+          "word": "enjing",
+          "meaning": "pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Lamun Raden Atif ngucapake 'Sugeng enjing!', mangkene tegese salam kasebut ing basa Indonesia...",
+        "options": [
+          "Selamat siang!",
+          "Selamat malam!",
+          "Selamat pagi!",
+          "Selamat jalan!"
+        ],
+        "answer": 2,
+        "explanation": "'Sugeng enjing' dudu 'Selamat pagi'. Opsi liyane salah.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      }
+    ]
+  },
+  {
+    "id": "quiz_1789229663685",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-12T16:14:23.685Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Salam 'Sugeng enjing' saka Raden Atif asring diucapake nalika wektu...?",
+        "options": [
+          "Mangalli (Sore)",
+          "Enjing (Pagi)",
+          "Sonten (Malam)",
+          "Dhengah (Siang)"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'enjing' tegese pagi, dadi 'Sugeng enjing' diucapake ing wektu subuh utawa pagi.",
+        "teaches": {
+          "word": "enjing",
+          "meaning": "pagi"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Ing basa Indonesia, Apa penerjemahan paling bener kanggo frasa 'Sugeng enjing' sing diucapake Raden Atif?",
+        "options": [
+          "Selamat siang",
+          "Selamat malam",
+          "Selamat pagi",
+          "Selamat tinggal"
+        ],
+        "answer": 2,
+        "explanation": "'Sugeng enjing' yaiku salam kanggo ngucapake 'Selamat pagi' ing basa Indonesia.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Nalika Raden Atif ngucapake 'woi woi woi', tembung kasebut kerep digunakake kanggo tujuan apa?",
+        "options": [
+          "Ngucapake terima kasih",
+          "Ngucapake salam sesambetan",
+          "Manggil wong liya kanthi kasar utawa nandhesake perhatian",
+          "Ngucapake permintaan maaf"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'woi' asring digunakake kanggo manggil wong utawa nandhesake perhatian menawa ana wong sing kudu mriksa utawa ati-ati.",
+        "teaches": {
+          "word": "woi",
+          "meaning": "woi (to call out/attract attention)"
+        }
+      }
+    ]
   }
 ]

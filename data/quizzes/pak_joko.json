@@ -166,5 +166,61 @@
         }
       }
     ]
+  },
+  {
+    "id": "quiz_1789227875598",
+    "npcId": "pak_joko",
+    "title": "Kuis Tembung Pak Joko #4",
+    "generatedAt": "2026-09-12T15:44:35.598Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing ukara 'Pari butuh \"toya\" akeh supaya tuwuh subur', tembung 'tuwuh' nuduhake proses apa?",
+        "options": [
+          "Berbuah",
+          "Tumbuh",
+          "Berkembang",
+          "Setia"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'tuwuh' tegese 'tumbuh' ing basa Indonesia.",
+        "teaches": {
+          "word": "tuwuh",
+          "meaning": "tumbuh"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Apa tegese tembung 'banyu' ing basa Indonesia?",
+        "options": [
+          "Batu",
+          "Besi",
+          "Air",
+          "Api"
+        ],
+        "answer": 2,
+        "explanation": "'Banyu' tegese 'air' ing basa Indonesia. Iki tembung liyane kanggo 'toya'.",
+        "teaches": {
+          "word": "banyu",
+          "meaning": "air"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Sapa sing ngomong: 'Sugeng rawuh ing sawah kula.'?",
+        "options": [
+          "Panjenengan",
+          "Kula",
+          "Iki",
+          "Pak Joko"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'kula' tegese 'saya' utawa 'aku' ing basa halus (krama).",
+        "teaches": {
+          "word": "kula",
+          "meaning": "saya/aku"
+        }
+      }
+    ]
   }
 ]

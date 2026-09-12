@@ -38,10 +38,12 @@
   "rumah_joko": [],
   "istana_atif": [
     {
-      "id": "warga_baru_7",
+      "id": "raden_atif",
       "tileX": 2,
       "tileY": 4,
-      "dir": 0
+      "dir": 0,
+      "col": 6,
+      "row": 4
     }
   ]
 }
