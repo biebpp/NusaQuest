@@ -11,7 +11,7 @@ class SoundManager {
       if (savedMute !== null) {
         this.muted = savedMute === 'true';
       }
-    } catch (e) {}
+    } catch (e) { }
 
     this.sfx = {
       dialog: new Audio('/assets/sfx/dialog.mp3'),
@@ -21,7 +21,7 @@ class SoundManager {
     };
 
     this.ambient = {
-      outdoor: new Audio('/assets/sfx/ambient_outdoor.wav'),
+      outdoor: new Audio('/assets/sfx/ambient_outdoor.mp3'),
       indoor: new Audio('/assets/sfx/ambient_indoor.wav')
     };
 
@@ -63,7 +63,7 @@ class SoundManager {
     this.muted = !this.muted;
     try {
       localStorage.setItem('nusaquest_muted', String(this.muted));
-    } catch (e) {}
+    } catch (e) { }
 
     if (this.muted) {
       this.stopDialogueSfx();
@@ -83,7 +83,7 @@ class SoundManager {
     this.muted = !!isMuted;
     try {
       localStorage.setItem('nusaquest_muted', String(this.muted));
-    } catch (e) {}
+    } catch (e) { }
 
     if (this.muted) {
       this.stopDialogueSfx();
@@ -126,15 +126,15 @@ class SoundManager {
 
     try {
       if (activeAudio.paused) {
-        activeAudio.play().catch(() => {});
+        activeAudio.play().catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
 
     if (immediate) {
       if (this.fadeInterval) clearInterval(this.fadeInterval);
       activeAudio.volume = targetVolume;
       inactiveAudio.volume = 0;
-      try { inactiveAudio.pause(); } catch (e) {}
+      try { inactiveAudio.pause(); } catch (e) { }
       return;
     }
 
@@ -159,7 +159,7 @@ class SoundManager {
         inactiveAudio.volume = 0;
         try {
           inactiveAudio.pause();
-        } catch (e) {}
+        } catch (e) { }
       }
     }, 50);
   }
@@ -181,9 +181,9 @@ class SoundManager {
       targetAudio.currentTime = 0;
       const playPromise = targetAudio.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {});
+        playPromise.catch(() => { });
       }
-    } catch (err) {}
+    } catch (err) { }
   }
 
   stopDialogueSfx() {
@@ -191,7 +191,7 @@ class SoundManager {
       try {
         this.currentDialogueAudio.pause();
         this.currentDialogueAudio.currentTime = 0;
-      } catch (e) {}
+      } catch (e) { }
       this.currentDialogueAudio = null;
     }
     try {
@@ -199,7 +199,7 @@ class SoundManager {
       this.sfx.dialog.currentTime = 0;
       this.sfx.atif.pause();
       this.sfx.atif.currentTime = 0;
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playCorrect() {
@@ -209,9 +209,9 @@ class SoundManager {
       correctSound.volume = 0.65;
       const playPromise = correctSound.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {});
+        playPromise.catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   playIncorrect() {
@@ -221,9 +221,9 @@ class SoundManager {
       wrongSound.volume = 0.55;
       const playPromise = wrongSound.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {});
+        playPromise.catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   updateMuteUI() {

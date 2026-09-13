@@ -1028,5 +1028,61 @@
         }
       }
     ]
+  },
+  {
+    "id": "quiz_1789273106176",
+    "npcId": "dimas",
+    "title": "Kuis Tembung Dimas 4",
+    "generatedAt": "2026-09-13T04:18:26.176Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing ukara 'Halo Kak! Pripun kabare?', menapa tegese tembung 'pripun' ing tembung Indonésia?",
+        "options": [
+          "Apa",
+          "Kapan",
+          "Neng ngendi",
+          "Sapa"
+        ],
+        "answer": 0,
+        "explanation": "Tembung 'pripun' ing basa krama tegese 'apa'. Ukara 'Pripun kabare?' tegese 'Apa kabare?'.",
+        "teaches": {
+          "word": "pripun",
+          "meaning": "apa"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Dimas ngucapake 'Matur nuwun wis diajak omong-omong!'. Menapa tegese tembung 'wis' ing ukara kasebut?",
+        "options": [
+          "Sedang",
+          "Akan",
+          "Sudah",
+          "Baru"
+        ],
+        "answer": 2,
+        "explanation": "Tembung 'wis' tegese 'sudah' utawa 'telah'. Dadi ukara kasebut tegese 'Terima kasih sudah diajak ngobrol'.",
+        "teaches": {
+          "word": "wis",
+          "meaning": "sudah"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Yen Dimas ngucapake 'Yen sehat, jawabe \"sae-sae mawon\"', menapa tegese tembung 'jawabe'?",
+        "options": [
+          "Pertanyaannya",
+          "Jawabannya",
+          "Kabarannya",
+          "Sudahnya"
+        ],
+        "answer": 1,
+        "explanation": "Tembung 'jawabe' tegese 'jawaban' utawa 'jawab'. Dadi ukara kasebut nyaranake yen sehat, jawabane 'sae-sae mawon' (baik-baik saja).",
+        "teaches": {
+          "word": "jawabe",
+          "meaning": "jawaban"
+        }
+      }
+    ]
   }
 ]

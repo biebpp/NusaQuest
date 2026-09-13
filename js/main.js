@@ -31,6 +31,7 @@ class GameEngine {
     this.warpDuration = 300;
     this.pendingWarp = null;
     this.warpCooldownArea = null;
+    this.isTitleScreen = true;
 
     this.updateCanvasDimensions();
     this.bindInputs();
@@ -89,19 +90,110 @@ class GameEngine {
     }
   }
 
+  showTitleScreen() {
+    this.isTitleScreen = true;
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen) {
+      startScreen.classList.remove('start-exit');
+    }
+    if (this.uiManager) {
+      this.uiManager.toggleNotebook(false);
+      this.uiManager.hideDialogue();
+      this.uiManager.hideQuizModal();
+      this.uiManager.hideQuestModalUI();
+    }
+  }
+
+  hideTitleScreen() {
+    if (!this.isTitleScreen) return;
+    if (window.SoundManager) {
+      window.SoundManager.initialized = true;
+      if (this.currentMapId) {
+        window.SoundManager.updateAmbientForMap(this.currentMapId, this.currentMap ? this.currentMap.name : '');
+      }
+    }
+    if (this.uiManager) {
+      this.uiManager.toggleNotebook(true);
+    }
+    const startScreen = document.getElementById('startScreen');
+    if (startScreen) {
+      startScreen.classList.add('start-exit');
+    }
+    setTimeout(() => {
+      this.isTitleScreen = false;
+    }, 600);
+  }
+
   bindInputs() {
     window.addEventListener('keydown', (e) => {
+      if (typeof window.handleKeybindCapture === 'function' && window.handleKeybindCapture(e)) {
+        return;
+      }
+
       this.keysPressed[e.code] = true;
 
-      if (e.code === 'KeyE') {
+      const binds = window.KEYBINDS || {
+        interact: ['KeyE'],
+        notebook: ['KeyN', 'Tab'],
+        quest: ['KeyQ'],
+        sound: ['KeyM']
+      };
+
+      const matches = (action) => {
+        const list = binds[action] || [];
+        return list.includes(e.code);
+      };
+
+      if (e.code === 'Escape') {
+        e.preventDefault();
+        const optionsModal = document.getElementById('optionsModal');
+        if (optionsModal && !optionsModal.classList.contains('hidden')) {
+          optionsModal.classList.add('hidden');
+          return;
+        }
+        if (this.isTitleScreen) {
+          this.hideTitleScreen();
+          return;
+        }
+        if (this.uiManager) {
+          if (this.uiManager.isQuizActive()) {
+            this.uiManager.hideQuizModal();
+            return;
+          }
+          if (this.uiManager.isQuestModalActive()) {
+            this.uiManager.hideQuestModalUI();
+            return;
+          }
+          if (this.activeDialogueNpc) {
+            this.advanceDialogue();
+            return;
+          }
+        }
+        this.showTitleScreen();
+        return;
+      }
+
+      if (this.isTitleScreen) {
+        if (matches('sound') && window.SoundManager) {
+          e.preventDefault();
+          const isMuted = window.SoundManager.toggleMute();
+          this.uiManager.showToast(isMuted ? 'Suara Dipateni (Muted)' : 'Suara Diuripake (Unmuted)');
+        }
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      if (matches('interact')) {
         this.handleInteractionKey();
-      } else if (e.code === 'KeyN' || e.code === 'Tab') {
+      } else if (matches('notebook')) {
         e.preventDefault();
         this.uiManager.toggleNotebook();
-      } else if (e.code === 'KeyQ') {
+      } else if (matches('quest')) {
         e.preventDefault();
         this.uiManager.toggleQuestModal();
-      } else if (e.code === 'KeyM') {
+      } else if (matches('sound')) {
         e.preventDefault();
         if (window.SoundManager) {
           const isMuted = window.SoundManager.toggleMute();
@@ -167,7 +259,7 @@ class GameEngine {
   }
 
   handleInteractionKey() {
-    if (this.isGeneratingQuiz || this.isWarping || (this.uiManager && (this.uiManager.isQuizActive() || this.uiManager.isQuestModalActive()))) return;
+    if (this.isTitleScreen || this.isGeneratingQuiz || this.isWarping || (this.uiManager && (this.uiManager.isQuizActive() || this.uiManager.isQuestModalActive()))) return;
 
     if (this.activeDialogueNpc) {
       this.advanceDialogue();
@@ -364,7 +456,7 @@ class GameEngine {
     this.player.update(
       now,
       activeMapContext,
-      this.activeDialogueNpc || (this.uiManager && (this.uiManager.isQuizActive() || this.uiManager.isQuestModalActive())),
+      this.isTitleScreen || this.activeDialogueNpc || (this.uiManager && (this.uiManager.isQuizActive() || this.uiManager.isQuestModalActive())),
       this.keysPressed,
       (tx, ty) => this.checkWarp(tx, ty),
       ts
@@ -482,7 +574,7 @@ class GameEngine {
   }
 
   renderPrompts(now) {
-    if (this.activeDialogueNpc || this.isWarping || (this.uiManager && this.uiManager.isQuizActive())) return;
+    if (this.isTitleScreen || this.activeDialogueNpc || this.isWarping || (this.uiManager && this.uiManager.isQuizActive())) return;
 
     const ts = this.getTileSize();
     const adjacentNpc = this.npcManager.getAdjacentNpc(this.player, this.currentMapId);
@@ -550,11 +642,193 @@ class GameEngine {
   }
 }
 
+const DEFAULT_KEYBINDS = {
+  up: 'KeyW',
+  down: 'KeyS',
+  left: 'KeyA',
+  right: 'KeyD',
+  interact: 'KeyE',
+  notebook: 'KeyN',
+  quest: 'KeyQ',
+  sound: 'KeyM'
+};
+
+const KEYBIND_LABELS = {
+  up: 'Maju / Munggah',
+  down: 'Mundur / Mudhun',
+  left: 'Ngiwa (Kiri)',
+  right: 'Nengen (Kanan)',
+  interact: 'Bicara / Gunem',
+  notebook: 'Buku Tembung',
+  quest: 'Misi Budaya',
+  sound: 'Suara / Audio'
+};
+
+function getKeyName(code) {
+  if (!code) return '-';
+  if (code.startsWith('Key')) return code.slice(3);
+  if (code.startsWith('Digit')) return code.slice(5);
+  if (code === 'ArrowUp') return '▲';
+  if (code === 'ArrowDown') return '▼';
+  if (code === 'ArrowLeft') return '◄';
+  if (code === 'ArrowRight') return '►';
+  if (code === 'Space') return 'Space';
+  return code;
+}
+
+function loadKeybinds() {
+  try {
+    const saved = localStorage.getItem('nusaquest_keybinds');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return { ...DEFAULT_KEYBINDS, ...parsed };
+    }
+  } catch (e) {}
+  return { ...DEFAULT_KEYBINDS };
+}
+
+function buildActiveKeybinds(binds) {
+  const active = {};
+  for (const [action, primaryKey] of Object.entries(binds)) {
+    active[action] = [primaryKey];
+  }
+  if (!active.up.includes('ArrowUp')) active.up.push('ArrowUp');
+  if (!active.down.includes('ArrowDown')) active.down.push('ArrowDown');
+  if (!active.left.includes('ArrowLeft')) active.left.push('ArrowLeft');
+  if (!active.right.includes('ArrowRight')) active.right.push('ArrowRight');
+  if (active.notebook && !active.notebook.includes('Tab')) active.notebook.push('Tab');
+  return active;
+}
+
+function saveKeybinds(binds) {
+  try {
+    localStorage.setItem('nusaquest_keybinds', JSON.stringify(binds));
+  } catch (e) {}
+  window.KEYBINDS = buildActiveKeybinds(binds);
+}
+
+window.USER_KEYBINDS = loadKeybinds();
+window.KEYBINDS = buildActiveKeybinds(window.USER_KEYBINDS);
+
+let activeListeningAction = null;
+
+window.handleKeybindCapture = function(e) {
+  if (!activeListeningAction) return false;
+  if (e.code !== 'Escape') {
+    window.USER_KEYBINDS[activeListeningAction] = e.code;
+    saveKeybinds(window.USER_KEYBINDS);
+  }
+  activeListeningAction = null;
+  renderKeybindsUI();
+  e.preventDefault();
+  return true;
+};
+
+function renderKeybindsUI() {
+  const list = document.getElementById('keybindsList');
+  if (!list) return;
+  list.innerHTML = '';
+
+  for (const [action, label] of Object.entries(KEYBIND_LABELS)) {
+    const row = document.createElement('div');
+    row.className = 'keybind-row';
+    const currentKey = window.USER_KEYBINDS[action] || DEFAULT_KEYBINDS[action];
+    const isListening = activeListeningAction === action;
+
+    row.innerHTML = `
+      <span>${label}</span>
+      <button class="keybind-btn ${isListening ? 'listening' : ''}" data-action="${action}">
+        ${isListening ? '...' : getKeyName(currentKey)}
+      </button>
+    `;
+
+    const btn = row.querySelector('.keybind-btn');
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      activeListeningAction = isListening ? null : action;
+      renderKeybindsUI();
+    });
+
+    list.appendChild(row);
+  }
+}
+
 window.addEventListener('load', () => {
   window.game = new GameEngine();
   const mapsPromise = window.mapsLoadPromise || Promise.resolve();
+
+  const startScreen = document.getElementById('startScreen');
+  const startPlayBtn = document.getElementById('startPlayBtn');
+  const startOptionsBtn = document.getElementById('startOptionsBtn');
+  const optionsModal = document.getElementById('optionsModal');
+  const closeOptionsBtn = document.getElementById('closeOptionsBtn');
+  const resetKeybindsBtn = document.getElementById('resetKeybindsBtn');
+  const optSoundBtn = document.getElementById('optSoundBtn');
+
   mapsPromise.then(() => {
     window.game.initMap('village');
     window.game.start();
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+      lucide.createIcons();
+    }
   });
+
+  if (startPlayBtn) {
+    startPlayBtn.addEventListener('click', () => {
+      if (window.game) {
+        window.game.hideTitleScreen();
+      }
+    });
+  }
+
+  if (startOptionsBtn && optionsModal) {
+    startOptionsBtn.addEventListener('click', () => {
+      optionsModal.classList.remove('hidden');
+      renderKeybindsUI();
+      if (optSoundBtn && window.SoundManager) {
+        const isMuted = window.SoundManager.isMuted();
+        optSoundBtn.innerHTML = isMuted ? '<i data-lucide="volume-x" style="width: 14px; height: 14px;"></i> Suara (M)' : '<i data-lucide="volume-2" style="width: 14px; height: 14px;"></i> Suara (M)';
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
+        }
+      }
+    });
+  }
+
+  if (resetKeybindsBtn) {
+    resetKeybindsBtn.addEventListener('click', () => {
+      window.USER_KEYBINDS = { ...DEFAULT_KEYBINDS };
+      saveKeybinds(window.USER_KEYBINDS);
+      activeListeningAction = null;
+      renderKeybindsUI();
+    });
+  }
+
+  if (closeOptionsBtn && optionsModal) {
+    closeOptionsBtn.addEventListener('click', () => {
+      activeListeningAction = null;
+      optionsModal.classList.add('hidden');
+    });
+  }
+
+  if (optionsModal) {
+    optionsModal.addEventListener('click', (e) => {
+      if (e.target === optionsModal) {
+        activeListeningAction = null;
+        optionsModal.classList.add('hidden');
+      }
+    });
+  }
+
+  if (optSoundBtn) {
+    optSoundBtn.addEventListener('click', () => {
+      if (window.SoundManager) {
+        const isMuted = window.SoundManager.toggleMute();
+        optSoundBtn.innerHTML = isMuted ? '<i data-lucide="volume-x" style="width: 14px; height: 14px;"></i> Suara (M)' : '<i data-lucide="volume-2" style="width: 14px; height: 14px;"></i> Suara (M)';
+        if (typeof lucide !== 'undefined' && lucide.createIcons) {
+          lucide.createIcons();
+        }
+      }
+    });
+  }
 });

@@ -391,5 +391,61 @@
         }
       }
     ]
+  },
+  {
+    "id": "quiz_1789273160987",
+    "npcId": "raden_atif",
+    "title": "Kuis Tembung Raden Atif",
+    "generatedAt": "2026-09-13T04:19:20.987Z",
+    "questions": [
+      {
+        "id": 1,
+        "question": "Ing basa Indonesia, 'Sugeng enjing' sing diucapake Raden Atif tegese apa?",
+        "options": [
+          "Selamat siang",
+          "Selamat pagi",
+          "Selamat malam",
+          "Selamat sore"
+        ],
+        "answer": 1,
+        "explanation": "'Sugeng enjing' tegese 'Selamat pagi'.",
+        "teaches": {
+          "word": "Sugeng enjing",
+          "meaning": "Selamat pagi"
+        }
+      },
+      {
+        "id": 2,
+        "question": "Tembung 'enjing' ing salam Raden Atif nuduhake wektu apa ing dina?",
+        "options": [
+          "Wengi esuk",
+          "Awal dinen",
+          "Sore",
+          "Wengi tengah"
+        ],
+        "answer": 1,
+        "explanation": "'Enjing' nuduhake wektu awal dinen utawa pagi.",
+        "teaches": {
+          "word": "enjing",
+          "meaning": "pagi"
+        }
+      },
+      {
+        "id": 3,
+        "question": "Raden Atif ngucapake 'woi woi woi'. Ing konteks basa Jawa, carane manggil iki biasane diarahake marang sapa utawa kanggo tujuan apa?",
+        "options": [
+          "Kanggo wong sing luwih tuwa kanthi sopan",
+          "Kanggo wong ukur-ukuran utawa urut-urunan",
+          "Kanggo wong sing wis sepuh banget",
+          "Kanggo wong sing lagi kesibuk kerja"
+        ],
+        "answer": 1,
+        "explanation": "'Woi' biasane digunakake kanggo manggil wong sing ukure katon utawa gawe gawe tanpa nduweni rasa hormat kanthi kaku.",
+        "teaches": {
+          "word": "woi",
+          "meaning": "manggil (informal)"
+        }
+      }
+    ]
   }
 ]

@@ -1,7 +1,7 @@
 class UIManager {
   constructor() {
     this.learnedVocab = new Map();
-    this.isNotebookCollapsed = false;
+    this.isNotebookCollapsed = true;
     
     this.currentQuiz = null;
     this.currentQuestionIdx = 0;
@@ -132,8 +132,12 @@ class UIManager {
     }
   }
 
-  toggleNotebook() {
-    this.isNotebookCollapsed = !this.isNotebookCollapsed;
+  toggleNotebook(forceOpen = null) {
+    if (forceOpen !== null) {
+      this.isNotebookCollapsed = !forceOpen;
+    } else {
+      this.isNotebookCollapsed = !this.isNotebookCollapsed;
+    }
     if (this.isNotebookCollapsed) {
       this.vocabNotebook.classList.add('collapsed');
       if (this.toggleNotebookBtn) this.toggleNotebookBtn.innerText = '+';

@@ -71,19 +71,31 @@ class Player {
     let newDir = this.dir;
     let keyHit = false;
 
-    if (keysPressed['KeyW'] || keysPressed['ArrowUp']) {
+    const binds = window.KEYBINDS || {
+      up: ['KeyW', 'ArrowUp'],
+      down: ['KeyS', 'ArrowDown'],
+      left: ['KeyA', 'ArrowLeft'],
+      right: ['KeyD', 'ArrowRight']
+    };
+
+    const isPressed = (action) => {
+      const list = binds[action] || [];
+      return list.some(k => keysPressed[k]);
+    };
+
+    if (isPressed('up')) {
       nextY--;
       newDir = 3;
       keyHit = true;
-    } else if (keysPressed['KeyS'] || keysPressed['ArrowDown']) {
+    } else if (isPressed('down')) {
       nextY++;
       newDir = 0;
       keyHit = true;
-    } else if (keysPressed['KeyA'] || keysPressed['ArrowLeft']) {
+    } else if (isPressed('left')) {
       nextX--;
       newDir = 1;
       keyHit = true;
-    } else if (keysPressed['KeyD'] || keysPressed['ArrowRight']) {
+    } else if (isPressed('right')) {
       nextX++;
       newDir = 2;
       keyHit = true;

@@ -22,17 +22,7 @@
         <span class="badge">BAIFEST 2026</span>
       </div>
 
-      <div class="control-hint" style="display: flex; align-items: center; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; color: #fef08a; font-weight: 700;">Tile Size:</span>
-          <select id="tileSizeSelect" title="Adjust Game Tile Size (px)" style="padding: 2px 6px; font-size: 11px; background: #451a03; color: #fbbf24; border: 1px solid #78350f; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700;">
-            <option value="24">24px</option>
-            <option value="32">32px</option>
-            <option value="48" selected>48px</option>
-            <option value="64">64px</option>
-          </select>
-        </div>
-        <span><span class="key">WASD</span> / <span class="key">▲▼◄►</span> Pindah &nbsp;•&nbsp; <span class="key">E</span> Bicara &nbsp;•&nbsp; <span class="key">N</span> Buku &nbsp;•&nbsp; <span class="key">Q</span> Misi</span>
+      <div class="control-hint" style="display: flex; align-items: center; gap: 8px;">
         <button id="soundToggleBtn" title="Suara / Audio (M)" style="padding: 3px 10px; font-size: 11px; background: #78350f; color: #fef08a; border: 1px solid #fbbf24; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 4px;"><i data-lucide="volume-2" style="width: 14px; height: 14px;"></i> Suara (M)</button>
         <button id="questHudBtn" title="Buka Quest Log (Q)" style="padding: 3px 10px; font-size: 11px; background: #78350f; color: #fef08a; border: 1px solid #fbbf24; border-radius: 4px; cursor: pointer; font-family: 'Quicksand', sans-serif; font-weight: 700; display: flex; align-items: center; gap: 4px;"><i data-lucide="scroll" style="width: 14px; height: 14px;"></i> Misi (Q)</button>
       </div>
@@ -41,6 +31,38 @@
     <!-- Main Game Area -->
     <div id="canvasContainer">
       <canvas id="gameCanvas" width="768" height="480"></canvas>
+
+      <div id="startScreen">
+        <div class="start-logo-area">
+          <h1 class="start-title-retro">NUSAQUEST</h1>
+          <div class="start-badge-tag">BAIFEST 2026</div>
+        </div>
+
+        <div class="start-menu">
+          <button id="startPlayBtn" class="start-menu-item">START GAME</button>
+          <button id="startOptionsBtn" class="start-menu-item">OPTIONS</button>
+        </div>
+      </div>
+
+      <div id="optionsModal" class="options-modal hidden">
+        <div class="options-box rpg-box">
+          <div class="options-header">
+            <span class="options-title">PENGATURAN</span>
+            <button id="closeOptionsBtn" class="quiz-close-btn">&times;</button>
+          </div>
+          <div class="options-body">
+            <div class="option-row">
+              <label>Suara / Audio:</label>
+              <button id="optSoundBtn" class="rpg-btn" style="font-size: 11px;"><i data-lucide="volume-2" style="width: 14px; height: 14px;"></i> Suara (M)</button>
+            </div>
+            <div class="keybinds-header">
+              <span class="keybinds-title">Tombol Kontrol (Keybinds)</span>
+              <button id="resetKeybindsBtn" class="keybind-reset-btn" title="Reset Default">Reset</button>
+            </div>
+            <div id="keybindsList" class="keybinds-grid"></div>
+          </div>
+        </div>
+      </div>
 
       <!-- Mini Quest Tracker Widget (Top Left HUD Overlay) -->
       <div id="questTracker" class="rpg-box mini-tracker">
@@ -51,14 +73,14 @@
       </div>
 
       <!-- Vocab Notebook Overlay Panel (Top Right HUD) -->
-      <aside id="vocabNotebook" class="rpg-box">
+      <aside id="vocabNotebook" class="rpg-box collapsed">
         <div class="notebook-header">
           <div class="notebook-title">
             <span class="icon"><i data-lucide="book-open" style="width: 14px; height: 14px;"></i></span> Buku Tembung
           </div>
           <div class="notebook-controls">
             <span id="vocabCounter" class="counter">0 kata</span>
-            <button id="toggleNotebookBtn" class="toggle-btn" title="Sembunyikan / Tampilkan Buku (N / Tab)">−</button>
+            <button id="toggleNotebookBtn" class="toggle-btn" title="Sembunyikan / Tampilkan Buku (N / Tab)">+</button>
           </div>
         </div>
         <div class="notebook-body">
